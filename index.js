@@ -1,10 +1,39 @@
 const express = require('express')
 const path = require('path')
+
 const PORT = process.env.PORT || 5000
 
-express()
-  .use(express.static(path.join(__dirname, 'public')))
-  .set('views', path.join(__dirname, 'views'))
-  .set('view engine', 'ejs')
-  .get('/', (req, res) => res.render('pages/index'))
-  .listen(PORT, () => console.log(`Listening on ${ PORT }`))
+const app = express();
+
+const { Pool } = require('pg');
+
+
+var pool = new Pool({
+  connectionString : process.env.DATABASE_URL//connecting the database
+})
+
+app.use(express.static(path.join(__dirname, 'public')))//joining the files public and current folder
+app.use(express.json());
+app.use(express.urlencoded({extended:false}));
+app.set('views', path.join(__dirname, 'views'))// joining the files views and current folder
+app.set('view engine', 'ejs')//using ejs
+app.get('/', (req, res) => res.render('pages/index'))
+
+app.use(express.static(path.join(__dirname, 'node_modules')))
+
+app.get('/db', async (req, res) => {//seting the database
+    try {
+      const client = await pool.connect()
+      const result = await client.query('SELECT * FROM Students');//sql query
+      const results = { 'results': (result.rows[0].id) ? result.rows : [] };
+      res.status(200);
+
+      res.send(results);
+      client.release();
+    } catch (err) {
+      console.error(err);
+      res.send("Error " + err);
+    }
+  })
+
+app.listen(PORT, () => console.log(`Listening on ${ PORT }`))
