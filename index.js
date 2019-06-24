@@ -24,7 +24,7 @@ app.use(express.static(path.join(__dirname, 'node_modules')))
 app.get('/db', async (req, res) => {//seting the database
     try {
       const client = await pool.connect()
-      const result = await client.query('SELECT * FROM Students');//sql query
+      const result = await client.query('SELECT * FROM login');//sql query
       const results = { 'results': (result.rows[0].id) ? result.rows : [] };
       res.status(200);
 
