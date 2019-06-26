@@ -45,13 +45,13 @@ app.get('/db', async (req, res) => {//seting the database
         const result = await client.query(que,
         value);
         if (result.Value = 1){
-          res.redirect('/db');
+          console.log("it matchs");
         }
         else {
-          // res.redirect('/db');
+           console.log("it doesn't match");
         }
       } catch (err) {
-        res.send("Error " + err);
+          res.send("Error " + err);
       }
     })
 
