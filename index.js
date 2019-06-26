@@ -31,7 +31,6 @@ app.get('/db', async (req, res) => {//seting the database
       res.send(results);
       client.release();
     } catch (err) {
-      console.error(err);
       res.send("Error " + err);
     }
   })
@@ -46,13 +45,12 @@ app.get('/db', async (req, res) => {//seting the database
         const result = await client.query(que,
         value);
         if (result == true){
-          res.redirect('/db');
+          // res.redirect('/db');
         }
         else {
-          console.log("either the user name or password does not match");
+          res.redirect('/db');
         }
       } catch (err) {
-        console.error(err);
         res.send("Error " + err);
       }
     })
@@ -67,7 +65,6 @@ app.get('/db', async (req, res) => {//seting the database
           res.redirect('/login.html');
           client.release();
         } catch (err) {
-          console.error(err);
           res.send("Error " + err);
         }
       })
