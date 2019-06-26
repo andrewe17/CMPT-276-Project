@@ -38,10 +38,9 @@ app.get('/db', async (req, res) => {//seting the database
 
 
 
-  // app.post('/Sign', async (req, res) => {//this updates the form when the form from login is submited
+  // app.post('/signin', async (req, res) => {//this updates the form when the form from login is submited
   //     try {
   //       const client = await pool.connect()
-  //       const value =[Math.floor(Math.random() * (100)),req.body.name,req.body.weight,req.body.height,req.body.hair_color,req.body.gpa]
   //       const result = await client.query('insert into Students (id,name,weight,height,hair_color,gpa) values ($1,$2,$3,$4,$5,$6)',
   //       value);
   //       res.redirect('/asn2.html');
@@ -51,5 +50,21 @@ app.get('/db', async (req, res) => {//seting the database
   //       res.send("Error " + err);
   //     }
   //   })
+
+
+    app.post('/signup', async (req, res) => {//this updates the form when the form from login is submited
+        try {
+          const client = await pool.connect()
+          const value =[Math.floor(Math.random() * (100)),req.body.userup,req.body.psw,req.body.emailup]
+          const result = await client.query('insert into login (id,username,password,email) values ($1,$2,$3,$4)',
+          value);
+          res.redirect('/login.html');
+          client.release();
+        } catch (err) {
+          console.error(err);
+          res.send("Error " + err);
+        }
+      })
+
 
 app.listen(PORT, () => console.log(`Listening on ${ PORT }`))
