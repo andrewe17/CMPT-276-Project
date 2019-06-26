@@ -38,18 +38,24 @@ app.get('/db', async (req, res) => {//seting the database
 
 
 
-  // app.post('/signin', async (req, res) => {//this updates the form when the form from login is submited
-  //     try {
-  //       const client = await pool.connect()
-  //       const result = await client.query('insert into Students (id,name,weight,height,hair_color,gpa) values ($1,$2,$3,$4,$5,$6)',
-  //       value);
-  //       res.redirect('/asn2.html');
-  //       client.release();
-  //     } catch (err) {
-  //       console.error(err);
-  //       res.send("Error " + err);
-  //     }
-  //   })
+  app.post('/signin', async (req, res) => {//this updates the form when the form from login is submited
+      try {
+        const que = 'SELECT CASE WHEN EXISTS ( SELECT * FROM login WHERE username = $1 AND password = $2) THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END'
+        const value =[Math.floor(Math.random() * (100)),req.body.user,req.body.password]
+        const client = await pool.connect()
+        const result = await client.query(que,
+        value);
+        if (result == true){
+          res.redirect('/db');
+        }
+        else {
+          console.log("either the user name or password does not match");
+        }
+      } catch (err) {
+        console.error(err);
+        res.send("Error " + err);
+      }
+    })
 
 
     app.post('/signup', async (req, res) => {//this updates the form when the form from login is submited
