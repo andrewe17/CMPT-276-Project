@@ -41,7 +41,7 @@ app.get('/db', async (req, res) => {//seting the database
   app.post('/signin', async (req, res) => {//this updates the form when the form from login is submited
       try {
         const que = 'SELECT CASE WHEN EXISTS ( SELECT * FROM login WHERE username = $1 AND password = $2) THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END'
-        const value =[Math.floor(Math.random() * (100)),req.body.user,req.body.password]
+        const value =[req.body.user,req.body.password]
         const client = await pool.connect()
         const result = await client.query(que,
         value);
