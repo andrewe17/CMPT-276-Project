@@ -39,12 +39,12 @@ app.get('/db', async (req, res) => {//seting the database
 
   app.post('/signin', async (req, res) => {//this updates the form when the form from login is submited
       try {
-        const que = 'SELECT CASE WHEN EXISTS ( SELECT * FROM login WHERE username = $1 AND password = $2) THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END'
+        const que = 'SELECT count(1) as pers FROM login WHERE username = $1 AND password = $2'
         const value =[req.body.user,req.body.password]
         const client = await pool.connect()
         const result = await client.query(que,
         value);
-        if (result == true){
+        if (result.Fields(0).Value = 1){
           res.redirect('/db');
         }
         else {
