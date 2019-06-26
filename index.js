@@ -45,10 +45,10 @@ app.get('/db', async (req, res) => {//seting the database
         const result = await client.query(que,
         value);
         if (result == true){
-          // res.redirect('/db');
+          res.redirect('/db');
         }
         else {
-          res.redirect('/db');
+          // res.redirect('/db');
         }
       } catch (err) {
         res.send("Error " + err);
