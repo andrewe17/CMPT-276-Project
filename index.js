@@ -44,7 +44,7 @@ app.get('/db', async (req, res) => {//seting the database
         const client = await pool.connect()
         const result = await client.query(que,
         value);
-        console.log(result);
+        res..send(result);
         // if (result > 0){
         //   res.redirect('/db');
         // }
