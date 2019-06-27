@@ -47,7 +47,7 @@ app.get('/db', async (req, res) => {//seting the database
         // res.send(result.rowCount);
 
         if (result.rowCount > 0){//I noticed that if the queue returns true the rowCount is larger than 0
-          res.redirect('/db');
+          res.redirect('/Phaser Example.html');
         }
         else {
            res.redirect('/wrong.html');
