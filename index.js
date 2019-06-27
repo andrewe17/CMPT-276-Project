@@ -39,7 +39,7 @@ app.get('/db', async (req, res) => {//seting the database
 
   app.post('/signin', async (req, res) => {//this updates the form when the form from login is submited
       try {
-        const que = 'SELECT count(*) as pers FROM login WHERE username = $1 AND password = $2'
+        const que = 'SELECT username AND password FROM login WHERE EXISTS (SELECT username and password FROM login WHERE username = $1 AND password = $2);'
         const value =[req.body.user,req.body.password]
         const client = await pool.connect()
         const result = await client.query(que,
