@@ -44,12 +44,13 @@ app.get('/db', async (req, res) => {//seting the database
         const client = await pool.connect()
         const result = await client.query(que,
         value);
-        if (result == 1){
-          res.redirect('/db');
-        }
-        else {
-           res.redirect('/wrong.html');
-        }
+        console.log(result);
+        // if (result > 0){
+        //   res.redirect('/db');
+        // }
+        // else {
+        //    res.redirect('/wrong.html');
+        // }
       } catch (err) {
           res.send("Error " + err);
       }
