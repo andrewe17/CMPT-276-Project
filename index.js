@@ -46,7 +46,7 @@ app.get('/db', async (req, res) => {//seting the database
         value);
         // res.send(result.rowCount);
 
-        if (result.rowCount > 0){
+        if (result.rowCount > 0){//I noticed that if the queue returns true the rowCount is larger than 0
           res.redirect('/db');
         }
         else {
@@ -61,7 +61,7 @@ app.get('/db', async (req, res) => {//seting the database
     app.post('/signup', async (req, res) => {//this updates the form when the form from login is submited
         try {
           const client = await pool.connect()
-          const value =[Math.floor(Math.random() * (100)),req.body.userup,req.body.psw,req.body.emailup]
+          const value =[Math.floor(Math.random() * (100)),req.body.userup,req.body.psw,req.body.emailup]//randomly generated ID
           const result = await client.query('insert into login (id,username,password,email) values ($1,$2,$3,$4)',
           value);
           res.redirect('/login.html');
