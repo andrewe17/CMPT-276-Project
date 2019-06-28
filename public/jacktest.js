@@ -17,22 +17,17 @@ var config = {
 };
 
 var player;
-var stars;
-var bombs;
-var platforms;
 var cursors;
 var score = 0;
 var gameOver = false;
-var scoreText;
-var cameraa;
+var pointer;
 
 var game = new Phaser.Game(config);
 
 function preload ()
 {
-    this.load.image('sky', 'assets/sky.png');
+    this.load.image('redX', 'assets/redX.png');
     this.load.image('van', 'assets/van.jpg');
-    this.load.image('ground', 'assets/platform.png');
     this.load.image('star', 'assets/star.png');
     this.load.image('bomb', 'assets/bomb.png');
     this.load.spritesheet('dude', 'assets/dude.png', { frameWidth: 32, frameHeight: 48 });
@@ -40,36 +35,47 @@ function preload ()
 
 function create ()
 {
+    //pointer stores raw data of mouse
+    //e.g. pointer.worldX will return the position of cursor on canvas
+    pointer = this.input.activePointer;
 
     this.cameras.main.setBounds(0, 0, 3723, 2000);
     this.physics.world.setBounds(0, 0, 3723, 2000);
 
+    //add image to background
     this.add.image(1861, 1000, 'van');
 
-    cursors = this.input.keyboard.createCursorKeys();
-
-    player = this.physics.add.image(400, 300, 'bomb');
+    //cool particles effect for player
     var particles = this.add.particles('star');
-
     var emitter = particles.createEmitter({
         speed: 100,
         scale: { start: 1, end: 0 },
         blendMode: 'ADD'
     });
 
+    //add player to world
+    player = this.physics.add.image(400, 300, 'bomb');
+    //make placer collidable with world boundray.
     player.setCollideWorldBounds(true);
 
-    this.cameras.main.startFollow(player);
+    //make camera follow the player 
+    this.cameras.main.startFollow(player, true, 0.08, 0.08,0.08,0.08);
+
+    //add the emitter to player 
     emitter.startFollow(player);
+
 }
+
 
 function update ()
 {
+
     if (gameOver)
     {
         return;
     }
 
+    //control detection and position updating
     if (cursors.left.isDown)
     {
         player.setVelocityX(-160);
@@ -82,7 +88,7 @@ function update ()
     {
         player.setVelocityX(0);
     }
-
+    
     if (cursors.up.isDown)
     {
         player.setVelocityY(-160);
