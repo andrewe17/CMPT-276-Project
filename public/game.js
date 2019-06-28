@@ -34,12 +34,13 @@ function create(){
     player = this.physics.add.sprite(100, 100, 'logo');
     player.setCollideWorldBounds(true);
     player.setVelocity(0, 0);
+    player.scale.setTo(10, 10);
     
 }
 
 function update(){
-    if(cursor.up.isDown) player.setVelocityY(10);
-    if(cursor.down.isDown) player.setVelocityY(-10);
-    if(cursor.left.isDown) player.setVelocityX(10);
-    if(cursor.right.isDown) player.setVelocityX(-10);
+    if(cursor.up.isDown) player.setVelocityY(-10);
+    if(cursor.down.isDown) player.setVelocityY(10);
+    if(cursor.left.isDown) player.setVelocityX(-10);
+    if(cursor.right.isDown) player.setVelocityX(10);
 }
