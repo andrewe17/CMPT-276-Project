@@ -46,7 +46,11 @@ function create(){
     this.physics.add.collider(player,wall);
 
     dash=2;
-    spacedown=false;
+    this.time.events.repeat(Phaser.Timer.SECOND * 2, 10, dpp, this);
+}
+
+function dpp(){
+    if(dash<2) dash++;
 }
 
 function update(){
