@@ -25,7 +25,7 @@ var player;
 var wall;
 var dashtime;
 var dash;
-var regtime; // reg for dash
+var regtime; // dash cooldown 
 var pointer; // position of cursor
 
 function preload(){
@@ -90,9 +90,33 @@ function update(){
     // double dash
     if(this.space.isDown && dash>0){
         if(this.time.now>dashtime){
-            player.x+=100;
-            dash--;
-            dashtime=this.time.now+200;
+             if(cursor.up.isDown){
+                player.x+=-100;
+                dash--;
+                dashtime=this.time.now+200;
+            }
+            else if(cursor.down.isDown){
+                player.y+=100;
+                dash--;
+                dashtime=this.time.now+200;
+            } 
+            else{
+                player.setVelocityY(0);
+            }
+
+            if(cursor.left.isDown){
+                player.x+=-100;
+                dash--;
+                dashtime=this.time.now+200;
+            }
+            else if(cursor.right.isDown){
+                player.x+=100;
+                dash--;
+                dashtime=this.time.now+200;
+            }
+            else{
+                player.setVelocityX(0);
+            }
         }
     }
 
