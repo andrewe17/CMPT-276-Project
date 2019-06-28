@@ -30,7 +30,7 @@ function create ()
 
     var logo = this.physics.add.image(400, 100, 'logo');
 
-    //logo.setVelocity(200, 200);
+    logo.setVelocity(0, 0);
     //logo.setBounce(1, 1);
     logo.setCollideWorldBounds(true);
 
@@ -45,8 +45,8 @@ function update(){
         right:Phaser.Input.Keyboard.KeyCodes.D
     });
 
-    if(cursors.up.isDown) player.setVelocityY(-160);
-    if(cursors.down.isDown) player.setVelocityY(160);
-    if(cursors.left.isDown) player.setVelocityX(-160);
-    if(cursors.right.isDown) player.setVelocityX(160);
+    if(cursors.up.isDown) logo.setVelocityY(-100);
+    if(cursors.down.isDown) logo.setVelocityY(100);
+    if(cursors.left.isDown) logo.setVelocityX(-100);
+    if(cursors.right.isDown) logo.setVelocityX(100);
 }
