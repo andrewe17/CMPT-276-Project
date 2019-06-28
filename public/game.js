@@ -68,8 +68,7 @@ function update(){
     }
 
     if(space.isDown){
-        player.x += 100;
-        player.y += 100;
+
     }
     // double dash
     // hidden ninja function
