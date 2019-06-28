@@ -7,6 +7,8 @@ const app = express();
 
 const { Pool } = require('pg');
 
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
 
 var pool = new Pool({
   connectionString : process.env.DATABASE_URL//connecting the database
@@ -17,7 +19,15 @@ app.use(express.json());
 app.use(express.urlencoded({extended:false}));
 app.set('views', path.join(__dirname, 'views'))// joining the files views and current folder
 app.set('view engine', 'ejs')//using ejs
-app.get('/', (req, res) => res.render('pages/index'))
+//starter page
+//app.get('/', (req, res) => res.render('pages/index'))
+
+//web chat
+app.get('/', function(req, res){
+  res.send('Hello world!');
+
+})
+
 
 app.use(express.static(path.join(__dirname, 'node_modules')))
 
