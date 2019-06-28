@@ -33,7 +33,7 @@ function preload(){
 function create(){
     this.add.image(400, 300, 'grey');
     cursor = this.input.keyboard.createCursorKeys();
-    space = this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+    this.space = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
     player = this.physics.add.sprite(100, 100, 'ninja');
     player.setCollideWorldBounds(true);
@@ -67,8 +67,8 @@ function update(){
         player.setVelocityX(0);
     }
 
-    if(space.isDown){
-
+    if(this.space.isDown){
+        console.log('space is pressed');
     }
     // double dash
     // hidden ninja function
