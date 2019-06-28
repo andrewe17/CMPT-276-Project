@@ -23,6 +23,8 @@ var game = new Phaser.Game(config);
 var cursor;
 var player;
 var wall;
+var dash=2;
+var spacedown=false;
 
 function preload(){
     this.load.image('grey', 'grey.png');
@@ -67,8 +69,13 @@ function update(){
         player.setVelocityX(0);
     }
 
-    if(this.space.isUp){
+    if(this.space.isDown){
+        spacedown=true;
+    }
+
+    if(this.space.isUP && spacedown==true){
         player.x += 200;
+        dash--;
     }
     // double dash
     // hidden ninja function
