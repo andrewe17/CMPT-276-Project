@@ -26,31 +26,43 @@ var wall;
 var dashtime;
 var dash;
 var regtime; // reg for dash
+var pointer; // position of cursor
 
 function preload(){
-    this.load.image('grey', 'assets/grey.png');
+    //this.load.image('grey', 'assets/grey.png');
     this.load.image('ninja', 'assets/ninja.png');
     this.load.image('wall', 'assets/wall.png');
+    this.load.image('van', 'assets/van.jpg');
 }
 
 function create(){
-    this.add.image(400, 300, 'grey');
+    this.cameras.main.setBounds(0, 0, 3723, 2000);
+    this.physics.world.setBounds(0, 0, 3723, 2000);
+
+    //add image to background
+    this.add.image(1861, 1000, 'van');
     cursor = this.input.keyboard.createCursorKeys();
     this.space = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-    //this.space = this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 
     player = this.physics.add.sprite(100, 100, 'ninja');
     player.setCollideWorldBounds(true);
     player.setVelocity(0, 0);
 
+    //make camera follow the player 
+    this.cameras.main.startFollow(player, true, 0.08, 0.08,0.08,0.08);
+
+    // obsticles
     wall = this.physics.add.staticGroup();
     wall.create(300, 300, 'wall');
     this.physics.add.collider(player,wall);
 
+    // dash
     dashtime=this.time.now;
     dash=2;
-
+    // dash counter
     //this.dashcount = game.add.text(600, 20, "#dash: ", { font: "16px Arial", fill: "#ffffff", align: "right" });
+    // dash angle - position of cursor
+    pointer = this.input.activePointer;
 }
 
 function update(){
