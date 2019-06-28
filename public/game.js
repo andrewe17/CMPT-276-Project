@@ -18,6 +18,7 @@ var config = {
 };
 
 var game = new Phaser.Game(config);
+var player;
 
 function preload ()
 {
@@ -30,28 +31,25 @@ function create ()
 {
     this.add.image(400, 300, 'green');
     //this.add.image(400, 300, 'sky');
+    player = this.add.spirite(100, 100, 'logo')
+    //var logo = this.physics.add.image(100, 100, 'logo');
 
-    var logo = this.physics.add.image(100, 100, 'logo');
-
-    logo.setVelocity(0, 0);
-    //logo.setBounce(1, 1);
-    logo.setCollideWorldBounds(true);
-
-    //emitter.startFollow(logo);
+    //logo.setVelocity(0, 0);
+    player.setCollideWorldBounds(true);
 }
 
 function update(){
     if(game.input.keyboard.isDown(Phaser.Keyboard.W)){
-        logo.y-=100;
+        player.y-=100;
     };
     if(game.input.keyboard.isDown(Phaser.Keyboard.S)){
-        logo.y+=100;
+        player.y+=100;
     };
     if(game.input.keyboard.isDown(Phaser.Keyboard.A)){
-        logo.y-=100;
+        player.x-=100;
     };
     if(game.input.keyboard.isDown(Phaser.Keyboard.D)){
-        logo.y+=100;
+        player.x+=100;
     };
 
 }
