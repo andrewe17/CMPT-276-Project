@@ -38,15 +38,6 @@ function create ()
 }
 
 function update(){
-    this.cursors = this.input.keyboard.addKeys({
-        up:Phaser.Input.Keyboard.KeyCodes.W,
-        down:Phaser.Input.Keyboard.KeyCodes.S,
-        left:Phaser.Input.Keyboard.KeyCodes.A,
-        right:Phaser.Input.Keyboard.KeyCodes.D
-    });
+    this.input.keyboard.on(keydown_W, ()=>{logo.position.y(-100);});
 
-    if(cursors.up.isDown) logo.setVelocityY(-100);
-    if(cursors.down.isDown) logo.setVelocityY(100);
-    if(cursors.left.isDown) logo.setVelocityX(-100);
-    if(cursors.right.isDown) logo.setVelocityX(100);
 }
