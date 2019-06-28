@@ -16,8 +16,8 @@ var cursor;
 var player;
 
 function preload(){
-    game.load.image('logo', 'face.jpg');
-    game.load.image('green', 'green.png');
+    this.load.image('logo', 'face.jpg');
+    this.load.image('green', 'green.png');
 }
 
 function create(){
