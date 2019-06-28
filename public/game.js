@@ -25,13 +25,13 @@ var player;
 var wall;
 
 function preload(){
-    this.load.image('green', 'green.png');
+    this.load.image('grey', 'grey.png');
     this.load.image('ninja', 'ninja.png');
     this.load.image('wall', 'wall.png');
 }
 
 function create(){
-    this.add.image(400, 300, 'green');
+    this.add.image(400, 300, 'grey');
     cursor = this.input.keyboard.createCursorKeys();
     player = this.physics.add.sprite(100, 100, 'ninja');
     player.setCollideWorldBounds(true);
@@ -62,4 +62,6 @@ function update(){
     else{
         player.setVelocityX(0);
     }
+    // double dash
+    // hidden ninja function
 }
