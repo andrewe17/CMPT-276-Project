@@ -25,12 +25,12 @@ var player;
 var wall;
 var dashtime;
 var dash;
-
+var regtime; // reg for dash
 
 function preload(){
-    this.load.image('grey', 'grey.png');
-    this.load.image('ninja', 'ninja.png');
-    this.load.image('wall', 'wall.png');
+    this.load.image('grey', 'assets/grey.png');
+    this.load.image('ninja', 'assets/ninja.png');
+    this.load.image('wall', 'assets/wall.png');
 }
 
 function create(){
@@ -46,13 +46,11 @@ function create(){
     wall = this.physics.add.staticGroup();
     wall.create(300, 300, 'wall');
     this.physics.add.collider(player,wall);
-    
+
     dashtime=this.time.now;
     dash=2;
-}
 
-function dpp(){
-    if(dash<2) dash++;
+    this.dashcount = game.add.text(600, 20, "#dash: ", { font: "16px Arial", fill: "#ffffff", align: "right" });
 }
 
 function update(){
@@ -76,6 +74,7 @@ function update(){
         player.setVelocityX(0);
     }
 
+    // double dash
     if(this.space.isDown && dash>=0){
         if(this.time.now>dashtime){
             player.x+=100;
@@ -84,6 +83,14 @@ function update(){
         }
     }
 
-    // double dash
+    // regen
+    if(this.time.now>regtime){
+        dash++;
+        regtime=this.time.now+1000;
+    }
+    
     // hidden ninja function
+    // camera - from jack
+    // angle thingy
+    // relocate to asset
 }
