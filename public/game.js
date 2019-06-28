@@ -67,7 +67,7 @@ function update(){
         player.setVelocityX(0);
     }
 
-    if(this.space.isDown){
+    if(this.space.isUp){
         player.x += 200;
     }
     // double dash
