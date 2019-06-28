@@ -24,6 +24,7 @@ function preload ()
     this.load.image('logo', 'face.jpg');
     this.load.image('red', 'assets/particles/red.png');
     this.load.image('green', 'green.png');
+    // updated some codes
 }
 
 function create ()
