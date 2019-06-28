@@ -26,7 +26,7 @@ var player;
 function preload(){
     this.load.image('logo', 'face.jpg');
     this.load.image('green', 'green.png');
-    this.load.spritesheet('dude', 'dude.png', 32, 48, 9) // 32 48
+    this.load.spritesheet('dude', 'dude.png', 32, 48, 8) // 32 48
 
 }
 
