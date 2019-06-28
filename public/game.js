@@ -58,6 +58,7 @@ function create(){
 
     // dash
     dashtime=this.time.now;
+    regtime=this.time.now;
     dash=2;
     // dash counter
     //this.dashcount = game.add.text(600, 20, "#dash: ", { font: "16px Arial", fill: "#ffffff", align: "right" });
