@@ -5,14 +5,13 @@ const PORT = process.env.PORT || 5000
 const app = express();
 const { Pool } = require('pg');
 
-const server = require('http').Server(app);
-app.use(express.static(__dirname + '/public'));
+
 
 var pool = new Pool({
   connectionString : process.env.DATABASE_URL//connecting the database
 })
 
-//app.use(express.static(path.join(__dirname, 'public')))//joining the files public and current folder
+app.use(express.static(path.join(__dirname, 'public')))//joining the files public and current folder
 app.use(express.json());
 app.use(express.urlencoded({extended:false}));
 app.set('views', path.join(__dirname, 'views'))// joining the files views and current folder
@@ -20,7 +19,7 @@ app.set('view engine', 'ejs')//using ejs
 
 
 app.get('/', function (req, res) {
-  res.sendFile(__dirname + '/jacktest.html');
+  res.sendFile(__dirname + '/Phaser Example.html');
 });
 
 app.use(express.static(path.join(__dirname, 'node_modules')))
