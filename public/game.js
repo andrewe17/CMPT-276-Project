@@ -56,7 +56,7 @@ function create(){
 
     player.setCollideWorldBounds(true);
     player.setVelocity(0, 0);
-    player.setScale(0.2);
+    //player.setScale(0.2);
     
 }
 
