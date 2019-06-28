@@ -88,7 +88,7 @@ function update ()
     {
         player.setVelocityX(0);
     }
-    
+
     if (cursors.up.isDown)
     {
         player.setVelocityY(-160);
@@ -101,5 +101,17 @@ function update ()
     { 
         player.setVelocityY(0);
     }
+}
+
+//this function will be called when a dash operation is vallid
+function dash(){
+
+}
+
+//this function is used to check wheather a dash is permiited or not
+function checkDash(){
+
+    //will return a boolen
+    return true; // default
 }
 
