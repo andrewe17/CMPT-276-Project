@@ -134,13 +134,13 @@ function update ()
         player.anims.play('right', true);
     }else if (cursors.up.isDown)
     {
-        player.setVelocityX(160);
+        player.setVelocityY(160);
 
         player.anims.play('right', true);
     }
     else if (cursors.down.isDown)
     {
-        player.setVelocityX(-160);
+        player.setVelocityY(-160);
 
         player.anims.play('right', true);
     }
