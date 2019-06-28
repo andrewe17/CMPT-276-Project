@@ -15,39 +15,27 @@ var game = new Phaser.Game(config);
 
 function preload ()
 {
-    this.load.image('touhou', 'assets/pics/touhou1.png');
+    this.load.image('Bless', 'assets/BillyBless.jpg');
 
-    this.load.setPath('assets/audio/tech');
-
-    this.load.audio('bass', [ 'bass.ogg', 'bass.mp3' ]);
-    this.load.audio('drums', [ 'drums.ogg', 'drums.mp3' ]);
-    this.load.audio('percussion', [ 'percussion.ogg', 'percussion.mp3' ]);
-    this.load.audio('synth1', [ 'synth1.ogg', 'synth1.mp3' ]);
-    this.load.audio('synth2', [ 'synth2.ogg', 'synth2.mp3' ]);
-    this.load.audio('top1', [ 'top1.ogg', 'top1.mp3' ]);
-    this.load.audio('top2', [ 'top2.ogg', 'top2.mp3' ]);
+    this.load.audio('swing',  ['assets/SwordSwing.mp3'] );
+    this.load.audio('background1',  ['assets/BlackHawkDown.mp3'] );
+    this.load.audio('background2',  ['assets/Shingeki.mp3'] );
 }
 
 function create ()
 {
-    this.add.image(790, 600, 'touhou').setOrigin(1);
+    this.add.image(700, 700, 'Bless').setOrigin(1);
 
-    var bass = this.sound.add('bass');
-    var drums = this.sound.add('drums');
-    var percussion = this.sound.add('percussion');
-    var synth1 = this.sound.add('synth1');
-    var synth2 = this.sound.add('synth2');
-    var top1 = this.sound.add('top1');
-    var top2 = this.sound.add('top2');
 
-    var keys = [
-        'Press A for Bass',
-        'Press B for Drums',
-        'Press C for Percussion',
-        'Press D for Synth1',
-        'Press E for Synth2',
-        'Press F for Top1',
-        'Press G for Top2',
+    var swing = this.sound.add('swing');
+    var background1 = this.sound.add('background1');
+    var background2 = this.sound.add('background2');
+
+     
+     var keys = [
+        'Press Z for Swing Sound Effect',
+        'Press A for BlackHawkDown',
+        'Press S for Attack on Titan',
         '',
         'SPACE to stop all sounds'
     ];
@@ -63,36 +51,21 @@ function create ()
             text.setText(keys);
         });
     }
+    
 
     this.input.keyboard.on('keydown-SPACE', function () {
         this.sound.stopAll();
     }, this);
 
+
+    // for audio to play in the background, delete input function leaving "<name>.play();" inside create function
     this.input.keyboard.on('keydown-A', function () {
-        bass.play();
+        background1.play();
     });
-
-    this.input.keyboard.on('keydown-B', function () {
-        drums.play();
+    this.input.keyboard.on('keydown-S', function () {
+        background2.play();
     });
-
-    this.input.keyboard.on('keydown-C', function () {
-        percussion.play();
-    });
-
-    this.input.keyboard.on('keydown-D', function () {
-        synth1.play();
-    });
-
-    this.input.keyboard.on('keydown-E', function () {
-        synth2.play();
-    });
-
-    this.input.keyboard.on('keydown-F', function () {
-        top1.play();
-    });
-
-    this.input.keyboard.on('keydown-G', function () {
-        top2.play();
+    this.input.keyboard.on('keydown-Z', function () {
+        swing.play();
     });
 }
