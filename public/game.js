@@ -1,3 +1,5 @@
+import { cursorTo } from "readline";
+
 var config = {
     type: Phaser.AUTO,
     width: 800,
@@ -39,10 +41,17 @@ function create ()
 }
 
 function update(){
-    /*
-    this.input.keyboard.on(keydown_W, ()=>{logo.position.y(-100);});
-    this.input.keyboard.on(keydown_S, ()=>{logo.position.y(100);});
-    this.input.keyboard.on(keydown_A, ()=>{logo.position.x(-100);});
-    this.input.keyboard.on(keydown_D, ()=>{logo.position.x(100);});
-    */
+    if(game.input.keyboard.isDown(Phaser.Keyboard.W)){
+        logo.position.y(-100);
+    };
+    if(game.input.keyboard.isDown(Phaser.Keyboard.S)){
+        logo.position.y(100);
+    };
+    if(game.input.keyboard.isDown(Phaser.Keyboard.A)){
+        logo.position.y(-100);
+    };
+    if(game.input.keyboard.isDown(Phaser.Keyboard.D)){
+        logo.position.y(100);
+    };
+
 }
