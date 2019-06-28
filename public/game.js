@@ -40,13 +40,17 @@ function update(){
     if(cursor.up.isDown){
         player.setVelocityY(-10);
     }
-    if(cursor.down.isDown){
+    else if(cursor.down.isDown){
         player.setVelocityY(10);
     } 
-    if(cursor.left.isDown){
+    else if(cursor.left.isDown){
         player.setVelocityX(-10);
     }
-    if(cursor.right.isDown){
+    else if(cursor.right.isDown){
         player.setVelocityX(10);
+    }
+    else{
+        player.setVelocityY(0);
+        player.setVelocityX(0);
     }
 }
