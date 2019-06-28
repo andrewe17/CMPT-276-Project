@@ -22,10 +22,12 @@ var config={
 var game = new Phaser.Game(config);
 var cursor;
 var player;
+var wall;
 
 function preload(){
     this.load.image('green', 'green.png');
     this.load.image('ninja', 'ninja.png');
+    this.load.image('wall', 'wall.png');
 }
 
 function create(){
@@ -34,6 +36,10 @@ function create(){
     player = this.physics.add.sprite(100, 100, 'ninja');
     player.setCollideWorldBounds(true);
     player.setVelocity(0, 0);
+
+    wall = this.physics.add.staticgroup();
+    wall.create(300, 300, 'wall');
+    this.physics.add.collider(player,wall);
 }
 
 function update(){
