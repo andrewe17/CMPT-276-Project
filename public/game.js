@@ -24,50 +24,29 @@ var cursor;
 var player;
 
 function preload(){
-    this.load.image('logo', 'face.jpg');
     this.load.image('green', 'green.png');
-    this.load.spritesheet('dude', 'dude.png', 32, 48, 8) // 32 48
-
+    this.load.image('ninja', 'ninja.png');
 }
 
 function create(){
     this.add.image(400, 300, 'green');
     cursor = this.input.keyboard.createCursorKeys();
-    player = this.physics.add.sprite(100, 100, 'dude');
-    this.anims.create({
-        key: 'left',
-        frames: player.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
-        frameRate: 10,
-        repeat: -1
-    });
-    this.anims.create({
-        key: 'idle',
-        frames: [ { key: 'dude', frame: 4 } ],
-        frameRate: 20
-    });
-    this.anims.create({
-        key: 'right',
-        frames: player.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
-        frameRate: 10,
-        repeat: -1
-    });
-
+    player = this.physics.add.sprite(100, 100, 'ninja');
     player.setCollideWorldBounds(true);
     player.setVelocity(0, 0);
-    //player.setScale(0.2);
-    
 }
 
 function update(){
-    if(cursor.up.isDown) player.setVelocityY(-10);
-    else if(cursor.down.isDown){
-        player.setVelocityY(10);
-        player.anims.play('right');
-    } 
-    else if(cursor.left.isDown){
-        player.setVelocityX(-10);
-        player.anims.play('left');
+    if(cursor.up.isDown){
+        player.setVelocityY(-10);
     }
-    else if(cursor.right.isDown) player.setVelocityX(10);
-    else player.anims.play('idle');
+    if(cursor.down.isDown){
+        player.setVelocityY(10);
+    } 
+    if(cursor.left.isDown){
+        player.setVelocityX(-10);
+    }
+    if(cursor.right.isDown){
+        player.setVelocityX(10);
+    }
 }
