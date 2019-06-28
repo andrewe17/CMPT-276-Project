@@ -4,7 +4,6 @@ const path = require('path')
 const PORT = process.env.PORT || 5000
 const app = express();
 const { Pool } = require('pg');
-const io = require('socket.io').listen(server);
 
 var pool = new Pool({
   connectionString : process.env.DATABASE_URL//connecting the database
