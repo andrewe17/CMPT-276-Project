@@ -5,7 +5,7 @@ var config = {
     physics: {
         default: 'arcade',
         arcade: {
-            gravity: { y: 300 },
+            gravity: { y: 0 },
             debug: false
         }
     },
@@ -132,17 +132,23 @@ function update ()
         player.setVelocityX(160);
 
         player.anims.play('right', true);
+    }else if (cursors.up.isDown)
+    {
+        player.setVelocityX(160);
+
+        player.anims.play('right', true);
+    }
+    else if (cursors.down.isDown)
+    {
+        player.setVelocityX(-160);
+
+        player.anims.play('right', true);
     }
     else
     {
         player.setVelocityX(0);
-
+        player.setVelocityY(0);
         player.anims.play('turn');
-    }
-
-    if (cursors.up.isDown && player.body.touching.down)
-    {
-        player.setVelocityY(-330);
     }
 }
 
