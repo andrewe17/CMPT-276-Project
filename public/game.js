@@ -50,7 +50,7 @@ function create(){
     dashtime=this.time.now;
     dash=2;
 
-    this.dashcount = game.add.text(600, 20, "#dash: ", { font: "16px Arial", fill: "#ffffff", align: "right" });
+    //this.dashcount = game.add.text(600, 20, "#dash: ", { font: "16px Arial", fill: "#ffffff", align: "right" });
 }
 
 function update(){
