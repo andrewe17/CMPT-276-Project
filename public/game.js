@@ -35,7 +35,7 @@ function create ()
     //var logo = this.physics.add.image(100, 100, 'logo');
 
     //logo.setVelocity(0, 0);
-    player.setCollideWorldBounds(true);
+    //player.setCollideWorldBounds(true);
 }
 
 function update(){
