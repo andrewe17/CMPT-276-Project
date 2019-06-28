@@ -21,11 +21,11 @@ function preload(){
 }
 
 function create(){
-    game.add.image(400, 300, 'green');
-    cursor = game.input.keyboard.createCursorKeys();
-    player = game.add.sprite(100, 100, 'logo');
-    game.physics.startSystem(Phaser.Physics.P2JS);
-    game.physics.p2.enable(player);
+    this.add.image(400, 300, 'green');
+    cursor = this.input.keyboard.createCursorKeys();
+    player = this.add.sprite(100, 100, 'logo');
+    this.physics.startSystem(Phaser.Physics.P2JS);
+    this.physics.p2.enable(player);
 }
 
 function update(){
