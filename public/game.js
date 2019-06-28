@@ -31,7 +31,7 @@ function create ()
 {
     this.add.image(400, 300, 'green');
     //this.add.image(400, 300, 'sky');
-    player = this.add.spirite(100, 100, 'logo')
+    player = this.add.spirite(100, 100, 'logo');
     //var logo = this.physics.add.image(100, 100, 'logo');
 
     //logo.setVelocity(0, 0);
