@@ -37,7 +37,7 @@ function create(){
     player.setCollideWorldBounds(true);
     player.setVelocity(0, 0);
 
-    wall = this.physics.add.staticgroup();
+    wall = this.physics.add.staticGroup();
     wall.create(300, 300, 'wall');
     this.physics.add.collider(player,wall);
 }
