@@ -42,16 +42,16 @@ function create ()
 
 function update(){
     if(game.input.keyboard.isDown(Phaser.Keyboard.W)){
-        logo.position.y(-100);
+        logo.y-=100;
     };
     if(game.input.keyboard.isDown(Phaser.Keyboard.S)){
-        logo.position.y(100);
+        logo.y+=100;
     };
     if(game.input.keyboard.isDown(Phaser.Keyboard.A)){
-        logo.position.y(-100);
+        logo.y-=100;
     };
     if(game.input.keyboard.isDown(Phaser.Keyboard.D)){
-        logo.position.y(100);
+        logo.y+=100;
     };
 
 }
