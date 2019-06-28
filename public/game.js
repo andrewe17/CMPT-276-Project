@@ -1,52 +1,68 @@
-var config = {
+// import { cursorTo } from "readline";
+var w = 800;
+var h = 600;
+
+var config={
     type: Phaser.AUTO,
-    width: 800,
-    height: 600,
+    width: w,
+    height: h,
     physics: {
         default: 'arcade',
         arcade: {
-            gravity: { y: 200 }
+            gravity: { y: 0 }
         }
     },
-    scene: {
+    scene:{
         preload: preload,
-        create: create
+        create: create,
+        update: update
     }
 };
 
 var game = new Phaser.Game(config);
+var cursor;
+var player;
 
-function preload ()
-{
-    //this.load.image('sky', 'sky.png');
+function preload(){
     this.load.image('logo', 'face.jpg');
     this.load.image('green', 'green.png');
+    this.load.spritesheet('dude', 'dude.png', 32, 48, 9) // 32 48
+
 }
 
-function create ()
-{
+function create(){
     this.add.image(400, 300, 'green');
-    //this.add.image(400, 300, 'sky');
+    cursor = this.input.keyboard.createCursorKeys();
+    player = this.physics.add.sprite(100, 100, 'dude');
+    this.anims.create({
+        key: 'left',
+        frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
+        frameRate: 10,
+        repeat: -1
+    });
+    
+    this.anims.create({
+        key: 'turn',
+        frames: [ { key: 'dude', frame: 4 } ],
+        frameRate: 20
+    });
+    
+    this.anims.create({
+        key: 'right',
+        frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
+        frameRate: 10,
+        repeat: -1
+    });
 
-    var logo = this.physics.add.image(400, 100, 'logo');
-
-    logo.setVelocity(0, 0);
-    //logo.setBounce(1, 1);
-    logo.setCollideWorldBounds(true);
-
-    //emitter.startFollow(logo);
+    player.setCollideWorldBounds(true);
+    player.setVelocity(0, 0);
+    player.setScale(0.2);
+    
 }
 
 function update(){
-    this.cursors = this.input.keyboard.addKeys({
-        up:Phaser.Input.Keyboard.KeyCodes.W,
-        down:Phaser.Input.Keyboard.KeyCodes.S,
-        left:Phaser.Input.Keyboard.KeyCodes.A,
-        right:Phaser.Input.Keyboard.KeyCodes.D
-    });
-
-    if(cursors.up.isDown) logo.setVelocityY(-100);
-    if(cursors.down.isDown) logo.setVelocityY(100);
-    if(cursors.left.isDown) logo.setVelocityX(-100);
-    if(cursors.right.isDown) logo.setVelocityX(100);
+    if(cursor.up.isDown) player.setVelocityY(-10);
+    if(cursor.down.isDown) player.setVelocityY(10);
+    if(cursor.left.isDown) player.setVelocityX(-10);
+    if(cursor.right.isDown) player.setVelocityX(10);
 }
