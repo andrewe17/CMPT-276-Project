@@ -18,6 +18,7 @@ var config = {
 };
 
 var game = new Phaser.Game(config);
+var cursor;
 var player;
 
 function preload ()
@@ -30,7 +31,7 @@ function preload ()
 function create ()
 {
     this.add.image(400, 300, 'green');
-    //this.add.image(400, 300, 'sky');
+    cursor = this.input.keyboard.createCursorKeys();
     player = this.add.sprite(100, 100, 'logo');
     //var logo = this.physics.add.image(100, 100, 'logo');
 
@@ -39,17 +40,18 @@ function create ()
 }
 
 function update(){
-    if(game.input.keyboard.isDown(Phaser.Keyboard.W)){
-        player.y-=100;
-    };
-    if(game.input.keyboard.isDown(Phaser.Keyboard.S)){
-        player.y+=100;
-    };
-    if(game.input.keyboard.isDown(Phaser.Keyboard.A)){
-        player.x-=100;
-    };
-    if(game.input.keyboard.isDown(Phaser.Keyboard.D)){
-        player.x+=100;
-    };
+    
+    /*
+    this.cursors = this.input.keyboard.addKeys({
+        up: Phaser.Input.Keyboard.KeyCodes.W,
+        down: Phaser.Input.Keyboard.KeyCodes.S,
+        left: Phaser.Input.Keyboard.KeyCodes.A,
+        right: Phaser.Input.Keyboard.KeyCodes.D
+    });*/
+
+    if(cursors.up.isDown) player.y-=100;
+    if(cursors.down.isDown) player.y+=100;
+    if(cursors.left.isDown) player.x-=100;
+    if(cursors.right.isDown) player.x+=100;
 
 }
