@@ -24,7 +24,7 @@ var cursor;
 var player;
 var wall;
 var dash;
-var spacedown;
+var sdown;
 
 function preload(){
     this.load.image('grey', 'grey.png');
@@ -46,6 +46,7 @@ function create(){
     this.physics.add.collider(player,wall);
 
     dash=2;
+    sdown=0;
 }
 
 function dpp(){
@@ -74,8 +75,12 @@ function update(){
     }
 
     if(this.space.isDown && dash>=0){
-        player.x+=100;
+        sdown=1;
         dash--;
+    }
+    if(this.space.isUp && sdown==1){
+        player.x+=100;
+        sdown=0;
     }
 
     // double dash
