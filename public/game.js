@@ -23,8 +23,8 @@ var game = new Phaser.Game(config);
 var cursor;
 var player;
 var wall;
-var dash=2;
-var spacedown=false;
+var dash;
+var spacedown;
 
 function preload(){
     this.load.image('grey', 'grey.png');
@@ -45,7 +45,8 @@ function create(){
     wall.create(300, 300, 'wall');
     this.physics.add.collider(player,wall);
 
-    
+    dash=2;
+    spacedown=false;
 }
 
 function update(){
@@ -76,6 +77,7 @@ function update(){
     if(this.space.isUP && spacedown==true){
         player.x += 200;
         dash--;
+        spacedown=false;
     }
     // double dash
     // hidden ninja function
