@@ -23,8 +23,9 @@ var game = new Phaser.Game(config);
 var cursor;
 var player;
 var wall;
+var dashtime;
 var dash;
-var sdown;
+
 
 function preload(){
     this.load.image('grey', 'grey.png');
@@ -35,8 +36,8 @@ function preload(){
 function create(){
     this.add.image(400, 300, 'grey');
     cursor = this.input.keyboard.createCursorKeys();
-    //this.space = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-    this.space = this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+    this.space = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+    //this.space = this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 
     player = this.physics.add.sprite(100, 100, 'ninja');
     player.setCollideWorldBounds(true);
@@ -45,9 +46,9 @@ function create(){
     wall = this.physics.add.staticGroup();
     wall.create(300, 300, 'wall');
     this.physics.add.collider(player,wall);
-
-    dash=3;
-    sdown=0;
+    
+    dashtime=this.time.now;
+    dash=2;
 }
 
 function dpp(){
@@ -76,8 +77,11 @@ function update(){
     }
 
     if(this.space.isDown && dash>=0){
-        player.x+=100;
-        dash--;
+        if(this.time.now>dashtime){
+            player.x+=100;
+            dash--;
+            dashtime=this.time.now+200;
+        }
     }
 
     // double dash
