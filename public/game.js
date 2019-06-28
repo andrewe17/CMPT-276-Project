@@ -86,15 +86,14 @@ function update(){
         player.setVelocityX(0);
     }
 
-    /* double dash
+    // double dash
     if(this.space.isDown && dash>0){
         if(this.time.now>dashtime){
             player.x+=100;
             dash--;
             dashtime=this.time.now+200;
         }
-    }*/
-    ddash();
+    }
 
     // regen
     if(this.time.now>regtime){
@@ -104,14 +103,4 @@ function update(){
     
     // hidden ninja function
     // angle thingy
-}
-
-function ddash(){
-    if(this.space.isDown && dash>0){
-        if(this.time.now>dashtime){
-            player.x+=100;
-            dash--;
-            dashtime=this.time.now+200;
-        }
-    }
 }
