@@ -33,12 +33,13 @@ function create(){
     cursor = this.input.keyboard.createCursorKeys();
     player = this.physics.add.sprite(100, 100, 'logo');
     player.setCollideWorldBounds(true);
+    player.setVelocity(0, 0);
     
 }
 
 function update(){
-    if(cursor.up.isDown && player.y > 0) player.y-=10;
-    if(cursor.down.isDown && player.y < h) player.y+=10;
-    if(cursor.left.isDown && player.x > 0) player.x-=10;
-    if(cursor.right.isDown && player.x < w) player.x+=10;
+    if(cursor.up.isDown) player.setVelocityY(10);
+    if(cursor.down.isDown) player.setVelocityY(-10);
+    if(cursor.left.isDown) player.setVelocityX(10);
+    if(cursor.right.isDown) player.setVelocityX(-10);
 }
