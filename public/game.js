@@ -46,7 +46,6 @@ function create(){
     this.physics.add.collider(player,wall);
 
     dash=2;
-    this.time.events.repeat(Phaser.Timer.SECOND * 2, 10, dpp, this);
 }
 
 function dpp(){
