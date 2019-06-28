@@ -26,15 +26,37 @@ var player;
 function preload(){
     this.load.image('logo', 'face.jpg');
     this.load.image('green', 'green.png');
+    this.load.spritesheet('dude', 'dude.png', 32, 48, 9) // 32 48
+
 }
 
 function create(){
     this.add.image(400, 300, 'green');
     cursor = this.input.keyboard.createCursorKeys();
-    player = this.physics.add.sprite(100, 100, 'logo');
+    player = this.physics.add.sprite(100, 100, 'dude');
+    this.anims.create({
+        key: 'left',
+        frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
+        frameRate: 10,
+        repeat: -1
+    });
+    
+    this.anims.create({
+        key: 'turn',
+        frames: [ { key: 'dude', frame: 4 } ],
+        frameRate: 20
+    });
+    
+    this.anims.create({
+        key: 'right',
+        frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
+        frameRate: 10,
+        repeat: -1
+    });
+
     player.setCollideWorldBounds(true);
     player.setVelocity(0, 0);
-    player.scale.setTo(10, 10);
+    player.setScale(0.2);
     
 }
 
