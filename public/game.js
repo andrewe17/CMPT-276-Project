@@ -70,15 +70,11 @@ function update(){
         player.setVelocityX(0);
     }
 
-    if(this.space.isDown){
-        spacedown=true;
+    if(this.space.isDown && dash>=0){
+        player.x+=100;
+        dash--;
     }
 
-    if(this.space.isUP && spacedown==true){
-        player.x += 200;
-        dash--;
-        spacedown=false;
-    }
     // double dash
     // hidden ninja function
 }
