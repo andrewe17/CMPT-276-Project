@@ -87,7 +87,7 @@ function update(){
     }
 
     // double dash
-    if(this.space.isDown && dash>=0){
+    if(this.space.isDown && dash>0){
         if(this.time.now>dashtime){
             player.x+=100;
             dash--;
