@@ -49,9 +49,9 @@ function update(){
         right: Phaser.Input.Keyboard.KeyCodes.D
     });*/
 
-    if(cursors.up.isDown) player.y-=100;
-    if(cursors.down.isDown) player.y+=100;
-    if(cursors.left.isDown) player.x-=100;
-    if(cursors.right.isDown) player.x+=100;
+    if(cursor.up.isDown) player.y-=100;
+    if(cursor.down.isDown) player.y+=100;
+    if(cursor.left.isDown) player.x-=100;
+    if(cursor.right.isDown) player.x+=100;
 
 }
