@@ -42,8 +42,8 @@ function create ()
 {
 
     this.cameras.main.setBounds(0, 0, 3723, 2000);
-    this.physics.world.setBounds(0, 0, 3723, 2000;
-        
+    this.physics.world.setBounds(0, 0, 3723, 2000);
+
     this.add.image(0, 0, 'van');
 
     cursors = this.input.keyboard.createCursorKeys();
