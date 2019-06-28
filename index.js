@@ -21,22 +21,6 @@ app.get('/', (req, res) => res.render('pages/index'))
 
 app.use(express.static(path.join(__dirname, 'node_modules')))
 
-app.get('/db', async (req, res) => {//seting the database
-  try {
-    const client = await pool.connect()
-    const result = await client.query('SELECT * FROM login');//sql query
-    const results = { 'results': (result.rows[0].id) ? result.rows : [] };
-    res.status(200);
-
-    res.send(results);
-    client.release();
-  } catch (err) {
-    res.send("Error " + err);
-  }
-})
-
-
-
 app.post('/signin', async (req, res) => {//this updates the form when the form from login is submited
   try {
     const que = 'SELECT username, password FROM login WHERE EXISTS (SELECT username, password FROM login WHERE login.username = $1 AND login.password = $2);'
@@ -47,7 +31,7 @@ app.post('/signin', async (req, res) => {//this updates the form when the form f
     // res.send(result.rowCount);
 
     if (result.rowCount > 0){//I noticed that if the queue returns true the rowCount is larger than 0
-      res.redirect('/Phaser Example.html');
+      res.redirect('/game.html');
     }
     else {
        res.redirect('/wrong.html');
