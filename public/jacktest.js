@@ -49,6 +49,13 @@ function create ()
     cursors = this.input.keyboard.createCursorKeys();
 
     player = this.physics.add.image(400, 300, 'bomb');
+    var particles = player.add.particles('star');
+
+    var emitter = particles.createEmitter({
+        speed: 100,
+        scale: { start: 1, end: 0 },
+        blendMode: 'ADD'
+    });
 
     player.setCollideWorldBounds(true);
 
@@ -65,35 +72,27 @@ function update ()
     if (cursors.left.isDown)
     {
         player.setVelocityX(-160);
-
-        //player.anims.play('left', true);
     }
     else if (cursors.right.isDown)
     {
         player.setVelocityX(160);
-
-        //player.anims.play('right', true);
-    }else{
+    }
+    else
+    {
         player.setVelocityX(0);
-        //player.anims.play('turn');
     }
 
     if (cursors.up.isDown)
     {
         player.setVelocityY(-160);
-
-        //player.anims.play('up', true);
     }
     else if (cursors.down.isDown)
     {
         player.setVelocityY(160);
-
-        //player.anims.play('down', true);
     }
     else
     { 
         player.setVelocityY(0);
-        //player.anims.play('turn');
     }
 }
 
