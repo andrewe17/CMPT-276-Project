@@ -5,10 +5,7 @@ var config = {
     width: 800,
     height: 600,
     physics: {
-        default: 'arcade',
-        arcade: {
-            debug: true
-        }
+        default: 'p2js',
     },
     scene: {
         preload: preload,
@@ -32,9 +29,8 @@ function create ()
 {
     this.add.image(400, 300, 'green');
     cursor = this.input.keyboard.createCursorKeys();
-    player = this.add.sprite(100, 100, 'logo');
-    //logo.setVelocity(0, 0);
-    player.body.setCollideWorldBounds=true;
+    player = this.add.sprite(this.world.centerX, this.world.centerY, 'logo');
+    game.physics.p2.enable(player);
 }
 
 function update(){
