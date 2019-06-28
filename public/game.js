@@ -99,7 +99,7 @@ function update(){
     // regen
     if(this.time.now>regtime){
         dash++;
-        regtime=this.time.now+1000;
+        regtime=this.time.now+10000;
     }
     
     // hidden ninja function
