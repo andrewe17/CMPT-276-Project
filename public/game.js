@@ -1,9 +1,11 @@
 // import { cursorTo } from "readline";
+var w = 800;
+var h = 600;
 
 var config={
     type: Phaser.AUTO,
-    width: 800,
-    height: 600,
+    width: w,
+    height: h,
     scene:{
         preload: preload,
         create: create,
@@ -24,13 +26,11 @@ function create(){
     this.add.image(400, 300, 'green');
     cursor = this.input.keyboard.createCursorKeys();
     player = this.add.sprite(100, 100, 'logo');
-    game.physics.startSystem(Phaser.Physics.P2JS);
-    game.physics.p2.enable(player);
 }
 
 function update(){
-    if(cursor.up.isDown) player.y-=100;
-    if(cursor.down.isDown) player.y+=100;
-    if(cursor.left.isDown) player.x-=100;
-    if(cursor.right.isDown) player.x+=100;
+    if(cursor.up.isDown && player.y > 0) player.y-=10;
+    if(cursor.down.isDown && player.y < h) player.y+=10;
+    if(cursor.left.isDown && player.x > 0) player.x-=10;
+    if(cursor.right.isDown && player.x < w) player.x+=10;
 }
