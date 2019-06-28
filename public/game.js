@@ -35,7 +35,8 @@ function preload(){
 function create(){
     this.add.image(400, 300, 'grey');
     cursor = this.input.keyboard.createCursorKeys();
-    this.space = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+    //this.space = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+    this.space = this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 
     player = this.physics.add.sprite(100, 100, 'ninja');
     player.setCollideWorldBounds(true);
@@ -45,7 +46,7 @@ function create(){
     wall.create(300, 300, 'wall');
     this.physics.add.collider(player,wall);
 
-    dash=2;
+    dash=3;
     sdown=0;
 }
 
@@ -75,12 +76,8 @@ function update(){
     }
 
     if(this.space.isDown && dash>=0){
-        sdown=1;
-        dash--;
-    }
-    if(this.space.isUp && sdown==1){
         player.x+=100;
-        sdown=0;
+        dash--;
     }
 
     // double dash
