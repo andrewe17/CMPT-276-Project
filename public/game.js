@@ -1,13 +1,10 @@
 // import { cursorTo } from "readline";
 
-var config = {
+var config={
     type: Phaser.AUTO,
     width: 800,
     height: 600,
-    physics: {
-        default: 'p2js',
-    },
-    scene: {
+    scene:{
         preload: preload,
         create: create,
         update: update
@@ -18,18 +15,16 @@ var game = new Phaser.Game(config);
 var cursor;
 var player;
 
-function preload ()
-{
-    //this.load.image('sky', 'sky.png');
-    this.load.image('logo', 'face.jpg');
-    this.load.image('green', 'green.png');
+function preload(){
+    game.load.image('logo', 'face.jpg');
+    game.load.image('green', 'green.png');
 }
 
-function create ()
-{
-    this.add.image(400, 300, 'green');
-    cursor = this.input.keyboard.createCursorKeys();
-    player = this.add.sprite(100, 100, 'logo');
+function create(){
+    game.add.image(400, 300, 'green');
+    cursor = game.input.keyboard.createCursorKeys();
+    player = game.add.sprite(100, 100, 'logo');
+    game.physics.startSystem(Phaser.Physics.P2JS);
     game.physics.p2.enable(player);
 }
 
