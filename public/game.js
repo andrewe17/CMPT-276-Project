@@ -29,7 +29,7 @@ function create ()
     this.add.image(400, 300, 'green');
     //this.add.image(400, 300, 'sky');
 
-    var logo = this.physics.add.image(400, 100, 'logo');
+    var logo = this.physics.add.image(100, 100, 'logo');
 
     logo.setVelocity(0, 0);
     //logo.setBounce(1, 1);
@@ -39,8 +39,10 @@ function create ()
 }
 
 function update(){
+    /*
     this.input.keyboard.on(keydown_W, ()=>{logo.position.y(-100);});
     this.input.keyboard.on(keydown_S, ()=>{logo.position.y(100);});
     this.input.keyboard.on(keydown_A, ()=>{logo.position.x(-100);});
     this.input.keyboard.on(keydown_D, ()=>{logo.position.x(100);});
+    */
 }
