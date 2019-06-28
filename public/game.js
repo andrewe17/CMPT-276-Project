@@ -6,6 +6,12 @@ var config={
     type: Phaser.AUTO,
     width: w,
     height: h,
+    physics: {
+        default: 'arcade',
+        arcade: {
+            gravity: { y: 0 }
+        }
+    },
     scene:{
         preload: preload,
         create: create,
@@ -26,6 +32,7 @@ function create(){
     this.add.image(400, 300, 'green');
     cursor = this.input.keyboard.createCursorKeys();
     player = this.add.sprite(100, 100, 'logo');
+    player.setCollideWorldBounds(true);
 }
 
 function update(){
