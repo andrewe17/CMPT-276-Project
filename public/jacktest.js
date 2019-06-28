@@ -49,7 +49,7 @@ function create ()
     cursors = this.input.keyboard.createCursorKeys();
 
     player = this.physics.add.image(400, 300, 'bomb');
-    var particles = player.add.particles('star');
+    var particles = this.add.particles('star');
 
     var emitter = particles.createEmitter({
         speed: 100,
@@ -60,6 +60,7 @@ function create ()
     player.setCollideWorldBounds(true);
 
     this.cameras.main.startFollow(player);
+    emitter.startFollow(player);
 }
 
 function update ()
