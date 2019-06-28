@@ -48,27 +48,27 @@ function create(){
 
 function update(){
     if(cursor.up.isDown){
-        player.setVelocityY(-100);
+        player.setVelocityY(-200);
     }
     else if(cursor.down.isDown){
-        player.setVelocityY(100);
+        player.setVelocityY(200);
     } 
     else{
         player.setVelocityY(0);
     }
 
     if(cursor.left.isDown){
-        player.setVelocityX(-100);
+        player.setVelocityX(-200);
     }
     else if(cursor.right.isDown){
-        player.setVelocityX(100);
+        player.setVelocityX(200);
     }
     else{
         player.setVelocityX(0);
     }
 
     if(this.space.isDown){
-        console.log('space is pressed');
+        player.x += 200;
     }
     // double dash
     // hidden ninja function
