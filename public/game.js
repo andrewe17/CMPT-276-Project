@@ -18,11 +18,9 @@ var game = new Phaser.Game(config);
 
 function preload ()
 {
-    this.load.setBaseURL('http://labs.phaser.io');
-
     this.load.image('sky', 'sky.png');
     this.load.image('logo', 'face.jpg');
-    this.load.image('red', 'assets/particles/red.png');
+    this.load.image('red', 'red.png');
     this.load.image('green', 'green.png');
     // updated some codes
 }
