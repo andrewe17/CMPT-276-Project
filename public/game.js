@@ -28,9 +28,9 @@ function preload ()
 
 function create ()
 {
-    this.add.image(1, 1, 'green');
+    this.add.image(400, 300, 'green');
     this.add.image(400, 300, 'sky');
-    
+
     var particles = this.add.particles('red');
     var emitter = particles.createEmitter({
         speed: 100,
