@@ -39,5 +39,7 @@ function create ()
 
 function update(){
     this.input.keyboard.on(keydown_W, ()=>{logo.position.y(-100);});
-
+    this.input.keyboard.on(keydown_S, ()=>{logo.position.y(100);});
+    this.input.keyboard.on(keydown_A, ()=>{logo.position.x(-100);});
+    this.input.keyboard.on(keydown_D, ()=>{logo.position.x(100);});
 }
