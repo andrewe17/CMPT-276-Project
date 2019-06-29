@@ -1,11 +1,7 @@
-// import { cursorTo } from "readline";
-var w = 800;
-var h = 600;
-
 var config={
     type: Phaser.AUTO,
-    width: w,
-    height: h,
+    width: 800,
+    height: 600,
     physics: {
         default: 'arcade',
         arcade: {
@@ -21,9 +17,14 @@ var config={
 
 var game = new Phaser.Game(config);
 
+// map
+var mapx = 3723;
+var mapy = 2000;
 // keyboard + mouse
 var cursor;
 var pointer;
+var mousex;
+var mousey;
 // objects
 var player;
 var wall;
@@ -61,7 +62,7 @@ function create(){
     pointer = this.input.activePointer; // mouse
 
     // player
-    player = this.physics.add.sprite(300, 400, 'ninja');
+    player = this.physics.add.sprite(400, 300, 'ninja');
     player.setCollideWorldBounds(true);
     player.setVelocity(0, 0);
 
@@ -81,7 +82,7 @@ function create(){
     // text
     dashtext=this.add.text(0, 0, 'dash: '+dash, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     regtext=this.add.text(0, 20, 'regen: '+(regtime-this.time.now), {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
-    verstext=this.add.text(0, 40, 'vers: '+346, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
+    verstext=this.add.text(0, 40, 'vers: '+358, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     xtext=this.add.text(0, 60, 'x: '+0, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     ytext=this.add.text(0, 80, 'y: '+0, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
 
@@ -133,10 +134,20 @@ function update(){
     dashtext.text='dash: '+dash;
     regtext.text='regen: '+(regtime-this.time.now);
 
-
     pointer = this.input.activePointer;
+    if(player.x<400){
+        mousex=pointer.x-400;
+    }
+    else if(player.x>(mapx-400)){
+        mousex=pointer.x-(mapx-400);
+    }
+    else{
+        mousex=pointer.x-player.x;
+    }
+
     xtext.text='player.x: '+player.x;
     xtext.text+=' pointer.x: '+pointer.x;
+    xtext.text+=' mousex: '+mousex;
     ytext.text='player.y: '+player.y;
 
     // hidden ninja function
