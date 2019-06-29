@@ -79,9 +79,9 @@ function create(){
     // text
     dashtext=this.add.text(0, 0, 'dash: '+dash, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     regtext=this.add.text(0, 20, 'regen: '+(regtime-this.time.now), {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
-    verstext=this.add.text(0, 40, 'vers: '+310, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
-    xtext=this.add.text(0, 60, 'x: '+(pointer.x-300), {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
-    ytext=this.add.text(0, 80, 'y: '+(pointer.y-400), {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
+    verstext=this.add.text(0, 40, 'vers: '+314, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
+    xtext=this.add.text(0, 60, 'x: '+0, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
+    ytext=this.add.text(0, 80, 'y: '+0, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
 
 }
 
@@ -132,8 +132,8 @@ function update(){
     regtext.text='regen: '+(regtime-this.time.now);
 
     pointer = this.input.activePointer;
-    xtext.text='pointer.x: '+(pointer.x-300);
-    ytext.text='pointer.y: '+(pointer.y-400);
+    xtext.text='pointer.x: '+(pointer.x-300+100);
+    ytext.text='pointer.y: '+(pointer.y-400+100);
 
     // hidden ninja function
     // angle thingy
