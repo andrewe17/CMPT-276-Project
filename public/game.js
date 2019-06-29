@@ -68,7 +68,7 @@ function create(){
     regtime=this.time.now;
     dashtext=this.add.text(0, 0, 'dash: '+dash, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     regtext=this.add.text(0, 20, 'regen: '+(regtime-this.time.now), {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
-    verstext=this.add.text(0, 40, 'vers: '+236, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
+    verstext=this.add.text(0, 40, 'vers: '+239, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     // dash angle - position of cursor
     pointer = this.input.activePointer;
 }
@@ -101,7 +101,7 @@ function update(){
             dash--;
             dashtime=this.time.now+200;
             regtime=this.time.now+10000;
-            dashtext.text='dash: '+dash;
+            //dashtext.text='dash: '+dash;
             player.x+=100;
         }
     }
@@ -111,17 +111,18 @@ function update(){
         if(dash<2){
             dash++;
             regtime=this.time.now+10000;
-            dashtext.text='dash: '+dash;
+            //dashtext.text='dash: '+dash;
         }
         else{
             regtime=this.time.now;
-            regtext.text='regen: '+(regtime-this.time.now);
+            //regtext.text='regen: '+(regtime-this.time.now);
         }
     }
     else{
-        regtext.text='regen: '+(regtime-this.time.now);
+        //regtext.text='regen: '+(regtime-this.time.now);
     }
-
+    dashtext.text='dash: '+dash;
+    regtext.text='regen: '+(regtime-this.time.now);
 
     // hidden ninja function
     // angle thingy
