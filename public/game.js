@@ -82,7 +82,7 @@ function create(){
     // text
     dashtext=this.add.text(0, 0, 'dash: '+dash, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     regtext=this.add.text(0, 20, 'regen: '+(regtime-this.time.now), {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
-    verstext=this.add.text(0, 40, 'vers: '+413, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
+    verstext=this.add.text(0, 40, 'vers: '+418, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     xtext=this.add.text(0, 60, 'x: '+0, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     ytext=this.add.text(0, 80, 'y: '+0, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
 
@@ -134,6 +134,7 @@ function update(){
     dashtext.text='dash: '+dash;
     regtext.text='regen: '+(regtime-this.time.now);
 
+    // mouse position
     pointer = this.input.activePointer;
     if(player.x<400){
         mousex=pointer.x-player.x;
@@ -145,12 +146,18 @@ function update(){
         mousex=pointer.x-400;
     }
 
-    xtext.text='player.x: '+player.x;
-    xtext.text+=' pointer.x: '+pointer.x;
-    xtext.text+=' mousex: '+mousex;
-    ytext.text='player.y: '+player.y;
+    if(player.y<300){
+        mousey=pointer.y-player.y;
+    }
+    else if(player.y>(mapy-300)){
+        mousey=pointer.y-(player.y-(mapy-600));
+    }
+    else{
+        mousey=pointer.y-300;
+    }
+
+    xtext.text='mousex: '+mousex;
+    ytext.text='mousey: '+mousey;
 
     // hidden ninja function
-    // angle thingy
-    // test
 }
