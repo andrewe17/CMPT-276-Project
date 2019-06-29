@@ -73,6 +73,7 @@ function create(){
 }
 
 function update(){
+    // keys
     if(cursor.up.isDown){
         player.setVelocityY(-200);
     }
@@ -93,7 +94,7 @@ function update(){
         player.setVelocityX(0);
     }
 
-    // double dash
+    // dash
     if(this.space.isDown && dash>0){
         if(this.time.now>dashtime){
             dash--;
@@ -105,12 +106,16 @@ function update(){
 
     // regen
     if(this.time.now>regtime && dash<2){
-        dash++;
-        regtime=this.time.now+10000;
-        dashtext.text='dash: '+dash;
+        if(dash<2){
+            dash++;
+            regtime=this.time.now+10000;
+            dashtext.text='dash: '+dash;
+        }
+        else{
+            regtime=this.time.now;
+        }
     }
     else{
-        regtime=this.time.now+10000;
         regtext.text='regen: '+(regtime-this.time.now);
     }
 
