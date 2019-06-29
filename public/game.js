@@ -81,7 +81,7 @@ function create(){
     // text
     dashtext=this.add.text(0, 0, 'dash: '+dash, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     regtext=this.add.text(0, 20, 'regen: '+(regtime-this.time.now), {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
-    verstext=this.add.text(0, 40, 'vers: '+340, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
+    verstext=this.add.text(0, 40, 'vers: '+343, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     xtext=this.add.text(0, 60, 'x: '+0, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     ytext=this.add.text(0, 80, 'y: '+0, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
 
@@ -133,21 +133,10 @@ function update(){
     dashtext.text='dash: '+dash;
     regtext.text='regen: '+(regtime-this.time.now);
 
-    // mouse
-    if(player.x<400){
-        mousex= pointer.x;
-    }
-    else if(player.x>mw-400){
 
-
-    }
-    else{
-
-    }
-    //let angle = Phaser.Math.Angle.Between(this.x, this.y, mouse.x + this.scene.cameras.main.scrollX, mouse.y + this.scene.cameras.main.scrollY)  
     pointer = this.input.activePointer;
-    xtext.text='scrollX: '+this.scene.cameras.main.scrollX;
-    ytext.text='scrollY: '+this.scene.cameras.main.scrollX;
+    xtext.text='player.x: '+player.x;
+    ytext.text='player.y: '+player.y;
 
     // hidden ninja function
     // angle thingy
