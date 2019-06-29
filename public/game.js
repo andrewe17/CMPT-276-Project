@@ -25,9 +25,8 @@ var player;
 var wall;
 var dash; // #dashes
 var dashtime;
-var dashtext;
-var regen; // regen
 var regtime; 
+var dashtext;
 var regtext;
 var pointer; // mouse position
 
@@ -65,10 +64,9 @@ function create(){
     // dash
     dash=1;
     dashtime=this.time.now;
-    dashtext=this.add.text(0, 0, 'dash: '+dash, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
-    regen=0;
     regtime=this.time.now;
-    regtext=this.add.text(0, 100, 'regen: '+regen, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
+    dashtext=this.add.text(0, 0, 'dash: '+dash, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
+    regtext=this.add.text(0, 20, 'regen: '+(regtime-this.time.now), {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
 
     // dash angle - position of cursor
     pointer = this.input.activePointer;
@@ -111,8 +109,10 @@ function update(){
         regtime=this.time.now+10000;
         dashtext.text='#dashes: '+dash;
     }
-    regen = regtime-this.time.now;
-    regtext='regen: '+regen;
+    else{
+        regtext.text='regen: '+(regtime-this.time.now);
+    }
+
 
     // hidden ninja function
     // angle thingy
