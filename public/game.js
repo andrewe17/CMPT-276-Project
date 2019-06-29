@@ -72,7 +72,7 @@ function create(){
 
     // obsticles
     wall = this.physics.add.staticGroup();
-    wall.create(300, 300, 'wall');
+    wall.create(200, 300, 'wall');
     this.physics.add.collider(player,wall);
 
     // dash
@@ -148,7 +148,7 @@ function update(){
     // text
     dashtext.text='dash: '+dash;
     regtext.text='regen: '+(regtime-this.time.now);
-    xtext.text='angle: '+math.cos(angle);
+    xtext.text='angle: '+Math.cos(angle);
     //ytext.text='mousey: '+mousey;
 
     // hidden ninja function
