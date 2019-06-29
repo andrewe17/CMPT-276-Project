@@ -112,7 +112,7 @@ function update(){
             dashtext.text='dash: '+dash;
         }
         else{
-            regtime=this.time.now;
+            regtime=this.time.now+1000;
         }
     }
     else{
