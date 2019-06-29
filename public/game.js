@@ -37,6 +37,9 @@ var regtext;
 var verstext;
 var xtext;
 var ytext;
+// mouse
+var mousex;
+var mousey;
 
 function preload(){
     this.load.image('ninja', 'assets/ninja.png');
@@ -58,7 +61,7 @@ function create(){
     pointer = this.input.activePointer; // mouse
 
     // player
-    player = this.physics.add.sprite(100, 100, 'ninja');
+    player = this.physics.add.sprite(300, 400, 'ninja');
     player.setCollideWorldBounds(true);
     player.setVelocity(0, 0);
 
@@ -78,7 +81,7 @@ function create(){
     // text
     dashtext=this.add.text(0, 0, 'dash: '+dash, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     regtext=this.add.text(0, 20, 'regen: '+(regtime-this.time.now), {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
-    verstext=this.add.text(0, 40, 'vers: '+321, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
+    verstext=this.add.text(0, 40, 'vers: '+340, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     xtext=this.add.text(0, 60, 'x: '+0, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     ytext=this.add.text(0, 80, 'y: '+0, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
 
@@ -130,10 +133,21 @@ function update(){
     dashtext.text='dash: '+dash;
     regtext.text='regen: '+(regtime-this.time.now);
 
+    // mouse
+    if(player.x<400){
+        mousex= pointer.x;
+    }
+    else if(player.x>mw-400){
+
+
+    }
+    else{
+
+    }
+    //let angle = Phaser.Math.Angle.Between(this.x, this.y, mouse.x + this.scene.cameras.main.scrollX, mouse.y + this.scene.cameras.main.scrollY)  
     pointer = this.input.activePointer;
-    xtext.text='pointer.x: '+(pointer.x-300-100);
-    xtext.text+=' player.x: '+(player.x);
-    ytext.text='pointer.y: '+(pointer.y-400+100);
+    xtext.text='scrollX: '+this.scene.cameras.main.scrollX;
+    ytext.text='scrollY: '+this.scene.cameras.main.scrollX;
 
     // hidden ninja function
     // angle thingy
