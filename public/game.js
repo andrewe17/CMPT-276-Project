@@ -21,7 +21,6 @@ var config={
 
 var game = new Phaser.Game(config);
 
-var camera;
 // keyboard + mouse
 var cursor;
 var pointer;
@@ -47,7 +46,7 @@ function preload(){
 
 function create(){
     // set camera
-    camera=this.cameras.main.setBounds(0, 0, 3723, 2000);
+    this.cameras.main.setBounds(0, 0, 3723, 2000);
     this.physics.world.setBounds(0, 0, 3723, 2000);
 
     // background image
@@ -79,7 +78,7 @@ function create(){
     // text
     dashtext=this.add.text(0, 0, 'dash: '+dash, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     regtext=this.add.text(0, 20, 'regen: '+(regtime-this.time.now), {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
-    verstext=this.add.text(0, 40, 'vers: '+317, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
+    verstext=this.add.text(0, 40, 'vers: '+321, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     xtext=this.add.text(0, 60, 'x: '+0, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     ytext=this.add.text(0, 80, 'y: '+0, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
 
@@ -133,6 +132,7 @@ function update(){
 
     pointer = this.input.activePointer;
     xtext.text='pointer.x: '+(pointer.x-300-100);
+    xtext.text+=' player.x: '+(player.x);
     ytext.text='pointer.y: '+(pointer.y-400+100);
 
     // hidden ninja function
