@@ -20,16 +20,23 @@ var config={
 };
 
 var game = new Phaser.Game(config);
+
+// keyboard + mouse
 var cursor;
+var pointer;
+// objects
 var player;
 var wall;
-var dash; // #dashes
+// dash
+var dash;
 var dashtime;
 var regtime; 
+// text
 var dashtext;
 var regtext;
 var verstext;
-var pointer; // mouse position
+var xtext;
+var ytext;
 
 function preload(){
     this.load.image('ninja', 'assets/ninja.png');
@@ -45,9 +52,10 @@ function create(){
     // background image
     this.add.image(1861, 1000, 'van');
 
-    // keyboard keys
+    // keyboard + mouse
     cursor = this.input.keyboard.createCursorKeys();
     this.space = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+    pointer = this.input.activePointer; // mouse
 
     // player
     player = this.physics.add.sprite(100, 100, 'ninja');
@@ -66,11 +74,14 @@ function create(){
     dash=0;
     dashtime=this.time.now;
     regtime=this.time.now;
+
+    // text
     dashtext=this.add.text(0, 0, 'dash: '+dash, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     regtext=this.add.text(0, 20, 'regen: '+(regtime-this.time.now), {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
-    verstext=this.add.text(0, 40, 'vers: '+239, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
-    // dash angle - position of cursor
-    pointer = this.input.activePointer;
+    verstext=this.add.text(0, 40, 'vers: '+249, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
+    xtext=this.add.text(0, 60, 'x: '+(pointer.x), {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
+    ytext=this.add.text(0, 80, 'y: '+(pointer.y), {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
+
 }
 
 function update(){
@@ -84,7 +95,6 @@ function update(){
     else{
         player.setVelocityY(0);
     }
-
     if(cursor.left.isDown){
         player.setVelocityX(-200);
     }
@@ -101,7 +111,6 @@ function update(){
             dash--;
             dashtime=this.time.now+200;
             regtime=this.time.now+10000;
-            //dashtext.text='dash: '+dash;
             player.x+=100;
         }
     }
@@ -111,18 +120,19 @@ function update(){
         if(dash<2){
             dash++;
             regtime=this.time.now+10000;
-            //dashtext.text='dash: '+dash;
         }
         else{
             regtime=this.time.now;
-            //regtext.text='regen: '+(regtime-this.time.now);
         }
     }
-    else{
-        //regtext.text='regen: '+(regtime-this.time.now);
-    }
+
+    // text
     dashtext.text='dash: '+dash;
     regtext.text='regen: '+(regtime-this.time.now);
+
+    pointer = this.input.activePointer;
+    xtext.text='x: '+(pointer.x);
+    ytext.text='y: '+(pointer.y);
 
     // hidden ninja function
     // angle thingy
