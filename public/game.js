@@ -61,7 +61,8 @@ function create(){
     regtime=this.time.now;
     dash=2;
     // dash counter
-    //this.dashcount = game.add.text(600, 20, "#dash: ", { font: "16px Arial", fill: "#ffffff", align: "right" });
+    this.add.text(0, 0, 'dashes: '+dash, { fontFamily: '"Roboto Condensed"' });
+
     // dash angle - position of cursor
     pointer = this.input.activePointer;
 }
