@@ -99,7 +99,7 @@ function update(){
     }
 
     // regen
-    if(this.time.now>regtime){
+    if(this.time.now>regtime && dash<2){
         dash++;
         regtime=this.time.now+10000;
         dashtext.text='#dashes: '+dash;
