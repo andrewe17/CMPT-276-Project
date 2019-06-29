@@ -66,7 +66,7 @@ function create(){
     dashtime=this.time.now;
     dashtext=this.add.text(0, 0, 'dash: '+dash, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     regtime=this.time.now;
-    regtext=this.add.text(50, 0, 'regen: '+0, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
+    regtext=this.add.text(0, 100, 'regen: '+0, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
 
     // dash angle - position of cursor
     pointer = this.input.activePointer;
