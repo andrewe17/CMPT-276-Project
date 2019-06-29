@@ -50,7 +50,7 @@ function create(){
     player.setVelocity(0, 0);
 
     //make camera follow the player 
-    this.cameras.main.startFollow(player, true, 0.08, 0.08,0.08,0.08);
+    this.cameras.main.startFollow(player, true, 0.08, 0.08, 0.08, 0.08);
 
     // obsticles
     wall = this.physics.add.staticGroup();
@@ -61,8 +61,7 @@ function create(){
     dash=2;
     dashtime=this.time.now;
     regtime=this.time.now;
-    dashtext=this.add.text(0, 0, '#dashes: '+dash, {fontFamily:'"Roboto Condensed"'}); // counter
-    dashtext.scoreText.setScrollFactor(0,0);
+    dashtext=this.add.text(0, 0, '#dashes: '+dash, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     // dash angle - position of cursor
     pointer = this.input.activePointer;
 }
