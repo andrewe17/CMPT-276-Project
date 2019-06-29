@@ -21,6 +21,7 @@ var config={
 
 var game = new Phaser.Game(config);
 
+var camera;
 // keyboard + mouse
 var cursor;
 var pointer;
@@ -46,7 +47,7 @@ function preload(){
 
 function create(){
     // set camera
-    this.cameras.main.setBounds(0, 0, 3723, 2000);
+    camera=this.cameras.main.setBounds(0, 0, 3723, 2000);
     this.physics.world.setBounds(0, 0, 3723, 2000);
 
     // background image
@@ -78,7 +79,7 @@ function create(){
     // text
     dashtext=this.add.text(0, 0, 'dash: '+dash, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     regtext=this.add.text(0, 20, 'regen: '+(regtime-this.time.now), {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
-    verstext=this.add.text(0, 40, 'vers: '+257, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
+    verstext=this.add.text(0, 40, 'vers: '+300, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     xtext=this.add.text(0, 60, 'x: '+(pointer.x), {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     ytext=this.add.text(0, 80, 'y: '+(pointer.y), {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
 
@@ -131,8 +132,8 @@ function update(){
     regtext.text='regen: '+(regtime-this.time.now);
 
     pointer = this.input.activePointer;
-    xtext.text='x: '+(player.x-this.camera.x-pointer.x);
-    ytext.text='y: '+(player.y-this.camera.y-pointer.y);
+    xtext.text='x: '+(player.x-camera.x-pointer.x);
+    ytext.text='y: '+(player.y-camera.y-pointer.y);
 
     // hidden ninja function
     // angle thingy
