@@ -23,9 +23,10 @@ var game = new Phaser.Game(config);
 var cursor;
 var player;
 var wall;
-var dashtime;
 var dash;
+var dashtime;
 var regtime; // reg for dash
+var dashtext;
 var pointer; // position of cursor
 
 function preload(){
@@ -57,11 +58,10 @@ function create(){
     this.physics.add.collider(player,wall);
 
     // dash
+    dash=2;
     dashtime=this.time.now;
     regtime=this.time.now;
-    dash=2;
-    // dash counter
-    this.add.text(0, 0, 'dashes: '+dash, { fontFamily: '"Roboto Condensed"' });
+    dashtext=this.add.text(0, 0, '#dashes: '+dash, {fontFamily:'"Roboto Condensed"'}); // counter
 
     // dash angle - position of cursor
     pointer = this.input.activePointer;
@@ -94,6 +94,7 @@ function update(){
             player.x+=100;
             dash--;
             dashtime=this.time.now+200;
+            dashtext.text='#dashes: '+dash;
         }
     }
 
@@ -101,6 +102,7 @@ function update(){
     if(this.time.now>regtime){
         dash++;
         regtime=this.time.now+10000;
+        dashtext.text='#dashes: '+dash;
     }
     
     // hidden ninja function
