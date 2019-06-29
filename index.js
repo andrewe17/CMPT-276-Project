@@ -28,6 +28,9 @@ app.get('/', function(req, res){
 
 io.on('connection', function(socket){
   console.log('a user connected');
+  socket.on('disconnect', function(){ //on reload or exit
+    console.log('user disconnected');
+  });
 });
 
 app.use(express.static(path.join(__dirname, 'node_modules')))
