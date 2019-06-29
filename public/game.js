@@ -82,7 +82,7 @@ function create(){
     // text
     dashtext=this.add.text(0, 0, 'dash: '+dash, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     regtext=this.add.text(0, 20, 'regen: '+(regtime-this.time.now), {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
-    verstext=this.add.text(0, 40, 'vers: '+418, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
+    verstext=this.add.text(0, 40, 'vers: '+422, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     xtext=this.add.text(0, 60, 'x: '+0, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     ytext=this.add.text(0, 80, 'y: '+0, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
 
@@ -135,6 +135,17 @@ function update(){
     regtext.text='regen: '+(regtime-this.time.now);
 
     // mouse position
+    mouse_position();
+
+    xtext.text='mousex: '+mousex;
+    ytext.text='mousey: '+mousey;
+
+    // hidden ninja function
+}
+
+// gets the x and y position of mouse relative to player
+function mouse_position(){
+    // mouse x
     pointer = this.input.activePointer;
     if(player.x<400){
         mousex=pointer.x-player.x;
@@ -145,7 +156,7 @@ function update(){
     else{
         mousex=pointer.x-400;
     }
-
+    // mouse y
     if(player.y<300){
         mousey=pointer.y-player.y;
     }
@@ -155,9 +166,4 @@ function update(){
     else{
         mousey=pointer.y-300;
     }
-
-    xtext.text='mousex: '+mousex;
-    ytext.text='mousey: '+mousey;
-
-    // hidden ninja function
 }
