@@ -136,6 +136,7 @@ function update(){
 
     pointer = this.input.activePointer;
     xtext.text='player.x: '+player.x;
+    xtext.text+=' pointer.x: '+pointer.x;
     ytext.text='player.y: '+player.y;
 
     // hidden ninja function
