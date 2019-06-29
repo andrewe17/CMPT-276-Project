@@ -28,6 +28,7 @@ var dashtime;
 var regtime; 
 var dashtext;
 var regtext;
+var verstext;
 var pointer; // mouse position
 
 function preload(){
@@ -67,7 +68,7 @@ function create(){
     regtime=this.time.now;
     dashtext=this.add.text(0, 0, 'dash: '+dash, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     regtext=this.add.text(0, 20, 'regen: '+(regtime-this.time.now), {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
-
+    verstext=this.add.text(0, 30, 'vers: '+224, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     // dash angle - position of cursor
     pointer = this.input.activePointer;
 }
@@ -105,14 +106,15 @@ function update(){
     }
 
     // regen
-    if(this.time.now>regtime && dash<2){
+    if(this.time.now>regtime){
         if(dash<2){
             dash++;
             regtime=this.time.now+10000;
             dashtext.text='dash: '+dash;
         }
         else{
-            regtime=this.time.now+1000;
+            regtime=this.time.now;
+            regtext.text='regen: '+(regtime-this.time.now);
         }
     }
     else{
