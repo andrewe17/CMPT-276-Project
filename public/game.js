@@ -83,7 +83,7 @@ function create(){
     // text
     dashtext=this.add.text(0, 0, 'dash: '+dash, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     regtext=this.add.text(0, 20, 'regen: '+(regtime-this.time.now), {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
-    verstext=this.add.text(0, 40, 'vers: '+438, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
+    verstext=this.add.text(0, 40, 'vers: '+442, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     xtext=this.add.text(0, 60, 'x: '+0, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     ytext=this.add.text(0, 80, 'y: '+0, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
 
@@ -116,8 +116,8 @@ function update(){
             dash--;
             dashtime=this.time.now+200;
             regtime=this.time.now+10000;
-            player.x+=math.cos(angle)*100;
-            player.y+=math.sin(angle)*100;
+            player.x+=100;
+            player.y+=100;
 
         }
     }
@@ -143,13 +143,13 @@ function update(){
     if(player.y<300) mousey=pointer.y-player.y; 
     else if(player.y>(mapy-300))mousey=pointer.y-(player.y-(mapy-600));
     else mousey=pointer.y-300;
-    angle = math.acos(mousex/mousey);
+    angle = mousex/mousey;
 
     // text
     dashtext.text='dash: '+dash;
     regtext.text='regen: '+(regtime-this.time.now);
-    xtext.text='mousex: '+mousex;
-    ytext.text='mousey: '+mousey;
+    xtext.text='angle: '+angle;
+    //ytext.text='mousey: '+mousey;
 
     // hidden ninja function
 }
