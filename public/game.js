@@ -23,10 +23,11 @@ var game = new Phaser.Game(config);
 var cursor;
 var player;
 var wall;
-var dash;
-var dashtime; // #dashes
+var dash; // #dashes
+var dashtime;
 var dashtext;
-var regtime; // regen
+var regen; // regen
+var regtime; 
 var regtext;
 var pointer; // mouse position
 
@@ -65,8 +66,9 @@ function create(){
     dash=1;
     dashtime=this.time.now;
     dashtext=this.add.text(0, 0, 'dash: '+dash, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
+    regen=0;
     regtime=this.time.now;
-    regtext=this.add.text(0, 100, 'regen: '+0, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
+    regtext=this.add.text(0, 100, 'regen: '+regen, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
 
     // dash angle - position of cursor
     pointer = this.input.activePointer;
@@ -109,7 +111,8 @@ function update(){
         regtime=this.time.now+10000;
         dashtext.text='#dashes: '+dash;
     }
-    regtext='regen: '+(regtime-this.time.now);
+    regen = regtime-this.time.now;
+    regtext='regen: '+regen;
 
     // hidden ninja function
     // angle thingy
