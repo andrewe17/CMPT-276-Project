@@ -41,6 +41,7 @@ var ytext;
 // mouse
 var mousex;
 var mousey;
+var angle;
 
 function preload(){
     this.load.image('ninja', 'assets/ninja.png');
@@ -82,7 +83,7 @@ function create(){
     // text
     dashtext=this.add.text(0, 0, 'dash: '+dash, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     regtext=this.add.text(0, 20, 'regen: '+(regtime-this.time.now), {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
-    verstext=this.add.text(0, 40, 'vers: '+427, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
+    verstext=this.add.text(0, 40, 'vers: '+438, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     xtext=this.add.text(0, 60, 'x: '+0, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     ytext=this.add.text(0, 80, 'y: '+0, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
 
@@ -115,7 +116,9 @@ function update(){
             dash--;
             dashtime=this.time.now+200;
             regtime=this.time.now+10000;
-            player.x+=100;
+            player.x+=math.cos(angle)*100;
+            player.y+=math.sin(angle)*100;
+
         }
     }
 
@@ -140,6 +143,7 @@ function update(){
     if(player.y<300) mousey=pointer.y-player.y; 
     else if(player.y>(mapy-300))mousey=pointer.y-(player.y-(mapy-600));
     else mousey=pointer.y-300;
+    angle = math.acos(mousex/mousey);
 
     // text
     dashtext.text='dash: '+dash;
