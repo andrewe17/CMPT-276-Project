@@ -62,7 +62,7 @@ function create(){
     dashtime=this.time.now;
     regtime=this.time.now;
     dashtext=this.add.text(0, 0, '#dashes: '+dash, {fontFamily:'"Roboto Condensed"'}); // counter
-
+    dashtext.fixedToCamera=true;
     // dash angle - position of cursor
     pointer = this.input.activePointer;
 }
