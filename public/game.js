@@ -24,32 +24,36 @@ var cursor;
 var player;
 var wall;
 var dash;
-var dashtime;
+var dashtime; // #dashes
 var dashtext;
-var regtime; // reg for dash
-var pointer; // position of cursor
+var regtime; // regen
+var regtext;
+var pointer; // mouse position
 
 function preload(){
-    //this.load.image('grey', 'assets/grey.png');
     this.load.image('ninja', 'assets/ninja.png');
     this.load.image('wall', 'assets/wall.png');
     this.load.image('van', 'assets/van.jpg');
 }
 
 function create(){
+    // set camera
     this.cameras.main.setBounds(0, 0, 3723, 2000);
     this.physics.world.setBounds(0, 0, 3723, 2000);
 
-    //add image to background
+    // background image
     this.add.image(1861, 1000, 'van');
+
+    // keyboard keys
     cursor = this.input.keyboard.createCursorKeys();
     this.space = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
+    // player
     player = this.physics.add.sprite(100, 100, 'ninja');
     player.setCollideWorldBounds(true);
     player.setVelocity(0, 0);
 
-    //make camera follow the player 
+    // camera follow player 
     this.cameras.main.startFollow(player, true, 0.08, 0.08, 0.08, 0.08);
 
     // obsticles
@@ -58,10 +62,12 @@ function create(){
     this.physics.add.collider(player,wall);
 
     // dash
-    dash=2;
+    dash=1;
     dashtime=this.time.now;
+    dashtext=this.add.text(0, 0, 'dash: '+dash, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     regtime=this.time.now;
-    dashtext=this.add.text(0, 0, '#dashes: '+dash, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
+    regtext=this.add.text(0, 0, 'regen: '+(regtime-this.time.now), {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
+
     // dash angle - position of cursor
     pointer = this.input.activePointer;
 }
@@ -103,6 +109,7 @@ function update(){
         regtime=this.time.now+10000;
         dashtext.text='#dashes: '+dash;
     }
+    regtext='regen: '+(regtime-this.time.now);
     
     // hidden ninja function
     // angle thingy
