@@ -98,7 +98,7 @@ function update(){
         if(this.time.now>dashtime){
             dash--;
             dashtime=this.time.now+200;
-            dashtext.text='#dashes: '+dash;
+            dashtext.text='dash: '+dash;
             player.x+=100;
         }
     }
@@ -107,9 +107,10 @@ function update(){
     if(this.time.now>regtime && dash<2){
         dash++;
         regtime=this.time.now+10000;
-        dashtext.text='#dashes: '+dash;
+        dashtext.text='dash: '+dash;
     }
     else{
+        regtime=this.time.now+10000;
         regtext.text='regen: '+(regtime-this.time.now);
     }
 
