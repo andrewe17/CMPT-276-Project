@@ -25,8 +25,8 @@ var player;
 var wall;
 var dash;
 var dashtime;
-var regtime; // reg for dash
 var dashtext;
+var regtime; // reg for dash
 var pointer; // position of cursor
 
 function preload(){
@@ -63,6 +63,7 @@ function create(){
     regtime=this.time.now;
     dashtext=this.add.text(0, 0, '#dashes: '+dash, {fontFamily:'"Roboto Condensed"'}); // counter
     dashtext.fixedToCamera=true;
+    dashtext.cameraOffset.setTo(0, 0);
     // dash angle - position of cursor
     pointer = this.input.activePointer;
 }
@@ -91,10 +92,10 @@ function update(){
     // double dash
     if(this.space.isDown && dash>0){
         if(this.time.now>dashtime){
-            player.x+=100;
             dash--;
             dashtime=this.time.now+200;
             dashtext.text='#dashes: '+dash;
+            player.x+=100;
         }
     }
 
