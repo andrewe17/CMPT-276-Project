@@ -63,12 +63,12 @@ function create(){
     this.physics.add.collider(player,wall);
 
     // dash
-    dash=1;
+    dash=0;
     dashtime=this.time.now;
     regtime=this.time.now;
     dashtext=this.add.text(0, 0, 'dash: '+dash, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     regtext=this.add.text(0, 20, 'regen: '+(regtime-this.time.now), {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
-    verstext=this.add.text(0, 30, 'vers: '+224, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
+    verstext=this.add.text(0, 40, 'vers: '+230, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     // dash angle - position of cursor
     pointer = this.input.activePointer;
 }
