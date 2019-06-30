@@ -37,6 +37,7 @@ var dashtime;
 var dashreg;
 // weapons
 var options; 
+var o1, o2, o3, o4;
 // melee weapon
 var kata;
 var katatime;
@@ -229,20 +230,25 @@ function update(){
     // lava and traps
     // limited views
     // health
+    o1=o2=o3=o4='';
+    if(options==1) o1='* ';
+    if(options==2) o2='* ';
+    if(options==3) o3='* ';
+    if(options==4) o4='* ';
 
     // text
     textbox.setText([
         'dash: '+dash+' ('+Math.round((dashreg-this.time.now)/100)+')', // blink
-        'kata: '+kata+' ('+Math.round((katareg-this.time.now)/100)+')', // melee
-        'shuri: '+shuri+' ('+Math.round((shurireg-this.time.now)/100)+')', // range
-        'kibaku: '+kibaku, // land mine
-        'saisei: '+saisei, // health regen
-        '>> '+options,
+        o1+'kata: '+kata+' ('+Math.round((katareg-this.time.now)/100)+')', // melee
+        o2+'shuri: '+shuri+' ('+Math.round((shurireg-this.time.now)/100)+')', // range
+        o3+'kibaku: '+kibaku, // land mine
+        o4+'saisei: '+saisei, // health regen
+        '-------------------',
         'kage: ', // hmm... should we do invis or camo? like barrels or cluster?
         'health: ', // need to implement health bar
         'kills: ', // #kills
         'timer: ', // game over
-        'vers: '+1235
+        'vers: '+1240
     ]);
 }
 
