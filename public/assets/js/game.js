@@ -18,10 +18,12 @@ var config={
 var game = new Phaser.Game(config);
 
 // map -- may be change this to tile map?
+
 var mapx = 2780;
 var mapy = 2780;
 // global time
 var gg;
+
 // keyboard
 var cursor;
 var w, a, s, d, space;
@@ -72,15 +74,16 @@ function preload(){
     this.load.image('wall', 'assets/images/wall.png');
     this.load.image('slash', 'assets/images/slash.png');
     this.load.image('shuriken', 'assets/images/shuriken.png');
+     this.load.image('back', 'assets/images/bk.png');
 }
 
 function create(){
     // camera
-    this.cameras.main.setBounds(0, 0, 3723, 2000);
-    this.physics.world.setBounds(0, 0, 3723, 2000);
+    this.cameras.main.setBounds(0, 0, mapx, mapy);
+    this.physics.world.setBounds(0, 0, mapx, mapy);
 
     // background
-    this.add.image(1861, 1000, 'van');
+    this.add.image(mapy/2, mapy/2, 'back');
 
     // global time
     gg=this.time.now+(1000*60*10);
