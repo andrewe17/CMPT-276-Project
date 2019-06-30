@@ -249,7 +249,7 @@ function update(){
     // limited views
     // health
     otext='';
-    if(options==1) otext='kata:∞'; // melee
+    if(options==1) otext='kata: infinite'; // melee
     if(options==2) otext='shuri: '+shuri+'/10'; // range
     if(options==3) otext='kibaku: '+kibaku+'/10'; // land mine
     if(options==4) otext='saisei: '+saisei+'/10'; // health regen
@@ -264,10 +264,10 @@ function update(){
         'kills: '+kills // #kills
     ]);
     text3.setText([
-        'time: '+Math.floor(((gg-this.time.now)/1000)/60)+':'+Math.floor(((gg-this.time.now)/1000)%60)
+        'timer: '+Math.floor(((gg-this.time.now)/1000)/60)+':'+Math.floor(((gg-this.time.now)/1000)%60)
     ]);
     text4.setText([
-        'vers: '+344
+        'vers: '+345
     ]);
 }
 
