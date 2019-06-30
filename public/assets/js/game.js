@@ -130,12 +130,20 @@ function create(){
     wally_500 = this.physics.add.staticGroup();
     //wallx.create(1000, 500, 'wallx');
     //wally.create(500, 1000, 'wally');
-    wallx_500.create(500, 250, 'wallx_500');
-    wallx_500.create(1000, 250, 'wallx_500');
-    wallx_500.create(1500, 250, 'wallx_500');
-    wally_500.create(250, 500, 'wally_500');
-    wally_500.create(250, 1000, 'wally_500');
-    wally_500.create(250, 1500, 'wally_500');
+    //wallx_500.create(500, 50, 'wallx_500');
+    //wallx_500.create(1000, 50, 'wallx_500');
+    //wallx_500.create(1500, 50, 'wallx_500');
+    //wally_500.create(250, 50+250, 'wally_500');
+    //wally_500.create(250, 50+250+500, 'wally_500');
+    //wally_500.create(250, 50+250+1000, 'wally_500');
+    for(var i=0; i<10; i++){
+        wallx.create(Math.random()*mapx, Math.random*mapy, 'wallx');
+        wally.create(Math.random()*mapx, Math.random*mapy, 'wally');
+    }
+    for(var i=0; i<10; i++){
+        wallx_500.create(Math.random()*mapx, Math.random*mapy, 'wallx_500');
+        wally_500.create(Math.random()*mapx, Math.random*mapy, 'wally_500');
+    }
     this.physics.add.collider(player, wallx, fx);
     this.physics.add.collider(player, wally, fy);
     this.physics.add.collider(player, wallx_500, fx);
@@ -251,9 +259,21 @@ function update(){
             katareg=this.time.now;
         }
     }
-    if(this.time.now>shurireg){ // shuri regen
+    if(this.time.now>shurireg){ // shuri
+function maze(mapx,mapy){
+    wallx.create(Math.random()*mapx, Math.random*mapy, 'wallx');
+    wally.create(Math.random()*mapx, Math.random*mapy, 'wally');
+    wallx_500.create(Math.random()*mapx, Math.random*mapy, 'wallx_500');
+    wally_500.create(Math.random()*mapx, Math.random*mapy, 'wally_500');
+}en
         if(shuri<10){
             shurireg=this.time.now+1000;
+function maze(mapx,mapy){
+    wallx.create(Math.random()*mapx, Math.random*mapy, 'wallx');
+    wally.create(Math.random()*mapx, Math.random*mapy, 'wally');
+    wallx_500.create(Math.random()*mapx, Math.random*mapy, 'wallx_500');
+    wally_500.create(Math.random()*mapx, Math.random*mapy, 'wally_500');
+}
             shuri++;
         }
         else{
@@ -289,7 +309,7 @@ function update(){
         'timer: '+Math.floor(((gg-this.time.now)/1000)/60)+':'+Math.floor(((gg-this.time.now)/1000)%60)
     ]);
     text4.setText([
-        'vers: '+421
+        'vers: '+436
     ]);
 }
 
