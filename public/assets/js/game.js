@@ -18,8 +18,8 @@ var config={
 var game = new Phaser.Game(config);
 
 // map -- may be change this to tile map?
-var mapx = 3723;
-var mapy = 2000;
+var mapx = 2780;
+var mapy = 2780;
 // global time
 var gg;
 // keyboard
