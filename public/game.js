@@ -60,8 +60,8 @@ function create(){
 
     // keyboard + mouse
     cursor = this.input.keyboard.createCursorKeys();
-    this.space = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-    pointer = this.input.activePointer; // mouse
+    space = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+    pointer = this.input.activePointer; // mouse location relative to screen
 
     // player
     player = this.physics.add.sprite(400, 300, 'ninja');
@@ -84,7 +84,7 @@ function create(){
     // text
     dashtext=this.add.text(0, 0, 'dash: '+dash, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     regtext=this.add.text(0, 20, 'regen: '+(regtime-this.time.now), {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
-    verstext=this.add.text(0, 40, 'vers: '+527, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
+    verstext=this.add.text(0, 40, 'vers: '+532, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     xtext=this.add.text(0, 60, 'x: '+0, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     ytext=this.add.text(0, 80, 'y: '+0, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
 
@@ -134,18 +134,15 @@ function update(){
         }
     }
 
-    // mouse
-    pointer = this.input.activePointer;
-    // mouse x
-    if(player.x<400) mousex=pointer.x-player.x; 
+    // calculate angle between player and mouse
+    pointer = this.input.activePointer; // update position of mouse
+    if(player.x<400) mousex=pointer.x-player.x; // find mouse position (x) relative to player
     else if(player.x>(mapx-400)) mousex=pointer.x-(player.x-(mapx-800));
     else mousex=pointer.x-400;
-    // mouse y
-    if(player.y<300) mousey=pointer.y-player.y; 
+    if(player.y<300) mousey=pointer.y-player.y; // find mouse position (y) relative to player
     else if(player.y>(mapy-300))mousey=pointer.y-(player.y-(mapy-600));
     else mousey=pointer.y-300;
-    // angle
-    angle = Math.atan(mousey/mousex);
+    angle = Math.atan(mousey/mousex); // find angle between player and mouse
     if(mousex<0) angle+=Math.PI;
 
     // text
