@@ -87,7 +87,7 @@ function create(){
     this.physics.add.collider(player, wall, fx); // collision handling
 
     // dash
-    dash=10; // need to change to zero
+    dash=2; // need to change to zero
     dashtime=this.time.now;
     dashreg=this.time.now;
     shuri=100;
@@ -121,7 +121,6 @@ function update(){
     // dash
     if(space.isDown && dash>0){
         if(this.time.now>dashtime){
-            //dashreg=this.time.now+10000;
             player.x+=Math.cos(angle)*100;
             player.y+=Math.sin(angle)*100;
             dashtime=this.time.now+200;
@@ -131,9 +130,9 @@ function update(){
 
     // dash regen
     if(this.time.now>dashreg){
-        if(dash<10){
-            dash++;
+        if(dash<2){
             dashreg=this.time.now+10000;
+            dash++;
         }
         else{
             dashreg=this.time.now;
@@ -159,14 +158,13 @@ function update(){
             shuriken.setVelocityX(Math.cos(angle)*200);
             shuriken.setVelocityY(Math.sin(angle)*200);
             shuritime=this.time.now+100;
-            //shurireg=this.time.now+1000;
             shuri--;
         }
     }
     if(this.time.now>shurireg){
         if(shuri<100){
-            shuri++;
             shurireg=this.time.now+1000;
+            shuri++;
         }
         else{
             shurireg=this.time.now;
@@ -179,9 +177,9 @@ function update(){
 
     // text
     textbox.setText([
-        'dash: '+dash+' ('+Math.round((dashreg-this.time.now)/100)+')',
+        'dash: '+dash+' ('+Math.round((dashreg-this.time.now)/1000)+')',
         'shuri: '+shuri,
-        'vers: '+1033
+        'vers: '+1037
     ]);
 }
 
