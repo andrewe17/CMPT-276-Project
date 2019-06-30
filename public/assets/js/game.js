@@ -87,7 +87,7 @@ function create(){
     this.physics.add.collider(player, wall, fx); // collision handling
 
     // dash
-    dash=100; // need to change to zero
+    dash=10; // need to change to zero
     dashtime=this.time.now;
     dashreg=this.time.now;
     shuri=100;
@@ -131,7 +131,7 @@ function update(){
 
     // dash regen
     if(this.time.now>dashreg){
-        if(dash<2){
+        if(dash<10){
             dash++;
             dashreg=this.time.now+10000;
         }
@@ -181,7 +181,7 @@ function update(){
     textbox.setText([
         'dash: '+dash+' ('+Math.round((dashreg-this.time.now)/100)+')',
         'shuri: '+shuri,
-        'vers: '+1029
+        'vers: '+1033
     ]);
 }
 
