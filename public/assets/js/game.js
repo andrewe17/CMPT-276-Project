@@ -121,6 +121,9 @@ function create(){
     shuri=0;
     shuritime=this.time.now;
     shurireg=this.time.now;
+    kibaku=0;
+    saisei=0;
+    // probably better if ninjas have to search for items!!
     // text
     textbox=this.add.text(0, 0, '', {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
 }
@@ -235,7 +238,7 @@ function update(){
         'kibaku: '+kibaku,
         'saisei: '+saisei,
         'options: '+options,
-        'vers: '+1211
+        'vers: '+1215
     ]);
 }
 
