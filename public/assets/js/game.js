@@ -136,7 +136,7 @@ function create(){
     //wally_500.create(250, 50+250, 'wally_500');
     //wally_500.create(250, 50+250+500, 'wally_500');
     //wally_500.create(250, 50+250+1000, 'wally_500');
-    for(var i=0; i<10; i++){
+    for(var i=0; i<100; i++){
         maze(mapx,mapy);
     }
     this.physics.add.collider(player, wallx, fx);
@@ -292,7 +292,7 @@ function update(){
         'timer: '+Math.floor(((gg-this.time.now)/1000)/60)+':'+Math.floor(((gg-this.time.now)/1000)%60)
     ]);
     text4.setText([
-        'vers: '+442
+        'vers: '+446
     ]);
 }
 
@@ -307,8 +307,8 @@ function fy(player, wall){
 }
 
 function maze(mapx,mapy){
-    wallx.create(Math.random(mapx), Math.random(mapy), 'wallx');
-    wally.create(Math.random(mapx), Math.random(mapy), 'wally');
-    wallx_500.create(Math.random(mapx), Math.random(mapy), 'wallx_500');
-    wally_500.create(Math.random(mapx), Math.random(mapy), 'wally_500');
+    wallx.create(Math.random()*mapx, Math.random()*mapy, 'wallx');
+    wally.create(Math.random()*mapx, Math.random()*mapy, 'wally');
+    wallx_500.create(Math.random()*mapx, Math.random()*mapy, 'wallx_500');
+    wally_500.create(Math.random()*mapx, Math.random()*mapy, 'wally_500');
 }
