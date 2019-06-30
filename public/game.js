@@ -53,11 +53,11 @@ function preload(){
 }
 
 function create(){
-    // set camera
+    // camera
     this.cameras.main.setBounds(0, 0, 3723, 2000);
     this.physics.world.setBounds(0, 0, 3723, 2000);
 
-    // background image
+    // background
     this.add.image(1861, 1000, 'van');
 
     // keyboard
@@ -67,6 +67,7 @@ function create(){
     s = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
     d = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
     space = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+
     // mouse
     pointer = this.input.activePointer; // mouse location relative to screen
 
@@ -81,7 +82,8 @@ function create(){
     // obsticles
     wall = this.physics.add.staticGroup();
     wall.create(400, 200, 'wall');
-    this.physics.add.collider(player, wall, player.x++);
+    this.physics.add.collider(player, wall);
+    this.physics.add.overlap(player, wall, movepos, null, this);
 
     // dash
     dash=100; // need to change to zero
@@ -91,7 +93,7 @@ function create(){
     // text
     dashtext=this.add.text(0, 0, 'dash: '+dash, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     regtext=this.add.text(0, 20, 'regen: '+(regtime-this.time.now), {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
-    verstext=this.add.text(0, 40, 'vers: '+620, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
+    verstext=this.add.text(0, 40, 'vers: '+658, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     xtext=this.add.text(0, 60, 'x: '+0, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     ytext=this.add.text(0, 80, 'y: '+0, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
 
@@ -154,7 +156,11 @@ function update(){
 
     // attack - left mouse
 
-    // crouch - ctrl+c
+    // crouch - ctrl+c - hidden
+
+    // lava and traps
+
+    // limited views
 
     // text
     dashtext.text='dash: '+dash;
@@ -162,5 +168,10 @@ function update(){
     
     xtext.text='mousex: '+mousex + ' angle: '+angle;
     ytext.text='mousey: '+mousey;
-    // hidden ninja function
+
+}
+
+
+function movepos(){
+    // nothing
 }
