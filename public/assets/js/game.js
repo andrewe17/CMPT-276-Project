@@ -127,7 +127,7 @@ function create(){
     // text
     // textbox=this.add.text(0, 0, '', {fontFamily:'"Roboto Condensed"', fill: '#000'}).setScrollFactor(0);
     text1=this.add.text(0, 0, '', {fontFamily:'"Roboto Condensed"', fill: '#000'}).setScrollFactor(0);
-    text2=this.add.text(0, 700, '', {fontFamily:'"Roboto Condensed"', fill: '#000'}).setScrollFactor(0);
+    text2=this.add.text(700, 0, '', {fontFamily:'"Roboto Condensed"', fill: '#000'}).setScrollFactor(0);
 }
 
 function update(){
@@ -251,7 +251,7 @@ function update(){
         'health: ', // health bar
         'kills: ', // #kills
         'timer: ', // game over
-        'vers: '+241
+        'vers: '+243
     ]);
 }
 
