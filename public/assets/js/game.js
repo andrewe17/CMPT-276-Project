@@ -136,7 +136,7 @@ function create(){
     //wally_500.create(250, 50+250, 'wally_500');
     //wally_500.create(250, 50+250+500, 'wally_500');
     //wally_500.create(250, 50+250+1000, 'wally_500');
-    for(var i=0; i<10; i++){
+    for(var i=0; i<100; i++){
         maze(mapx,mapy);
     }
     this.physics.add.collider(player, wallx, fx);
