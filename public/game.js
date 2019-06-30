@@ -93,7 +93,7 @@ function create(){
     // text
     dashtext=this.add.text(0, 0, 'dash: '+dash, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     regtext=this.add.text(0, 20, 'regen: '+(regtime-this.time.now), {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
-    verstext=this.add.text(0, 40, 'vers: '+658, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
+    verstext=this.add.text(0, 40, 'vers: '+707, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     xtext=this.add.text(0, 60, 'x: '+0, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     ytext=this.add.text(0, 80, 'y: '+0, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
 
@@ -153,6 +153,12 @@ function update(){
     else mousey=pointer.y-300;
     angle = Math.atan(mousey/mousex); // find angle between player and mouse
     if(mousex<0) angle+=Math.PI;
+
+    // overlap
+    if(Phaser.Rectangle.intersects(player.getBounds(), wall.getBounds())){
+        player.x+=50;
+    }
+
 
     // attack - left mouse
 
