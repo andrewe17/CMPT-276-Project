@@ -37,14 +37,25 @@ var dashtime;
 var dashreg;
 // weapons
 var options; 
-// katana
+// melee weapon
 var kata;
 var katatime;
 var katareg;
-// shurikan
+// ranged weapon
 var shuri;
 var shuritime;
 var shurireg;
+// stun+damange mine
+var kibaku;
+var kibakutime;
+var kibakureg;
+// healing 
+var saisei;
+var saiseitime;
+var saiseireg;
+// cannot use ctrl+c or move
+
+
 
 // textbox
 var textbox;
@@ -171,15 +182,15 @@ function update(){
     if(mousex<0) angle+=Math.PI;
     
     pointer = this.input.activePointer;
-    if(pointer.leftButtonDown() && shuri>0){ // left click
+    if(pointer.leftButtonDown()){ // left click
         // shuri
-        if(options==1 && this.time.now>katatime){
+        if(options==1 && this.time.now>katatime && kata>0){
             // play animation, if target infront than lose health
             // slash = this.physics.add.sprite(player.x+Math.cos(angle)*20, player.y+Math.sin(angle)*20, 'slash');
             katatime=this.time.now+100;
             kata--;
         }
-        if(options==2 && this.time.now>shuritime){
+        if(options==2 && this.time.now>shuritime && shuri>0){
             shuriken = this.physics.add.sprite(player.x+Math.cos(angle)*20, player.y+Math.sin(angle)*20, 'shuriken');
             shuriken.setVelocityX(Math.cos(angle)*200);
             shuriken.setVelocityY(Math.sin(angle)*200);
@@ -221,8 +232,10 @@ function update(){
         'dash: '+dash+' ('+Math.round((dashreg-this.time.now)/100)+')',
         'kata: '+kata+' ('+Math.round((katareg-this.time.now)/100)+')',
         'shuri: '+shuri+' ('+Math.round((shurireg-this.time.now)/100)+')',
+        'kibaku: '+kibaku,
+        'saisei: '+saisei,
         'options: '+options,
-        'vers: '+1145
+        'vers: '+1211
     ]);
 }
 
