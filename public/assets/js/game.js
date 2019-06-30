@@ -34,6 +34,10 @@ var wall;
 var dash;
 var dashtime;
 var regtime;
+// shurican
+var shuri;
+var shuritime;
+
 // textbox
 var textbox;
 
@@ -85,7 +89,8 @@ function create(){
     dash=100; // need to change to zero
     dashtime=this.time.now;
     regtime=this.time.now;
-
+    shuri=100;
+    shuritime=this.time.now;
     // text
     textbox=this.add.text(0, 0, '', {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
 }
@@ -146,9 +151,14 @@ function update(){
 
     // attack - left mouse
     pointer = this.input.activePointer;
-    if(pointer.leftButtonDown()){
+    if(pointer.leftButtonDown() && shuri>0){
         shuriken = this.physics.add.sprite(player.x+Math.cos(angle)*20, player.y+Math.sin(angle)*20, 'shuriken');
+        shuriken.setVelocityX(Math.cos(angle)*200);
+        shuriken.setVelocityY(Math.sin(angle)*200);
+        shuri--;
     }
+
+
     // crouch - ctrl+c - hidden
     // lava and traps
     // limited views
@@ -157,7 +167,7 @@ function update(){
     textbox.setText([
         'dash: '+dash,
         'regen: '+(regtime-this.time.now),
-        'vers: '+950,
+        'vers: '+1005,
         'left: '+pointer.leftButtonDown()
     ]);
 }
