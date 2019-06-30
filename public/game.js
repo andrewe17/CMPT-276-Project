@@ -22,7 +22,7 @@ var mapx = 3723;
 var mapy = 2000;
 // keyboard + mouse
 var cursor;
-var space;
+var w, a, s, d, space;
 var pointer;
 var mousex;
 var mousey;
@@ -61,6 +61,10 @@ function create(){
 
     // keyboard + mouse
     cursor = this.input.keyboard.createCursorKeys();
+    w = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+    a = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+    s = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+    d = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
     space = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
     pointer = this.input.activePointer; // mouse location relative to screen
 
@@ -85,7 +89,7 @@ function create(){
     // text
     dashtext=this.add.text(0, 0, 'dash: '+dash, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     regtext=this.add.text(0, 20, 'regen: '+(regtime-this.time.now), {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
-    verstext=this.add.text(0, 40, 'vers: '+536, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
+    verstext=this.add.text(0, 40, 'vers: '+546, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     xtext=this.add.text(0, 60, 'x: '+0, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     ytext=this.add.text(0, 80, 'y: '+0, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
 
@@ -94,19 +98,19 @@ function create(){
 
 function update(){
     // keys
-    if(cursor.up.isDown){
+    if(w.isDown){
         player.setVelocityY(-200);
     }
-    else if(cursor.down.isDown){
+    else if(s.isDown){
         player.setVelocityY(200);
     } 
     else{
         player.setVelocityY(0);
     }
-    if(cursor.left.isDown){
+    if(a.isDown){
         player.setVelocityX(-200);
     }
-    else if(cursor.right.isDown){
+    else if(d.isDown){
         player.setVelocityX(200);
     }
     else{
