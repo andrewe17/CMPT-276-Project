@@ -57,8 +57,7 @@ var saiseireg;
 // cannot use ctrl+c or move
 
 // textbox
-var text1;
-var text2;
+var text1, text2, text3, text4;
 
 // mouse
 var mousex;
@@ -126,8 +125,10 @@ function create(){
     // probably better if ninjas have to search for items!!
     // text
     // textbox=this.add.text(0, 0, '', {fontFamily:'"Roboto Condensed"', fill: '#000'}).setScrollFactor(0);
-    text1=this.add.text(0, 0, '', {fontFamily:'"Roboto Condensed"', fill: '#000'}).setScrollFactor(0);
-    text2=this.add.text(700, 0, '', {fontFamily:'"Roboto Condensed"', fill: '#000'}).setScrollFactor(0);
+    text1=this.add.text(100, 100, '', {fontFamily:'"Roboto Condensed"', fill: '#000'}).setScrollFactor(0);
+    text2=this.add.text(700, 100, '', {fontFamily:'"Roboto Condensed"', fill: '#000'}).setScrollFactor(0);
+    text3=this.add.text(100, 500, '', {fontFamily:'"Roboto Condensed"', fill: '#000'}).setScrollFactor(0);
+    text4=this.add.text(700, 500, '', {fontFamily:'"Roboto Condensed"', fill: '#000'}).setScrollFactor(0);
 }
 
 function update(){
@@ -232,24 +233,25 @@ function update(){
     // limited views
     // health
     otext='';
-    if(options==1) otext='* kata: '+kata+' ('+Math.round((katareg-this.time.now)/100)+')'; // melee
-    if(options==2) otext='* shuri: '+shuri+' ('+Math.round((shurireg-this.time.now)/100)+')'; // range
-    if(options==3) otext='* kibaku: '+kibaku; // land mine
-    if(options==4) otext='* saisei: '+saisei; // health regen
+    if(options==1) otext='kata: '+kata+' ('+Math.round((katareg-this.time.now)/100)+')'; // melee
+    if(options==2) otext='shuri: '+shuri+' ('+Math.round((shurireg-this.time.now)/100)+')'; // range
+    if(options==3) otext='kibaku: '+kibaku; // land mine
+    if(options==4) otext='saisei: '+saisei; // health regen
 
     // text
     text1.setText([
         'dash: '+dash+' ('+Math.round((dashreg-this.time.now)/100)+')', // blink
         otext, // options
-        'kage: ', // hmm... should we do invis or camo? like barrels or cluster?
-        '-----------------------',
-        'timer: ', // game over
-        'vers: '+304
     ]);
-
     text2.setText([
         'health: ', // health bar
         'kills: ' // #kills
+    ]);
+    text3.setText([
+        'timer: '
+    ]);
+    text4.setText([
+        'vers: '+309
     ]);
 }
 
