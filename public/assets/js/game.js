@@ -78,6 +78,8 @@ function preload(){
     this.load.image('wall', 'assets/images/wall.png');
     this.load.image('wallx', 'assets/images/wallx.png');
     this.load.image('wally', 'assets/images/wally.png');
+    this.load.image('wallx_500', 'assets/images/wallx_500.png');
+    this.load.image('wally_500', 'assets/images/wally_500.png');
     this.load.image('slash', 'assets/images/slash.png');
     this.load.image('shuriken', 'assets/images/shuriken.png');
      this.load.image('back', 'assets/images/bk.png');
@@ -124,10 +126,20 @@ function create(){
 
     wallx = this.physics.add.staticGroup();
     wally = this.physics.add.staticGroup();
-    wallx.create(1000, 500, 'wallx');
-    wally.create(500, 1000, 'wally');
+    wallx_500 = this.physics.add.staticGroup();
+    wally_500 = this.physics.add.staticGroup();
+    //wallx.create(1000, 500, 'wallx');
+    //wally.create(500, 1000, 'wally');
+    wallx_500.create(1000, 500, 'wallx_500');
+    wallx_500.create(1500, 500, 'wallx_500');
+    wallx_500.create(2000, 500, 'wallx_500');
+    wally_500.create(1000, 500, 'wally_500');
+    wally_500.create(1000, 1000, 'wally_500');
+    wally_500.create(1000, 1500, 'wally_500');
     this.physics.add.collider(player, wallx, fx);
     this.physics.add.collider(player, wally, fy);
+    this.physics.add.collider(player, wallx_500, fx);
+    this.physics.add.collider(player, wally_500, fy);
 
     // dash
     dash=0;
@@ -277,7 +289,7 @@ function update(){
         'timer: '+Math.floor(((gg-this.time.now)/1000)/60)+':'+Math.floor(((gg-this.time.now)/1000)%60)
     ]);
     text4.setText([
-        'vers: '+406
+        'vers: '+415
     ]);
 }
 
