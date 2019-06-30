@@ -90,10 +90,10 @@ function create(){
     regtime=this.time.now;
 
     // text
-    dashtext=this.add.text(0, 0, 'dash: '+dash, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
-    regtext=this.add.text(0, 20, 'regen: '+(regtime-this.time.now), {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
-    verstext=this.add.text(0, 40, 'vers: '+940, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
-    text=this.add.text(0, 60, 'xtext: ', {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
+    //dashtext=this.add.text(0, 0, 'dash: '+dash, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
+    //regtext=this.add.text(0, 20, 'regen: '+(regtime-this.time.now), {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
+    //verstext=this.add.text(0, 40, 'vers: '+940, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
+    text=this.add.text(0, 0, '', {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
 }
 
 function update(){
@@ -162,9 +162,14 @@ function update(){
     
     
     // text
-    dashtext.text='dash: '+dash;
-    regtext.text='regen: '+(regtime-this.time.now);
-    text.setText(['dash: '+dash],['regen: '+(regtime-this.time.now)],['left: '+pointer.leftButtonDown()]);
+    //dashtext.text='dash: '+dash;
+    //regtext.text='regen: '+(regtime-this.time.now);
+    text.setText([
+        'dash: '+dash,
+        'regen: '+(regtime-this.time.now),
+        'vers: '+945,
+        'left: '+pointer.leftButtonDown()
+    ]);
 }
 
 function fx(player, wall){
