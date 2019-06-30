@@ -127,6 +127,7 @@ function create(){
     // probably better if ninjas have to search for items!!
     // text
     textbox=this.add.text(0, 0, '', {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
+    textbox.addColor('#ffff00', 16);
 }
 
 function update(){
@@ -248,7 +249,7 @@ function update(){
         'health: ', // health bar
         'kills: ', // #kills
         'timer: ', // game over
-        'vers: '+1243
+        'vers: '+225
     ]);
 }
 
