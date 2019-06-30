@@ -93,7 +93,7 @@ function create(){
     // text
     dashtext=this.add.text(0, 0, 'dash: '+dash, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     regtext=this.add.text(0, 20, 'regen: '+(regtime-this.time.now), {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
-    verstext=this.add.text(0, 40, 'vers: '+707, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
+    verstext=this.add.text(0, 40, 'vers: '+711, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     xtext=this.add.text(0, 60, 'x: '+0, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     ytext=this.add.text(0, 80, 'y: '+0, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
 
@@ -155,9 +155,7 @@ function update(){
     if(mousex<0) angle+=Math.PI;
 
     // overlap
-    if(Phaser.Rectangle.intersects(player.getBounds(), wall.getBounds())){
-        player.x+=50;
-    }
+    this.physics.arcade.collide(player, wall, colli);
 
 
     // attack - left mouse
@@ -178,6 +176,6 @@ function update(){
 }
 
 
-function movepos(){
-    // nothing
+function colli(){
+    player.y +=10;
 }
