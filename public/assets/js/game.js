@@ -17,7 +17,7 @@ var config={
 
 var game = new Phaser.Game(config);
 
-// map
+// map -- may be change this to tile map?
 var mapx = 3723;
 var mapy = 2000;
 // keyboard
@@ -82,10 +82,9 @@ function create(){
     // obsticles
     wall = this.physics.add.staticGroup();
     wall.create(400, 200, 'wall');
-    wall.create(500, 100, 'wall').angle=90;
 
-    this.physics.add.collider(player, wall);
-    this.physics.add.overlap(player, wall, overlapfx);
+    this.physics.add.collider(player, wall, overlapfx);
+    //this.physics.add.overlap(player, wall, overlapfx);
 
     // dash
     dash=100; // need to change to zero
@@ -95,7 +94,7 @@ function create(){
     // text
     dashtext=this.add.text(0, 0, 'dash: '+dash, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     regtext=this.add.text(0, 20, 'regen: '+(regtime-this.time.now), {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
-    verstext=this.add.text(0, 40, 'vers: '+817, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
+    verstext=this.add.text(0, 40, 'vers: '+826, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     xtext=this.add.text(0, 60, 'x: '+0, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     ytext=this.add.text(0, 80, 'y: '+0, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
 }
@@ -154,15 +153,6 @@ function update(){
     angle = Math.atan(mousey/mousex); // find angle between player and mouse
     if(mousex<0) angle+=Math.PI;
 
-    // overlap
-    if(this.physics.add.overlap(player, wall)){
-        ytext.text='overlap';
-    }
-    else{
-        ytext.text='no overlap';
-    }
-
-
     // attack - left mouse
 
     // crouch - ctrl+c - hidden
@@ -174,11 +164,6 @@ function update(){
     // text
     dashtext.text='dash: '+dash;
     regtext.text='regen: '+(regtime-this.time.now);
-
-    //xtext.text='mousex: '+mousex + ' angle: '+angle;
-    //ytext.text='mousey: '+mousey;
-
-    // trying to pull...
 }
 
 function overlapfx(player, wall){
