@@ -130,6 +130,10 @@ function update(){
     else{
         player.setVelocityX(0);
     }
+    if(one.isDown) options=1;
+    if(two.isDown) options=2;
+    if(three.isDown) options=3;
+    if(four.isDown) options=4;
 
     // dash
     if(space.isDown && dash>0){
@@ -140,14 +144,7 @@ function update(){
             dash--;
         }
     }
-
-    if(one.isDown) options=1;
-    if(two.isDown) options=2;
-    if(three.isDown) options=3;
-    if(four.isDown) options=4;
-
-    // dash regen
-    if(this.time.now>dashreg){
+    if(this.time.now>dashreg){ // dash regen
         if(dash<2){
             dashreg=this.time.now+10000;
             dash++;
@@ -171,6 +168,11 @@ function update(){
     pointer = this.input.activePointer;
     if(pointer.leftButtonDown() && shuri>0){
         // shuri
+        if(options==1 && this.time.now>katatime){
+            // play animation, if target infront than lose health
+            // slash = this.physics.add.sprite(player.x+Math.cos(angle)*20, player.y+Math.sin(angle)*20, 'slash');
+            katatime=this.time.now+100;
+        }
         if(options==2 && this.time.now>shuritime){
             shuriken = this.physics.add.sprite(player.x+Math.cos(angle)*20, player.y+Math.sin(angle)*20, 'shuriken');
             shuriken.setVelocityX(Math.cos(angle)*200);
@@ -180,7 +182,7 @@ function update(){
             shurireg=this.time.now+1000; // only 2 dashes
         }
     }
-    if(this.time.now>shurireg){
+    if(this.time.now>shurireg){ // shuri regen
         if(shuri<10){
             shurireg=this.time.now+1000;
             shuri++;
@@ -202,10 +204,11 @@ function update(){
 
     // text
     textbox.setText([
-        'dash: '+dash+' ('+Math.round((dashreg-this.time.now)/1000)+')',
-        //'kata: '+oo+' ('+Math.round((katareg-this.time.now)/1000)+')',
-        'shuri: '+shuri+' ('+Math.round((shurireg-this.time.now)/1000)+')',
-        'vers: '+1116
+        'dash: '+dash+' ('+Math.round((dashreg-this.time.now)/100)+')',
+        'kata: -- ('+Math.round((katatime-this.time.now)/100)+')',
+        'shuri: '+shuri,
+        'options: '+options,
+        'vers: '+1126
     ]);
 }
 
