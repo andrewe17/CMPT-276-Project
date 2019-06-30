@@ -158,6 +158,7 @@ function update(){
             shuriken.setVelocityX(Math.cos(angle)*200);
             shuriken.setVelocityY(Math.sin(angle)*200);
             shuritime=this.time.now+100;
+            shurireg=this.time.now+1000; // we only want 2 dashes
             shuri--;
         }
     }
@@ -179,7 +180,7 @@ function update(){
     textbox.setText([
         'dash: '+dash+' ('+Math.round((dashreg-this.time.now)/1000)+')',
         'shuri: '+shuri,
-        'vers: '+1037
+        'vers: '+1040
     ]);
 }
 
