@@ -253,10 +253,10 @@ function update(){
         'kills: ' // #kills
     ]);
     text3.setText([
-        'minutes: '+((gg-this.time.now)/1000)/60+' seconds: '+((gg-this.time.now)/1000)%60
+        'minutes: '+Math.round(((gg-this.time.now)/1000)/60)+' seconds: '+Math.round(((gg-this.time.now)/1000)%60)
     ]);
     text4.setText([
-        'vers: '+325
+        'vers: '+332
     ]);
 }
 
