@@ -38,8 +38,7 @@ var dashreg;
 // weapons
 var options; 
 // katana
-var kata;
-var katatime; // no regen
+var katatime;
 // shurikan
 var shuri;
 var shuritime;
@@ -103,6 +102,8 @@ function create(){
     dashreg=this.time.now;
     // weapons
     options=1;
+    katatime=this.time.now;
+
     shuri=0;
     shuritime=this.time.now;
     shurireg=this.time.now;
@@ -166,7 +167,7 @@ function update(){
     if(mousex<0) angle+=Math.PI;
     
     pointer = this.input.activePointer;
-    if(pointer.leftButtonDown() && shuri>0){
+    if(pointer.leftButtonDown() && shuri>0){ // left click
         // shuri
         if(options==1 && this.time.now>katatime){
             // play animation, if target infront than lose health
@@ -208,7 +209,7 @@ function update(){
         'kata: -- ('+Math.round((katatime-this.time.now)/100)+')',
         'shuri: '+shuri,
         'options: '+options,
-        'vers: '+1126
+        'vers: '+1129
     ]);
 }
 
