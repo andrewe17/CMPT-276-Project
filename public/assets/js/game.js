@@ -130,12 +130,12 @@ function create(){
     wally_500 = this.physics.add.staticGroup();
     //wallx.create(1000, 500, 'wallx');
     //wally.create(500, 1000, 'wally');
-    wallx_500.create(1000, 500, 'wallx_500');
-    wallx_500.create(1500, 500, 'wallx_500');
-    wallx_500.create(2000, 500, 'wallx_500');
-    wally_500.create(1000, 500, 'wally_500');
-    wally_500.create(1000, 1000, 'wally_500');
-    wally_500.create(1000, 1500, 'wally_500');
+    wallx_500.create(500, 250, 'wallx_500');
+    wallx_500.create(1000, 250, 'wallx_500');
+    wallx_500.create(1500, 250, 'wallx_500');
+    wally_500.create(250, 500, 'wally_500');
+    wally_500.create(250, 1000, 'wally_500');
+    wally_500.create(250, 1500, 'wally_500');
     this.physics.add.collider(player, wallx, fx);
     this.physics.add.collider(player, wally, fy);
     this.physics.add.collider(player, wallx_500, fx);
@@ -289,7 +289,7 @@ function update(){
         'timer: '+Math.floor(((gg-this.time.now)/1000)/60)+':'+Math.floor(((gg-this.time.now)/1000)%60)
     ]);
     text4.setText([
-        'vers: '+415
+        'vers: '+419
     ]);
 }
 
