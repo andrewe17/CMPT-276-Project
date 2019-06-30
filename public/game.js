@@ -22,6 +22,7 @@ var mapx = 3723;
 var mapy = 2000;
 // keyboard + mouse
 var cursor;
+var space;
 var pointer;
 var mousex;
 var mousey;
@@ -84,7 +85,7 @@ function create(){
     // text
     dashtext=this.add.text(0, 0, 'dash: '+dash, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     regtext=this.add.text(0, 20, 'regen: '+(regtime-this.time.now), {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
-    verstext=this.add.text(0, 40, 'vers: '+532, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
+    verstext=this.add.text(0, 40, 'vers: '+536, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     xtext=this.add.text(0, 60, 'x: '+0, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     ytext=this.add.text(0, 80, 'y: '+0, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
 
@@ -113,7 +114,7 @@ function update(){
     }
 
     // dash
-    if(this.space.isDown && dash>0){
+    if(space.isDown && dash>0){
         if(this.time.now>dashtime){
             dash--;
             dashtime=this.time.now+200;
