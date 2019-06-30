@@ -23,6 +23,7 @@ var mapy = 2000;
 // keyboard
 var cursor;
 var w, a, s, d, space;
+var one, two, three, four;
 // mouse
 var pointer;
 var mousex;
@@ -34,6 +35,11 @@ var wall;
 var dash;
 var dashtime;
 var dashreg;
+// weapons
+var options; 
+// katana
+var kata;
+var katatime; // no regen
 // shurikan
 var shuri;
 var shuritime;
@@ -51,6 +57,7 @@ function preload(){
     this.load.image('van', 'assets/images/van.jpg');
     this.load.image('ninja', 'assets/images/ninja.png');
     this.load.image('wall', 'assets/images/wall.png');
+    this.load.image('slash', 'assets/images/slash.png');
     this.load.image('shuriken', 'assets/images/shuriken.png');
 }
 
@@ -69,6 +76,10 @@ function create(){
     s = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
     d = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
     space = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+    one = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ONE);
+    two = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TWO);
+    three = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.THREE);
+    four = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.FOUR);
 
     // mouse
     pointer = this.input.activePointer; // mouse location relative to screen
@@ -87,10 +98,12 @@ function create(){
     this.physics.add.collider(player, wall, fx); // collision handling
 
     // dash
-    dash=2; // need to change to zero
+    dash=0;
     dashtime=this.time.now;
     dashreg=this.time.now;
-    shuri=10;
+    // weapons
+    options=1;
+    shuri=0;
     shuritime=this.time.now;
     shurireg=this.time.now;
     // text
@@ -128,6 +141,11 @@ function update(){
         }
     }
 
+    if(one.isDown) options=1;
+    if(two.isDown) options=2;
+    if(three.isDown) options=3;
+    if(four.isDown) options=4;
+
     // dash regen
     if(this.time.now>dashreg){
         if(dash<2){
@@ -149,11 +167,11 @@ function update(){
     else mousey=pointer.y-300;
     angle = Math.atan(mousey/mousex); // find angle between player and mouse
     if(mousex<0) angle+=Math.PI;
-
-    // shuri
+    
     pointer = this.input.activePointer;
     if(pointer.leftButtonDown() && shuri>0){
-        if(this.time.now>shuritime){
+        // shuri
+        if(options==2 && this.time.now>shuritime){
             shuriken = this.physics.add.sprite(player.x+Math.cos(angle)*20, player.y+Math.sin(angle)*20, 'shuriken');
             shuriken.setVelocityX(Math.cos(angle)*200);
             shuriken.setVelocityY(Math.sin(angle)*200);
@@ -172,15 +190,22 @@ function update(){
         }
     }
 
+    // katana
+    // mines
+    // dash need smoke effect
+    // need animation for chracter on movement
+    // implement background using tiles?
     // crouch - ctrl+c - hidden
     // lava and traps
     // limited views
+    // health
 
     // text
     textbox.setText([
         'dash: '+dash+' ('+Math.round((dashreg-this.time.now)/1000)+')',
-        'shuri: '+shuri,
-        'vers: '+1043
+        //'kata: '+oo+' ('+Math.round((katareg-this.time.now)/1000)+')',
+        'shuri: '+shuri+' ('+Math.round((shurireg-this.time.now)/1000)+')',
+        'vers: '+1116
     ]);
 }
 
