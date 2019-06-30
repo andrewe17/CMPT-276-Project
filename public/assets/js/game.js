@@ -255,7 +255,7 @@ function update(){
         'health: ', // health bar
         'kills: ', // #kills
         'timer: ', // game over
-        'vers: '+225
+        'vers: '+228
     ]);
 }
 
