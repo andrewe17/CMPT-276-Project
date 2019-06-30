@@ -237,12 +237,12 @@ function update(){
         'shuri: '+shuri+' ('+Math.round((shurireg-this.time.now)/100)+')', // range
         'kibaku: '+kibaku, // land mine
         'saisei: '+saisei, // health regen
+        '>> '+options,
         'kage: ', // hmm... should we do invis or camo? like barrels or cluster?
-        'selected: '+options,
         'health: ', // need to implement health bar
         'kills: ', // #kills
         'timer: ', // game over
-        'vers: '+1232
+        'vers: '+1235
     ]);
 }
 
