@@ -232,13 +232,16 @@ function update(){
 
     // text
     textbox.setText([
-        'dash: '+dash+' ('+Math.round((dashreg-this.time.now)/100)+')',
-        'kata: '+kata+' ('+Math.round((katareg-this.time.now)/100)+')',
-        'shuri: '+shuri+' ('+Math.round((shurireg-this.time.now)/100)+')',
-        'kibaku: '+kibaku,
-        'saisei: '+saisei,
-        'options: '+options,
-        'vers: '+1215
+        'dash: '+dash+' ('+Math.round((dashreg-this.time.now)/100)+')', // blink
+        'kata: '+kata+' ('+Math.round((katareg-this.time.now)/100)+')', // melee
+        'shuri: '+shuri+' ('+Math.round((shurireg-this.time.now)/100)+')', // range
+        'kibaku: '+kibaku, // land mine
+        'saisei: '+saisei, // health regen
+        'kage: ', // hmm... should we do invis or camo? like barrels or cluster?
+        'health: ', // need to implement health bar
+        'kills: ', // #kills
+        'selected: '+options,
+        'vers: '+1229
     ]);
 }
 
