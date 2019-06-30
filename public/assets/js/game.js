@@ -42,7 +42,7 @@ var dashtime;
 var dashreg;
 // weapons
 var options; 
-var o1, o2, o3, o4;
+var otext;
 // melee weapon
 var kata;
 var katatime;
@@ -237,27 +237,25 @@ function update(){
     // lava and traps
     // limited views
     // health
-    o1=o2=o3=o4='';
-    if(options==1) o1='* ';
-    if(options==2) o2='* ';
-    if(options==3) o3='* ';
-    if(options==4) o4='* ';
+    otext='';
+    if(options==1) otext='* kata: '+kata+' ('+Math.round((katareg-this.time.now)/100)+')'; // melee
+    if(options==2) otext='* shuri: '+shuri+' ('+Math.round((shurireg-this.time.now)/100)+')'; // range
+    if(options==3) otext='* kibaku: '+kibaku; // land mine
+    if(options==4) otext='* saisei: '+saisei; // health regen
 
     // text
     text1.setText([
         'dash: '+dash+' ('+Math.round((dashreg-this.time.now)/100)+')', // blink
-        o1+'kata: '+kata+' ('+Math.round((katareg-this.time.now)/100)+')', // melee
-        o2+'shuri: '+shuri+' ('+Math.round((shurireg-this.time.now)/100)+')', // range
-        o3+'kibaku: '+kibaku, // land mine
-        o4+'saisei: '+saisei, // health regen
+        otext, // options
         'kage: ', // hmm... should we do invis or camo? like barrels or cluster?
+        '-----------------------',
+        'timer: ', // game over
+        'vers: '+304
     ]);
 
     text2.setText([
         'health: ', // health bar
-        'kills: ', // #kills
-        'timer: ', // game over
-        'vers: '+243
+        'kills: ' // #kills
     ]);
 }
 
