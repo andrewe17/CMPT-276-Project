@@ -292,7 +292,7 @@ function update(){
         'timer: '+Math.floor(((gg-this.time.now)/1000)/60)+':'+Math.floor(((gg-this.time.now)/1000)%60)
     ]);
     text4.setText([
-        'vers: '+442
+        'vers: '+446
     ]);
 }
 
@@ -307,8 +307,8 @@ function fy(player, wall){
 }
 
 function maze(mapx,mapy){
-    wallx.create(Math.random(mapx), Math.random(mapy), 'wallx');
-    wally.create(Math.random(mapx), Math.random(mapy), 'wally');
-    wallx_500.create(Math.random(mapx), Math.random(mapy), 'wallx_500');
-    wally_500.create(Math.random(mapx), Math.random(mapy), 'wally_500');
+    wallx.create(Math.random()*mapx, Math.random()*mapy, 'wallx');
+    wally.create(Math.random()*mapx, Math.random()*mapy, 'wally');
+    wallx_500.create(Math.random()*mapx, Math.random()*mapy, 'wallx_500');
+    wally_500.create(Math.random()*mapx, Math.random()*mapy, 'wally_500');
 }
