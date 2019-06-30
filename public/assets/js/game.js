@@ -38,7 +38,9 @@ var dashreg;
 // weapons
 var options; 
 // katana
+var kata;
 var katatime;
+var katareg;
 // shurikan
 var shuri;
 var shuritime;
@@ -102,8 +104,9 @@ function create(){
     dashreg=this.time.now;
     // weapons
     options=1;
+    kata=0;
     katatime=this.time.now;
-
+    katareg=this.time.now;
     shuri=0;
     shuritime=this.time.now;
     shurireg=this.time.now;
@@ -173,6 +176,7 @@ function update(){
             // play animation, if target infront than lose health
             // slash = this.physics.add.sprite(player.x+Math.cos(angle)*20, player.y+Math.sin(angle)*20, 'slash');
             katatime=this.time.now+100;
+            katareg=this.time.now+1000;
         }
         if(options==2 && this.time.now>shuritime){
             shuriken = this.physics.add.sprite(player.x+Math.cos(angle)*20, player.y+Math.sin(angle)*20, 'shuriken');
@@ -181,6 +185,15 @@ function update(){
             shuritime=this.time.now+100;
             shuri--;
             shurireg=this.time.now+1000; // only 2 dashes
+        }
+    }
+    if(this.time.now>katareg){ // kata regen
+        if(kata<2){
+            katareg=this.time.now+1000;
+            kata++;
+        }
+        else{
+            katareg=this.time.now;
         }
     }
     if(this.time.now>shurireg){ // shuri regen
@@ -206,10 +219,10 @@ function update(){
     // text
     textbox.setText([
         'dash: '+dash+' ('+Math.round((dashreg-this.time.now)/100)+')',
-        'kata: -- ('+Math.round((katatime-this.time.now)/100)+')',
-        'shuri: '+shuri,
+        'kata: '+kata+' ('+Math.round((katareg-this.time.now)/100)+')',
+        'shuri: '+shuri+' ('+Math.round((shurireg-this.time.now)/100)+')',
         'options: '+options,
-        'vers: '+1129
+        'vers: '+1136
     ]);
 }
 
