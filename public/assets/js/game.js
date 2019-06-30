@@ -131,10 +131,10 @@ function create(){
     // probably better if ninjas have to search for items!!
     // text
     // textbox=this.add.text(0, 0, '', {fontFamily:'"Roboto Condensed"', fill: '#000'}).setScrollFactor(0);
-    text1=this.add.text(100, 100, '', {fontFamily:'"Roboto Condensed"', fill: '#000'}).setScrollFactor(0);
-    text2=this.add.text(700, 100, '', {fontFamily:'"Roboto Condensed"', fill: '#000'}).setScrollFactor(0);
-    text3=this.add.text(100, 500, '', {fontFamily:'"Roboto Condensed"', fill: '#000'}).setScrollFactor(0);
-    text4=this.add.text(700, 500, '', {fontFamily:'"Roboto Condensed"', fill: '#000'}).setScrollFactor(0);
+    text1=this.add.text(10, 10, '', {fontFamily:'"Roboto Condensed"', fill: '#000'}).setScrollFactor(0);
+    text2=this.add.text(780, 10, '', {fontFamily:'"Roboto Condensed"', fill: '#000'}).setScrollFactor(0);
+    text3=this.add.text(10, 500, '', {fontFamily:'"Roboto Condensed"', fill: '#000'}).setScrollFactor(0);
+    text4=this.add.text(780, 500, '', {fontFamily:'"Roboto Condensed"', fill: '#000'}).setScrollFactor(0);
 }
 
 function update(){
@@ -257,7 +257,7 @@ function update(){
         'timer: '
     ]);
     text4.setText([
-        'vers: '+309
+        'vers: '+312
     ]);
 }
 
