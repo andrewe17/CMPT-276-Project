@@ -83,7 +83,6 @@ function create(){
     wall = this.physics.add.staticGroup();
     wall.create(400, 200, 'wall');
     this.physics.add.collider(player, wall);
-    this.physics.add.overlap(player, wall, test);
 
     // dash
     dash=100; // need to change to zero
@@ -93,7 +92,7 @@ function create(){
     // text
     dashtext=this.add.text(0, 0, 'dash: '+dash, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     regtext=this.add.text(0, 20, 'regen: '+(regtime-this.time.now), {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
-    verstext=this.add.text(0, 40, 'vers: '+731, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
+    verstext=this.add.text(0, 40, 'vers: '+739, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     xtext=this.add.text(0, 60, 'x: '+0, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     ytext=this.add.text(0, 80, 'y: '+0, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
 
@@ -155,7 +154,13 @@ function update(){
     if(mousex<0) angle+=Math.PI;
 
     // overlap
-
+    if(this.physics.add.overlap(player, wall)){
+        ytext.text='overlap';
+    }
+    else{
+        ytext.text='no overlap';
+    }
+    ;
 
     // attack - left mouse
 
@@ -171,9 +176,4 @@ function update(){
     
     //xtext.text='mousex: '+mousex + ' angle: '+angle;
     //ytext.text='mousey: '+mousey;
-}
-
-function test(){
-    ytext.text='overlap';
-
 }
