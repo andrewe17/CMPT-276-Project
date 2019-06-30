@@ -18,12 +18,11 @@ var config={
 var game = new Phaser.Game(config);
 
 // map -- may be change this to tile map?
-//var mapx = 3723;
-//var mapy = 2000;
 
-//new backgroud
 var mapx = 2780;
 var mapy = 2780;
+// global time
+var gg;
 
 // keyboard
 var cursor;
@@ -86,6 +85,9 @@ function create(){
     // background
     this.add.image(mapy/2, mapy/2, 'back');
 
+    // global time
+    gg=this.time.now+(1000*60*10);
+
     // keyboard
     cursor = this.input.keyboard.createCursorKeys();
     w = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
@@ -107,7 +109,7 @@ function create(){
     player.setVelocity(0, 0);
 
     // camera follow player
-    this.cameras.main.startFollow(player, true, 0.08, 0.08, 0.08, 0.08);
+    this.cameras.main.startFollow(player, true, 0.05, 0.05, 0.05, 0.05);
 
     // obsticles
     wall = this.physics.add.staticGroup();
@@ -131,9 +133,9 @@ function create(){
     // probably better if ninjas have to search for items!!
     // text
     // textbox=this.add.text(0, 0, '', {fontFamily:'"Roboto Condensed"', fill: '#000'}).setScrollFactor(0);
-    text1=this.add.text(10, 10, '', {fontFamily:'"Roboto Condensed"', fill: '#000'}).setScrollFactor(0);
-    text2=this.add.text(700, 10, '', {fontFamily:'"Roboto Condensed"', fill: '#000'}).setScrollFactor(0);
-    text3=this.add.text(10, 580, '', {fontFamily:'"Roboto Condensed"', fill: '#000'}).setScrollFactor(0);
+    text1=this.add.text(0, 0, '', {fontFamily:'"Roboto Condensed"', fill: '#000'}).setScrollFactor(0);
+    text2=this.add.text(700, 0, '', {fontFamily:'"Roboto Condensed"', fill: '#000'}).setScrollFactor(0);
+    text3=this.add.text(0, 580, '', {fontFamily:'"Roboto Condensed"', fill: '#000'}).setScrollFactor(0);
     text4=this.add.text(700, 580, '', {fontFamily:'"Roboto Condensed"', fill: '#000'}).setScrollFactor(0);
 }
 
@@ -239,14 +241,14 @@ function update(){
     // limited views
     // health
     otext='';
-    if(options==1) otext='kata: '+kata+' ('+Math.round((katareg-this.time.now)/100)+')'; // melee
-    if(options==2) otext='shuri: '+shuri+' ('+Math.round((shurireg-this.time.now)/100)+')'; // range
-    if(options==3) otext='kibaku: '+kibaku; // land mine
-    if(options==4) otext='saisei: '+saisei; // health regen
+    if(options==1) otext='kata: '+kata+'/10'; // melee
+    if(options==2) otext='shuri: '+shuri+'/10'; // range
+    if(options==3) otext='kibaku: '+kibaku+'/10'; // land mine
+    if(options==4) otext='saisei: '+saisei+'/10'; // health regen
 
     // text
     text1.setText([
-        'dash: '+dash+' ('+Math.round((dashreg-this.time.now)/100)+')', // blink
+        'dash: '+dash+'/2', // blink
         otext, // options
     ]);
     text2.setText([
@@ -254,10 +256,10 @@ function update(){
         'kills: ' // #kills
     ]);
     text3.setText([
-        'timer: '
+        'minutes: '+((gg-this.time.now)/1000)/60+' seconds: '+((gg-this.time.now)/1000)%60
     ]);
     text4.setText([
-        'vers: '+314
+        'vers: '+325
     ]);
 }
 
