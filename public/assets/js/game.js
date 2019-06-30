@@ -256,10 +256,10 @@ function update(){
         'kills: ' // #kills
     ]);
     text3.setText([
-        'minutes: '+Math.round(((gg-this.time.now)/1000)/60)+' seconds: '+Math.round(((gg-this.time.now)/1000)%60)
+        'minutes: '+Math.floor(((gg-this.time.now)/1000)/60)+' seconds: '+Math.floor(((gg-this.time.now)/1000)%60)
     ]);
     text4.setText([
-        'vers: '+332
+        'vers: '+335
     ]);
 }
 
