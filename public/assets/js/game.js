@@ -76,6 +76,8 @@ function preload(){
     this.load.image('van', 'assets/images/van.jpg');
     this.load.image('ninja', 'assets/images/ninja.png');
     this.load.image('wall', 'assets/images/wall.png');
+    this.load.image('wallx', 'assets/images/wallx.png');
+    this.load.image('wally', 'assets/images/wally.png');
     this.load.image('slash', 'assets/images/slash.png');
     this.load.image('shuriken', 'assets/images/shuriken.png');
      this.load.image('back', 'assets/images/bk.png');
@@ -119,6 +121,13 @@ function create(){
     wall = this.physics.add.staticGroup();
     wall.create(400, 200, 'wall');
     this.physics.add.collider(player, wall, fx); // collision handling
+
+    wallx = this.physics.add.staticGroup();
+    wally = this.physics.add.staticGroup();
+    wallx.create(1000, 500, 'wallx');
+    wally.create(500, 1000, 'wally');
+    this.physics.add.collider(player, wallx, fx);
+    this.physics.add.collider(player, wally, fy);
 
     // dash
     dash=0;
@@ -205,12 +214,12 @@ function update(){
     
     pointer = this.input.activePointer;
     if(pointer.leftButtonDown()){ // left click
-        // shuri
         if(options==1 && this.time.now>katatime && kata>0){
             // play animation, if target infront than lose health
             // slash = this.physics.add.sprite(player.x+Math.cos(angle)*20, player.y+Math.sin(angle)*20, 'slash');
             katatime=this.time.now+100;
             kata--;
+            katareg=this.time.now+1000;
         }
         if(options==2 && this.time.now>shuritime && shuri>0){
             shuriken = this.physics.add.sprite(player.x+Math.cos(angle)*20, player.y+Math.sin(angle)*20, 'shuriken');
@@ -218,6 +227,7 @@ function update(){
             shuriken.setVelocityY(Math.sin(angle)*200);
             shuritime=this.time.now+100;
             shuri--;
+            shurireg=this.time.now+1000;
         }
     }
     if(this.time.now>katareg){ // kata regen
@@ -267,11 +277,16 @@ function update(){
         'timer: '+Math.floor(((gg-this.time.now)/1000)/60)+':'+Math.floor(((gg-this.time.now)/1000)%60)
     ]);
     text4.setText([
-        'vers: '+345
+        'vers: '+406
     ]);
 }
 
 function fx(player, wall){
     if(wall.y>player.y) player.y-=10;
     else player.y+=10;
+}
+
+function fy(player, wall){
+    if(wall.x>player.x) player.x-=10;
+    else player.x+=10;
 }
