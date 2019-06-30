@@ -136,13 +136,9 @@ function create(){
     //wally_500.create(250, 50+250, 'wally_500');
     //wally_500.create(250, 50+250+500, 'wally_500');
     //wally_500.create(250, 50+250+1000, 'wally_500');
-
-        wallx.create(Math.random()*mapx, Math.random*mapy, 'wallx');
-        wally.create(Math.random()*mapx, Math.random*mapy, 'wally');
-
-        wallx_500.create(Math.random()*mapx, Math.random*mapy, 'wallx_500');
-        wally_500.create(Math.random()*mapx, Math.random*mapy, 'wally_500');
-
+    for(var i=0; i<10; i++){
+        maze(mapx,mapy);
+    }
     this.physics.add.collider(player, wallx, fx);
     this.physics.add.collider(player, wally, fy);
     this.physics.add.collider(player, wallx_500, fx);
@@ -258,21 +254,9 @@ function update(){
             katareg=this.time.now;
         }
     }
-    if(this.time.now>shurireg){ // shuri
-function maze(mapx,mapy){
-    wallx.create(Math.random()*mapx, Math.random*mapy, 'wallx');
-    wally.create(Math.random()*mapx, Math.random*mapy, 'wally');
-    wallx_500.create(Math.random()*mapx, Math.random*mapy, 'wallx_500');
-    wally_500.create(Math.random()*mapx, Math.random*mapy, 'wally_500');
-}en
+    if(this.time.now>shurireg){ // shuri regen
         if(shuri<10){
             shurireg=this.time.now+1000;
-function maze(mapx,mapy){
-    wallx.create(Math.random()*mapx, Math.random*mapy, 'wallx');
-    wally.create(Math.random()*mapx, Math.random*mapy, 'wally');
-    wallx_500.create(Math.random()*mapx, Math.random*mapy, 'wallx_500');
-    wally_500.create(Math.random()*mapx, Math.random*mapy, 'wally_500');
-}
             shuri++;
         }
         else{
@@ -308,7 +292,7 @@ function maze(mapx,mapy){
         'timer: '+Math.floor(((gg-this.time.now)/1000)/60)+':'+Math.floor(((gg-this.time.now)/1000)%60)
     ]);
     text4.setText([
-        'vers: '+438
+        'vers: '+442
     ]);
 }
 
@@ -320,4 +304,11 @@ function fx(player, wall){
 function fy(player, wall){
     if(wall.x>player.x) player.x-=5;
     else player.x+=5;
+}
+
+function maze(mapx,mapy){
+    wallx.create(Math.random(mapx), Math.random(mapy), 'wallx');
+    wally.create(Math.random(mapx), Math.random(mapy), 'wally');
+    wallx_500.create(Math.random(mapx), Math.random(mapy), 'wallx_500');
+    wally_500.create(Math.random(mapx), Math.random(mapy), 'wally_500');
 }
