@@ -40,7 +40,6 @@ var regtext;
 var verstext;
 var xtext;
 var ytext;
-
 // mouse
 var mousex;
 var mousey;
@@ -93,8 +92,8 @@ function create(){
     // text
     dashtext=this.add.text(0, 0, 'dash: '+dash, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     regtext=this.add.text(0, 20, 'regen: '+(regtime-this.time.now), {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
-    verstext=this.add.text(0, 40, 'vers: '+856, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
-    xtext=this.add.text(0, 60, '', {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
+    verstext=this.add.text(0, 40, 'vers: '+858, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
+    xtext=this.add.text(0, 60, 'xtext: ', {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     //ytext=this.add.text(0, 80, 'y: '+0, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
 }
 
@@ -165,7 +164,7 @@ function update(){
     // text
     dashtext.text='dash: '+dash;
     regtext.text='regen: '+(regtime-this.time.now);
-    xtext.text='left: '+pointer.leftButton.isDown;
+    //xtext.text='left: '+pointer.leftButton.isDown;
 }
 
 function fx(player, wall){
