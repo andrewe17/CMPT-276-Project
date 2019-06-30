@@ -289,16 +289,16 @@ function update(){
         'timer: '+Math.floor(((gg-this.time.now)/1000)/60)+':'+Math.floor(((gg-this.time.now)/1000)%60)
     ]);
     text4.setText([
-        'vers: '+419
+        'vers: '+421
     ]);
 }
 
 function fx(player, wall){
-    if(wall.y>player.y) player.y-=10;
-    else player.y+=10;
+    if(wall.y>player.y) player.y-=5;
+    else player.y+=5;
 }
 
 function fy(player, wall){
-    if(wall.x>player.x) player.x-=10;
-    else player.x+=10;
+    if(wall.x>player.x) player.x-=5;
+    else player.x+=5;
 }
