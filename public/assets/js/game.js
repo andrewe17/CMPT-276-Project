@@ -34,11 +34,8 @@ var wall;
 var dash;
 var dashtime;
 var regtime;
-// text
-var dashtext;
-var regtext;
-var verstext;
-var text;
+// textbox
+var textbox;
 
 // mouse
 var mousex;
@@ -90,10 +87,7 @@ function create(){
     regtime=this.time.now;
 
     // text
-    //dashtext=this.add.text(0, 0, 'dash: '+dash, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
-    //regtext=this.add.text(0, 20, 'regen: '+(regtime-this.time.now), {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
-    //verstext=this.add.text(0, 40, 'vers: '+940, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
-    text=this.add.text(0, 0, '', {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
+    textbox=this.add.text(0, 0, '', {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
 }
 
 function update(){
@@ -153,21 +147,17 @@ function update(){
     // attack - left mouse
     pointer = this.input.activePointer;
     if(pointer.leftButtonDown()){
-        //shuriken = this.physics.add.sprite(player.x+Math.cos(angle)*50, player.y+Math.sin(angle)*50, 'shuriken');
+        shuriken = this.physics.add.sprite(player.x+Math.cos(angle)*20, player.y+Math.sin(angle)*20, 'shuriken');
     }
     // crouch - ctrl+c - hidden
     // lava and traps
     // limited views
 
-    
-    
     // text
-    //dashtext.text='dash: '+dash;
-    //regtext.text='regen: '+(regtime-this.time.now);
-    text.setText([
+    textbox.setText([
         'dash: '+dash,
         'regen: '+(regtime-this.time.now),
-        'vers: '+945,
+        'vers: '+950,
         'left: '+pointer.leftButtonDown()
     ]);
 }
