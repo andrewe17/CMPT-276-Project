@@ -33,7 +33,7 @@ var wall;
 // dash
 var dash;
 var dashtime;
-var regtime; 
+var regtime;
 // text
 var dashtext;
 var regtext;
@@ -47,9 +47,9 @@ var mousey;
 var angle;
 
 function preload(){
-    this.load.image('ninja', 'assets/ninja.png');
-    this.load.image('wall', 'assets/wall.png');
-    this.load.image('van', 'assets/van.jpg');
+    this.load.image('ninja', 'assets/images/ninja.png');
+    this.load.image('wall', 'assets/images/wall.png');
+    this.load.image('van', 'assets/images/van.jpg');
 }
 
 function create(){
@@ -76,7 +76,7 @@ function create(){
     player.setCollideWorldBounds(true);
     player.setVelocity(0, 0);
 
-    // camera follow player 
+    // camera follow player
     this.cameras.main.startFollow(player, true, 0.08, 0.08, 0.08, 0.08);
 
     // obsticles
@@ -106,7 +106,7 @@ function update(){
     }
     else if(s.isDown){
         player.setVelocityY(200);
-    } 
+    }
     else{
         player.setVelocityY(0);
     }
@@ -167,7 +167,7 @@ function update(){
     // text
     dashtext.text='dash: '+dash;
     regtext.text='regen: '+(regtime-this.time.now);
-    
+
     //xtext.text='mousex: '+mousex + ' angle: '+angle;
     //ytext.text='mousey: '+mousey;
 }
