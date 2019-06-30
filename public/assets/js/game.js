@@ -176,6 +176,7 @@ function update(){
             // play animation, if target infront than lose health
             // slash = this.physics.add.sprite(player.x+Math.cos(angle)*20, player.y+Math.sin(angle)*20, 'slash');
             katatime=this.time.now+100;
+            kata--;
             katareg=this.time.now+1000;
         }
         if(options==2 && this.time.now>shuritime){
@@ -184,11 +185,11 @@ function update(){
             shuriken.setVelocityY(Math.sin(angle)*200);
             shuritime=this.time.now+100;
             shuri--;
-            shurireg=this.time.now+1000; // only 2 dashes
+            shurireg=this.time.now+1000; 
         }
     }
     if(this.time.now>katareg){ // kata regen
-        if(kata<2){
+        if(kata<10){
             katareg=this.time.now+1000;
             kata++;
         }
@@ -222,7 +223,7 @@ function update(){
         'kata: '+kata+' ('+Math.round((katareg-this.time.now)/100)+')',
         'shuri: '+shuri+' ('+Math.round((shurireg-this.time.now)/100)+')',
         'options: '+options,
-        'vers: '+1136
+        'vers: '+1141
     ]);
 }
 
