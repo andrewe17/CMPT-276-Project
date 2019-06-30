@@ -146,6 +146,7 @@ function update(){
             player.y+=Math.sin(angle)*100;
             dashtime=this.time.now+200;
             dash--;
+            dashreg=this.time.now+10000; // only 2 dashes
         }
     }
     if(this.time.now>dashreg){ // dash regen
@@ -177,7 +178,6 @@ function update(){
             // slash = this.physics.add.sprite(player.x+Math.cos(angle)*20, player.y+Math.sin(angle)*20, 'slash');
             katatime=this.time.now+100;
             kata--;
-            katareg=this.time.now+1000;
         }
         if(options==2 && this.time.now>shuritime){
             shuriken = this.physics.add.sprite(player.x+Math.cos(angle)*20, player.y+Math.sin(angle)*20, 'shuriken');
@@ -185,7 +185,6 @@ function update(){
             shuriken.setVelocityY(Math.sin(angle)*200);
             shuritime=this.time.now+100;
             shuri--;
-            shurireg=this.time.now+1000; 
         }
     }
     if(this.time.now>katareg){ // kata regen
@@ -223,7 +222,7 @@ function update(){
         'kata: '+kata+' ('+Math.round((katareg-this.time.now)/100)+')',
         'shuri: '+shuri+' ('+Math.round((shurireg-this.time.now)/100)+')',
         'options: '+options,
-        'vers: '+1141
+        'vers: '+1145
     ]);
 }
 
