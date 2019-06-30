@@ -46,9 +46,10 @@ var mousey;
 var angle;
 
 function preload(){
+    this.load.image('van', 'assets/images/van.jpg');
     this.load.image('ninja', 'assets/images/ninja.png');
     this.load.image('wall', 'assets/images/wall.png');
-    this.load.image('van', 'assets/images/van.jpg');
+    this.load.image('shuriken', 'assets/images/shuriken.png');
 }
 
 function create(){
@@ -91,7 +92,7 @@ function create(){
     // text
     dashtext=this.add.text(0, 0, 'dash: '+dash, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     regtext=this.add.text(0, 20, 'regen: '+(regtime-this.time.now), {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
-    verstext=this.add.text(0, 40, 'vers: '+927, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
+    verstext=this.add.text(0, 40, 'vers: '+940, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     text=this.add.text(0, 60, 'xtext: ', {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
 }
 
@@ -150,16 +151,20 @@ function update(){
     if(mousex<0) angle+=Math.PI;
 
     // attack - left mouse
+    pointer = this.input.activePointer;
+    if(pointer.leftButtonDown()){
+        //shuriken = this.physics.add.sprite(player.x+Math.cos(angle)*50, player.y+Math.sin(angle)*50, 'shuriken');
+    }
     // crouch - ctrl+c - hidden
     // lava and traps
     // limited views
 
-    pointer = this.input.activePointer;
+    
     
     // text
     dashtext.text='dash: '+dash;
     regtext.text='regen: '+(regtime-this.time.now);
-    text.text='left: '+pointer.rightButtonDown();
+    text.setText(['dash: '+dash],['regen: '+(regtime-this.time.now)],['left: '+pointer.leftButtonDown()]);
 }
 
 function fx(player, wall){
