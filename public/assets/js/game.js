@@ -33,10 +33,11 @@ var wall;
 // dash
 var dash;
 var dashtime;
-var regtime;
-// shurican
+var dashreg;
+// shurikan
 var shuri;
 var shuritime;
+var shurireg;
 
 // textbox
 var textbox;
@@ -88,9 +89,10 @@ function create(){
     // dash
     dash=100; // need to change to zero
     dashtime=this.time.now;
-    regtime=this.time.now;
+    dashreg=this.time.now;
     shuri=100;
     shuritime=this.time.now;
+    shurireg=this.time.now;
     // text
     textbox=this.add.text(0, 0, '', {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
 }
@@ -121,20 +123,20 @@ function update(){
         if(this.time.now>dashtime){
             dash--;
             dashtime=this.time.now+200;
-            regtime=this.time.now+10000;
+            dashreg=this.time.now+10000;
             player.x+=Math.cos(angle)*100;
             player.y+=Math.sin(angle)*100;
         }
     }
 
-    // regen
-    if(this.time.now>regtime){
+    // dash regen
+    if(this.time.now>dashreg){
         if(dash<2){
             dash++;
-            regtime=this.time.now+10000;
+            dashreg=this.time.now+10000;
         }
         else{
-            regtime=this.time.now;
+            dashreg=this.time.now;
         }
     }
 
@@ -149,15 +151,27 @@ function update(){
     angle = Math.atan(mousey/mousex); // find angle between player and mouse
     if(mousex<0) angle+=Math.PI;
 
-    // attack - left mouse
+    // shuri
     pointer = this.input.activePointer;
     if(pointer.leftButtonDown() && shuri>0){
-        shuriken = this.physics.add.sprite(player.x+Math.cos(angle)*20, player.y+Math.sin(angle)*20, 'shuriken');
-        shuriken.setVelocityX(Math.cos(angle)*200);
-        shuriken.setVelocityY(Math.sin(angle)*200);
-        shuri--;
+        if(this.time.now>shuritime){
+            shuriken = this.physics.add.sprite(player.x+Math.cos(angle)*20, player.y+Math.sin(angle)*20, 'shuriken');
+            shuriken.setVelocityX(Math.cos(angle)*200);
+            shuriken.setVelocityY(Math.sin(angle)*200);
+            shuritime=this.time.now+100;
+            shurireg=this.time.now+1000;
+            shuri--;
+        }
     }
-
+    if(this.time.now>shurireg){
+        if(shuri<100){
+            shuri++;
+            shurireg=this.time.now+1000;
+        }
+        else{
+            shurireg=this.time.now;
+        }
+    }
 
     // crouch - ctrl+c - hidden
     // lava and traps
@@ -166,8 +180,8 @@ function update(){
     // text
     textbox.setText([
         'dash: '+dash,
-        'regen: '+(regtime-this.time.now),
-        'vers: '+1005,
+        'dash regen: '+(dashreg-this.time.now),
+        'vers: '+1018,
         'left: '+pointer.leftButtonDown()
     ]);
 }
