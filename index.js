@@ -5,6 +5,10 @@ const PORT = process.env.PORT || 5000
 const app = express();
 const { Pool } = require('pg');
 
+var http = require('http').createServer(app);
+var io = require('socket.io')(http);
+
+
 
 var pool = new Pool({
   connectionString : process.env.DATABASE_URL//connecting the database
@@ -16,8 +20,23 @@ app.use(express.urlencoded({extended:false}));
 app.set('views', path.join(__dirname, 'views'))// joining the files views and current folder
 app.set('view engine', 'ejs')//using ejs
 
-app.get('/', (req, res) => res.render('pages/index'))
+//app.get('/', (req, res) => res.render('pages/index'))
+app.get('/', function(req, res){
+  res.sendFile(__dirname + '/index.html');
+});
 
+
+io.on('connection', function(socket){
+  console.log('a user connected');
+  socket.on('disconnect', function(){ //on reload or exit
+    console.log('user disconnected');
+  });
+  socket.on('chat message', function(msg){
+    console.log('message: ' + msg);
+    io.emit('chat message', msg);
+  });
+
+});
 
 app.use(express.static(path.join(__dirname, 'node_modules')))
 
@@ -55,5 +74,5 @@ app.post('/signup', async (req, res) => {//this updates the form when the form f
   }
 })
 
-
-app.listen(PORT, () => console.log(`Listening on ${ PORT }`))
+//app.listen(PORT, () => console.log(`Listening on ${ PORT }`))
+http.listen(PORT, () => console.log(`Listening on ${ PORT }`))
