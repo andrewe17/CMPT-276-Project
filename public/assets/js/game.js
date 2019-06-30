@@ -56,10 +56,9 @@ var saiseitime;
 var saiseireg;
 // cannot use ctrl+c or move
 
-
-
 // textbox
-var textbox;
+var text1;
+var text2;
 
 // mouse
 var mousex;
@@ -126,7 +125,9 @@ function create(){
     saisei=0;
     // probably better if ninjas have to search for items!!
     // text
-    textbox=this.add.text(0, 0, '', {fontFamily:'"Roboto Condensed"', fill: '#000'}).setScrollFactor(0);
+    // textbox=this.add.text(0, 0, '', {fontFamily:'"Roboto Condensed"', fill: '#000'}).setScrollFactor(0);
+    text1=this.add.text(0, 0, '', {fontFamily:'"Roboto Condensed"', fill: '#000'}).setScrollFactor(0);
+    text2=this.add.text(0, 700, '', {fontFamily:'"Roboto Condensed"', fill: '#000'}).setScrollFactor(0);
 }
 
 function update(){
@@ -237,18 +238,20 @@ function update(){
     if(options==4) o4='* ';
 
     // text
-    textbox.setText([
+    text1.setText([
         'dash: '+dash+' ('+Math.round((dashreg-this.time.now)/100)+')', // blink
         o1+'kata: '+kata+' ('+Math.round((katareg-this.time.now)/100)+')', // melee
         o2+'shuri: '+shuri+' ('+Math.round((shurireg-this.time.now)/100)+')', // range
         o3+'kibaku: '+kibaku, // land mine
         o4+'saisei: '+saisei, // health regen
         'kage: ', // hmm... should we do invis or camo? like barrels or cluster?
-        '-------------------',
+    ]);
+
+    text2.setText([
         'health: ', // health bar
         'kills: ', // #kills
         'timer: ', // game over
-        'vers: '+234
+        'vers: '+241
     ]);
 }
 
