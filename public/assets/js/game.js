@@ -70,6 +70,7 @@ function create(){
 
     // mouse
     pointer = this.input.activePointer; // mouse location relative to screen
+    left = this.input.activePointer.leftButton;
 
     // player
     player = this.physics.add.sprite(400, 300, 'ninja');
@@ -83,8 +84,7 @@ function create(){
     wall = this.physics.add.staticGroup();
     wall.create(400, 200, 'wall');
 
-    this.physics.add.collider(player, wall, overlapfx);
-    //this.physics.add.overlap(player, wall, overlapfx);
+    this.physics.add.collider(player, wall, fx);
 
     // dash
     dash=100; // need to change to zero
@@ -94,9 +94,9 @@ function create(){
     // text
     dashtext=this.add.text(0, 0, 'dash: '+dash, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     regtext=this.add.text(0, 20, 'regen: '+(regtime-this.time.now), {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
-    verstext=this.add.text(0, 40, 'vers: '+826, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
-    xtext=this.add.text(0, 60, 'x: '+0, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
-    ytext=this.add.text(0, 80, 'y: '+0, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
+    verstext=this.add.text(0, 40, 'vers: '+846, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
+    xtext=this.add.text(0, 60, '', {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
+    //ytext=this.add.text(0, 80, 'y: '+0, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
 }
 
 function update(){
@@ -154,7 +154,9 @@ function update(){
     if(mousex<0) angle+=Math.PI;
 
     // attack - left mouse
-
+    if(left.isDown){
+        xtext.text = 'left mouse button';
+    }
     // crouch - ctrl+c - hidden
 
     // lava and traps
@@ -166,7 +168,7 @@ function update(){
     regtext.text='regen: '+(regtime-this.time.now);
 }
 
-function overlapfx(player, wall){
+function fx(player, wall){
     if(wall.y>player.y) player.y-=10;
     else player.y+=10;
 }
