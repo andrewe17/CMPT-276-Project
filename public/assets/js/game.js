@@ -132,9 +132,9 @@ function create(){
     // text
     // textbox=this.add.text(0, 0, '', {fontFamily:'"Roboto Condensed"', fill: '#000'}).setScrollFactor(0);
     text1=this.add.text(10, 10, '', {fontFamily:'"Roboto Condensed"', fill: '#000'}).setScrollFactor(0);
-    text2=this.add.text(780, 10, '', {fontFamily:'"Roboto Condensed"', fill: '#000'}).setScrollFactor(0);
-    text3=this.add.text(10, 500, '', {fontFamily:'"Roboto Condensed"', fill: '#000'}).setScrollFactor(0);
-    text4=this.add.text(780, 500, '', {fontFamily:'"Roboto Condensed"', fill: '#000'}).setScrollFactor(0);
+    text2=this.add.text(700, 10, '', {fontFamily:'"Roboto Condensed"', fill: '#000'}).setScrollFactor(0);
+    text3=this.add.text(10, 580, '', {fontFamily:'"Roboto Condensed"', fill: '#000'}).setScrollFactor(0);
+    text4=this.add.text(700, 580, '', {fontFamily:'"Roboto Condensed"', fill: '#000'}).setScrollFactor(0);
 }
 
 function update(){
@@ -257,7 +257,7 @@ function update(){
         'timer: '
     ]);
     text4.setText([
-        'vers: '+312
+        'vers: '+314
     ]);
 }
 
