@@ -33,7 +33,9 @@ io.on('connection', function(socket){
   });
   socket.on('chat message', function(msg){
     console.log('message: ' + msg);
+    io.emit('chat message', msg);
   });
+
 });
 
 app.use(express.static(path.join(__dirname, 'node_modules')))
