@@ -179,10 +179,9 @@ function update(){
 
     // text
     textbox.setText([
-        'dash: '+dash,
-        'dash regen: '+(dashreg-this.time.now),
-        'vers: '+1018,
-        'left: '+pointer.leftButtonDown()
+        'dash: '+dash+' ('+Math.round((dashreg-this.time.now)/100)+')',
+        'shuri: '+shuri,
+        'vers: '+1026
     ]);
 }
 
