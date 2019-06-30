@@ -31,6 +31,9 @@ io.on('connection', function(socket){
   socket.on('disconnect', function(){ //on reload or exit
     console.log('user disconnected');
   });
+  socket.on('chat message', function(msg){
+    console.log('message: ' + msg);
+  });
 });
 
 app.use(express.static(path.join(__dirname, 'node_modules')))
