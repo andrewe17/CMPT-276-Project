@@ -84,7 +84,7 @@ function create(){
     // text
     dashtext=this.add.text(0, 0, 'dash: '+dash, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     regtext=this.add.text(0, 20, 'regen: '+(regtime-this.time.now), {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
-    verstext=this.add.text(0, 40, 'vers: '+515, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
+    verstext=this.add.text(0, 40, 'vers: '+519, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     xtext=this.add.text(0, 60, 'x: '+0, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     ytext=this.add.text(0, 80, 'y: '+0, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
 
@@ -147,6 +147,7 @@ function update(){
     else mousey=pointer.y-300;
     // angle
     angle = Math.atan(mousey/mousex);
+    if(mousex<0) angle=angle*-1;
 
     // text
     dashtext.text='dash: '+dash;
