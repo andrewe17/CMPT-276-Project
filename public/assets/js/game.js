@@ -90,7 +90,7 @@ function create(){
     dash=2; // need to change to zero
     dashtime=this.time.now;
     dashreg=this.time.now;
-    shuri=100;
+    shuri=10;
     shuritime=this.time.now;
     shurireg=this.time.now;
     // text
@@ -158,12 +158,12 @@ function update(){
             shuriken.setVelocityX(Math.cos(angle)*200);
             shuriken.setVelocityY(Math.sin(angle)*200);
             shuritime=this.time.now+100;
-            shurireg=this.time.now+1000; // we only want 2 dashes
             shuri--;
+            shurireg=this.time.now+1000; // only 2 dashes
         }
     }
     if(this.time.now>shurireg){
-        if(shuri<100){
+        if(shuri<10){
             shurireg=this.time.now+1000;
             shuri++;
         }
@@ -180,7 +180,7 @@ function update(){
     textbox.setText([
         'dash: '+dash+' ('+Math.round((dashreg-this.time.now)/1000)+')',
         'shuri: '+shuri,
-        'vers: '+1040
+        'vers: '+1043
     ]);
 }
 
