@@ -20,9 +20,10 @@ var game = new Phaser.Game(config);
 // map
 var mapx = 3723;
 var mapy = 2000;
-// keyboard + mouse
+// keyboard
 var cursor;
 var w, a, s, d, space;
+// mouse
 var pointer;
 var mousex;
 var mousey;
@@ -59,13 +60,14 @@ function create(){
     // background image
     this.add.image(1861, 1000, 'van');
 
-    // keyboard + mouse
+    // keyboard
     cursor = this.input.keyboard.createCursorKeys();
     w = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
     a = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
     s = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
     d = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
     space = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+    // mouse
     pointer = this.input.activePointer; // mouse location relative to screen
 
     // player
@@ -89,7 +91,7 @@ function create(){
     // text
     dashtext=this.add.text(0, 0, 'dash: '+dash, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     regtext=this.add.text(0, 20, 'regen: '+(regtime-this.time.now), {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
-    verstext=this.add.text(0, 40, 'vers: '+546, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
+    verstext=this.add.text(0, 40, 'vers: '+608, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     xtext=this.add.text(0, 60, 'x: '+0, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
     ytext=this.add.text(0, 80, 'y: '+0, {fontFamily:'"Roboto Condensed"'}).setScrollFactor(0);
 
