@@ -121,11 +121,11 @@ function update(){
     // dash
     if(space.isDown && dash>0){
         if(this.time.now>dashtime){
-            dash--;
-            dashtime=this.time.now+200;
-            dashreg=this.time.now+10000;
+            //dashreg=this.time.now+10000;
             player.x+=Math.cos(angle)*100;
             player.y+=Math.sin(angle)*100;
+            dashtime=this.time.now+200;
+            dash--;
         }
     }
 
@@ -159,7 +159,7 @@ function update(){
             shuriken.setVelocityX(Math.cos(angle)*200);
             shuriken.setVelocityY(Math.sin(angle)*200);
             shuritime=this.time.now+100;
-            shurireg=this.time.now+1000;
+            //shurireg=this.time.now+1000;
             shuri--;
         }
     }
@@ -181,7 +181,7 @@ function update(){
     textbox.setText([
         'dash: '+dash+' ('+Math.round((dashreg-this.time.now)/100)+')',
         'shuri: '+shuri,
-        'vers: '+1026
+        'vers: '+1029
     ]);
 }
 
