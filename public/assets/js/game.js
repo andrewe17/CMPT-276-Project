@@ -152,19 +152,14 @@ function update(){
     if(mousex<0) angle+=Math.PI;
 
     // attack - left mouse
-    if(left.isDown){
-        xtext.text = 'left mouse button';
-    }
     // crouch - ctrl+c - hidden
-
     // lava and traps
-
     // limited views
 
     // text
     dashtext.text='dash: '+dash;
     regtext.text='regen: '+(regtime-this.time.now);
-    //xtext.text='left: '+pointer.leftButton.isDown;
+    xtext.text='left: '+pointer.leftButton.isDown;
 }
 
 function fx(player, wall){
