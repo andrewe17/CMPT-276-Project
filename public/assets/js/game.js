@@ -272,7 +272,7 @@ function update(){
         'timer: '+Math.floor(((gg-this.time.now)/1000)/60)+':'+Math.floor(((gg-this.time.now)/1000)%60)
     ]);
     text4.setText([
-        'vers: '+643
+        'vers: '+649
     ]);
 }
 
@@ -313,10 +313,10 @@ function maze(){
     for (var i=0; i<20; i++){
         for (var j=0; j<20; j++){
             if(maze[i][j]==2){
-                wallx.create(i*100, j*100, 'wallx');
+                wallx.create(i*50, j*50, 'wallx');
             } 
             else if(maze[i][j]==1){
-                wally.create(i*100, j*100, 'wally');
+                wally.create(i*50, j*50, 'wally');
             } 
         }
     }
