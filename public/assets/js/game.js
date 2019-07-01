@@ -119,30 +119,12 @@ function create(){
     // camera follow player
     this.cameras.main.startFollow(player, true, 0.05, 0.05, 0.05, 0.05);
 
-    // obsticles
-    wall = this.physics.add.staticGroup();
-    wall.create(400, 200, 'wall');
-    this.physics.add.collider(player, wall, fx); // collision handling
-
+    // walls
     wallx = this.physics.add.staticGroup();
     wally = this.physics.add.staticGroup();
-    wallx_500 = this.physics.add.staticGroup();
-    wally_500 = this.physics.add.staticGroup();
-    //wallx.create(1000, 500, 'wallx');
-    //wally.create(500, 1000, 'wally');
-    //wallx_500.create(500, 50, 'wallx_500');
-    //wallx_500.create(1000, 50, 'wallx_500');
-    //wallx_500.create(1500, 50, 'wallx_500');
-    //wally_500.create(250, 50+250, 'wally_500');
-    //wally_500.create(250, 50+250+500, 'wally_500');
-    //wally_500.create(250, 50+250+1000, 'wally_500');
-    for(var i=0; i<100; i++){
-        maze(mapx,mapy);
-    }
+    maze(mapx,mapy);
     this.physics.add.collider(player, wallx, fx);
     this.physics.add.collider(player, wally, fy);
-    this.physics.add.collider(player, wallx_500, fx);
-    this.physics.add.collider(player, wally_500, fy);
 
     // dash
     dash=0;
@@ -292,7 +274,7 @@ function update(){
         'timer: '+Math.floor(((gg-this.time.now)/1000)/60)+':'+Math.floor(((gg-this.time.now)/1000)%60)
     ]);
     text4.setText([
-        'vers: '+527
+        'vers: '+554
     ]);
 }
 
@@ -306,73 +288,25 @@ function fy(player, wall){
     else player.x+=5;
 }
 
-// update this to create a random maze generator
-function maze(mapx,mapy){
-    var disp = generator(10,10);
-    for (var i=0; i<disp.length; i++){
-        for (var j=0; j<disp[i].length; j++){
-            if (disp[i][j][0]==0) wallx.create(i*100, j*100, 'wallx');
-            if (disp[i][j][1]==0) wally.create(i*100, j*100, 'wally');
-            if (disp[i][j][2]==0) wallx.create(i*100, (j+1)*100, 'wallx');
-            if (disp[i][j][3]==0) wally.create((i+1)*100, j*100, 'wally');
-        }
-    }
-}
+// create maze
+function maze(){
+    var maze = [
+        "00000000000000000000",
+        "01111111111111111110",
+        "02000000000000000020",
+        "02000111100000000020",
+        "02000000000000000020",
+        "02000000000000000020",
+        "02000000000000000020",
+        "02000000000000000020",
+        "01111111111111111110",
+        "00000000000000000000"
+    ];
 
-// need to rewrite this...
-function generator(x, y){
-    // initialize starting grid
-    var total = x*y;
-    var cells = new Array();
-    var unvis = new Array();
-    for(var i=0; i<y; i++){
-        cells[i]=new Array();
-        unvis[i]=new Array();
-        for (var j = 0; j < x; j++) {
-            cells[i][j]=[0,0,0,0]; // cell grid
-            unvis[i][j]=true; // visited
+    for (var i=0; i<10; i++){
+        for (var j=0; j<10; j++){
+            if(maze[i][j]==1) wallx.create(i*100, j*100, 'wallx');
+            else if(disp[i][j]==2) wally.create(i*100, j*100, 'wally');
         }
     }
-    
-    // Set a random position to start from
-    var current=[0,0]; // starting position
-    var path=[current];
-    unvis[current[0]][current[1]] = false;
-    var visited = 1;
-    
-    // Loop through all available cell positions
-    while (visited < total) {
-        // Determine neighboring cells
-        var pot = [[current[0]-1, current[1], 0, 2],
-                [current[0], current[1]+1, 1, 3],
-                [current[0]+1, current[1], 2, 0],
-                [current[0], current[1]-1, 3, 1]];
-        var neighbors=new Array();
-        
-        // Determine if each neighboring cell is in game grid, and whether it has already been checked
-        for (var l = 0; l < 4; l++) {
-            if (pot[l][0] > -1 && pot[l][0] < y && pot[l][1] > -1 && pot[l][1] < x && unvis[pot[l][0]][pot[l][1]]) { neighbors.push(pot[l]); }
-        }
-        
-        // If at least one active neighboring cell has been found
-        if (neighbors.length){
-            // Choose one of the neighbors at random
-            next = neighbors[Math.floor(Math.random()*neighbors.length)];
-            
-            // Remove the wall between the current cell and the chosen neighboring cell
-            cells[current[0]][current[1]][next[2]] = 1;
-            cells[next[0]][next[1]][next[3]] = 1;
-            
-            // Mark the neighbor as visited, and set it as the current cell
-            unvis[next[0]][next[1]] = false;
-            visited++;
-            current = [next[0], next[1]];
-            path.push(current);
-        }
-        // Otherwise go back up a step and keep going
-        else {
-            current = path.pop();
-        }
-    }
-    return cells;
 }
