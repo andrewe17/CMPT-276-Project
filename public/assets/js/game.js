@@ -310,7 +310,7 @@ function maze(){
     for (var i=0; i<20; i++){
         for (var j=0; j<20; j++){
             if(maze[i][j]==1) wallx.create(i*100, j*100, 'wallx');
-            else if(disp[i][j]==2) wally.create(i*100, j*100, 'wally');
+            else if(maze[i][j]==2) wally.create(i*100, j*100, 'wally');
         }
     }
 }
