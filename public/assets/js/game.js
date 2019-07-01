@@ -272,7 +272,7 @@ function update(){
         'timer: '+Math.floor(((gg-this.time.now)/1000)/60)+':'+Math.floor(((gg-this.time.now)/1000)%60)
     ]);
     text4.setText([
-        'vers: '+746
+        'vers: '+749
     ]);
 }
 
@@ -286,11 +286,11 @@ function fy(player, wall){
     else player.x+=5;
 }
 
-var maze = require('amazejs');
+//var maze = require('amazejs');
 
 // create maze
 function maze(){
-    /*
+    
     var maze=[
         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
         [0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,0,2,0],
@@ -323,8 +323,8 @@ function maze(){
                 wally.create(i*50, j*50, 'wally');
             } 
         }
-    }*/
-
+    }
+/*
     var m = new maze.Backtracker(21, 21);
     m.generate();
 
@@ -335,5 +335,5 @@ function maze(){
                 else wallx.create(i*50, j*50, 'wallx');
             } 
         }
-    }
+    }*/
 }
