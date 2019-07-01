@@ -272,7 +272,7 @@ function update(){
         'timer: '+Math.floor(((gg-this.time.now)/1000)/60)+':'+Math.floor(((gg-this.time.now)/1000)%60)
     ]);
     text4.setText([
-        'vers: '+719
+        'vers: '+741
     ]);
 }
 
@@ -286,13 +286,9 @@ function fy(player, wall){
     else player.x+=5;
 }
 
-
-//var generator = require('maze-generator');
-
-
 // create maze
 function maze(){
-    
+    /*
     var maze=[
         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
         [0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,0,2,0],
@@ -315,8 +311,6 @@ function maze(){
         [0,2,0,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0],
         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
     ];
-    
-    //var maze = generator([20, 20]);
 
     for (var i=0; i<20; i++){
         for (var j=0; j<20; j++){
@@ -325,6 +319,19 @@ function maze(){
             } 
             else if(maze[i][j]==1){
                 wally.create(i*50, j*50, 'wally');
+            } 
+        }
+    }*/
+
+    var maze = require('amazejs');
+    var m = new maze.Backtracker(20, 20);
+    m.generate();
+
+    for (var i=0; i<20; i++){
+        for (var j=0; j<20; j++){
+            if(m.get(i,j)){
+                if(m.get(i,j+1)) wally.create(i*50, j*50, 'wally');
+                else wallx.create(i*50, j*50, 'wallx');
             } 
         }
     }
