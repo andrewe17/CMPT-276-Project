@@ -8,8 +8,6 @@ const { Pool } = require('pg');
 var http = require('http').createServer(app);
 var io = require('socket.io')(http);
 
-var generator = require('maze-generator');
-
 var pool = new Pool({
   connectionString : process.env.DATABASE_URL//connecting the database
 })

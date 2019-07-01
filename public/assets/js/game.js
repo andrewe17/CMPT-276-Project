@@ -272,7 +272,7 @@ function update(){
         'timer: '+Math.floor(((gg-this.time.now)/1000)/60)+':'+Math.floor(((gg-this.time.now)/1000)%60)
     ]);
     text4.setText([
-        'vers: '+712
+        'vers: '+719
     ]);
 }
 
@@ -287,9 +287,12 @@ function fy(player, wall){
 }
 
 
+//var generator = require('maze-generator');
+
+
 // create maze
 function maze(){
-    /*
+    
     var maze=[
         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
         [0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,0,2,0],
@@ -312,8 +315,8 @@ function maze(){
         [0,2,0,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0],
         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
     ];
-    */
-    var maze = generator([20, 20]);
+    
+    //var maze = generator([20, 20]);
 
     for (var i=0; i<20; i++){
         for (var j=0; j<20; j++){
