@@ -37,6 +37,7 @@ var wall;
 var dash;
 var dashtime;
 var dashreg;
+var dashani;
 // weapons
 var options; 
 var otext;
@@ -72,14 +73,15 @@ var mousey;
 var angle;
 
 function preload(){
-    this.load.image('van', 'assets/images/van.jpg');
+    this.load.image('van', 'assets/images/van.jpg'); // delete this
     this.load.image('ninja', 'assets/images/ninja.png');
     this.load.image('wall', 'assets/images/wall.png');
     this.load.image('wallx', 'assets/images/wallx.png');
     this.load.image('wally', 'assets/images/wally.png');
     this.load.image('slash', 'assets/images/slash.png');
     this.load.image('shuriken', 'assets/images/shuriken.png');
-     this.load.image('back', 'assets/images/bk.png');
+    this.load.image('back', 'assets/images/bk.png');
+    this.load.spritesheet('dashani', 'assets/images/dashani.png', {frameWidth: 32, frameHeight: 32});
 }
 
 function create(){
@@ -127,6 +129,12 @@ function create(){
     dash=0;
     dashtime=this.time.now;
     dashreg=this.time.now;
+    dashani=this.anims.create({
+        key: 'dashani',
+        frames: this.anims.generateFrameNumbers('dashani'),
+        frameRate: 16,
+        repeat: 1
+    });
     // weapons
     options=1;
     kata=0;
@@ -184,6 +192,7 @@ function update(){
             dashtime=this.time.now+200;
             dash--;
             dashreg=this.time.now+10000; // only 2 dashes
+            player.play('dashani');
         }
     }
     if(this.time.now>dashreg){ // dash regen
@@ -289,7 +298,7 @@ function update(){
         'timer: '+Math.floor(((gg-this.time.now)/1000)/60)+':'+Math.floor(((gg-this.time.now)/1000)%60)
     ]);
     text4.setText([
-        'vers: '+1259
+        'vers: '+428
     ]);
 }
 
