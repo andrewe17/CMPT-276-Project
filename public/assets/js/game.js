@@ -61,6 +61,7 @@ var saiseireg;
 // misc
 var health;
 var kills;
+var deaths;
 
 // textbox
 var text1, text2, text3, text4;
@@ -141,6 +142,7 @@ function create(){
     // misc
     health=100;
     kills=0;
+    deaths=0;
 
     // text
     text1=this.add.text(0, 0, '', {fontFamily:'"Roboto Condensed"', fill: '#000'}).setScrollFactor(0);
@@ -194,16 +196,32 @@ function update(){
         }
     }
 
-    // calculate angle between player and mouse
-    pointer = this.input.activePointer; // update position of mouse
-    if(player.x<400) mousex=pointer.x-player.x; // find mouse position (x) relative to player
-    else if(player.x>(mapx-400)) mousex=pointer.x-(player.x-(mapx-800));
-    else mousex=pointer.x-400;
-    if(player.y<300) mousey=pointer.y-player.y; // find mouse position (y) relative to player
-    else if(player.y>(mapy-300))mousey=pointer.y-(player.y-(mapy-600));
-    else mousey=pointer.y-300;
-    angle = Math.atan(mousey/mousex); // find angle between player and mouse
-    if(mousex<0) angle+=Math.PI;
+    // update position of mouse
+    pointer = this.input.activePointer; 
+    // distance between player & mouse
+    if(player.x<400){
+        mousex=pointer.x-player.x; // find mouse position (x) relative to player
+    } 
+    else if(player.x>(mapx-400)){
+        mousex=pointer.x-(player.x-(mapx-800));
+    }
+    else{
+        mousex=pointer.x-400;
+    }
+    if(player.y<300){
+        mousey=pointer.y-player.y; // find mouse position (y) relative to player
+    }
+    else if(player.y>(mapy-300)){
+        mousey=pointer.y-(player.y-(mapy-600));
+    }
+    else{
+        mousey=pointer.y-300;
+    }
+    // angle between player & mouse
+    angle = Math.atan(mousey/mousex); 
+    if(mousex<0){
+        angle+=Math.PI;
+    }
     
     pointer = this.input.activePointer;
     if(pointer.leftButtonDown()){ // left click
@@ -216,8 +234,8 @@ function update(){
         }
         if(options==2 && this.time.now>shuritime && shuri>0){
             shuriken = this.physics.add.sprite(player.x+Math.cos(angle)*20, player.y+Math.sin(angle)*20, 'shuriken');
-            shuriken.setVelocityX(Math.cos(angle)*200);
-            shuriken.setVelocityY(Math.sin(angle)*200);
+            shuriken.setVelocityX(Math.cos(angle)*300);
+            shuriken.setVelocityY(Math.sin(angle)*300);
             shuritime=this.time.now+100;
             shuri--;
             shurireg=this.time.now+1000;
@@ -264,13 +282,14 @@ function update(){
     ]);
     text2.setText([
         'health: '+health, // health bar
-        'kills: '+kills // #kills
+        'kills: '+kills, // #kills
+        'deaths: '+deaths // #kills
     ]);
     text3.setText([
         'timer: '+Math.floor(((gg-this.time.now)/1000)/60)+':'+Math.floor(((gg-this.time.now)/1000)%60)
     ]);
     text4.setText([
-        'vers: '+908
+        'vers: '+1259
     ]);
 }
 
