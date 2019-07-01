@@ -292,23 +292,22 @@ function update(){
         'timer: '+Math.floor(((gg-this.time.now)/1000)/60)+':'+Math.floor(((gg-this.time.now)/1000)%60)
     ]);
     text4.setText([
-        'vers: '+446
+        'vers: '+500
     ]);
 }
 
+// checks collision
 function fx(player, wall){
     if(wall.y>player.y) player.y-=5;
     else player.y+=5;
 }
-
 function fy(player, wall){
     if(wall.x>player.x) player.x-=5;
     else player.x+=5;
 }
 
+// update this to create a random maze generator
 function maze(mapx,mapy){
-    wallx.create(Math.random()*mapx, Math.random()*mapy, 'wallx');
-    wally.create(Math.random()*mapx, Math.random()*mapy, 'wally');
-    wallx_500.create(Math.random()*mapx, Math.random()*mapy, 'wallx_500');
-    wally_500.create(Math.random()*mapx, Math.random()*mapy, 'wally_500');
+    wallx.create(Math.random()*Math.round(mapx/100)*100, Math.random()*Math.round(mapy/100)*100, 'wallx');
+    wally.create(Math.random()*Math.round(mapy/100)*100, Math.random()*Math.round(mapy/100)*100, 'wally');
 }
