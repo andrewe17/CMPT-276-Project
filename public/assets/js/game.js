@@ -272,7 +272,7 @@ function update(){
         'timer: '+Math.floor(((gg-this.time.now)/1000)/60)+':'+Math.floor(((gg-this.time.now)/1000)%60)
     ]);
     text4.setText([
-        'vers: '+831
+        'vers: '+833
     ]);
 }
 
@@ -332,14 +332,14 @@ function maze(){
         [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
     ];
 
-    for (var i=0; i<40; i++){
-        for (var j=0; j<40; j++){
+    for (var i=0; i<42; i++){
+        for (var j=0; j<42; j++){
             if(maze[i][j]==1){
                 if(maze[i][j-1]==1){
-                    wally.create((i+1)*50+50, (j+1)*50, 'wally');
+                    wally.create((i+1)*50+50, (j+2)*50, 'wally');
                 }
                 else{
-                    wallx.create((i+1)*50+50, (j+1)*50, 'wallx');
+                    wallx.create((i+1)*50+50, (j+2)*50, 'wallx');
                 }
             } 
 
