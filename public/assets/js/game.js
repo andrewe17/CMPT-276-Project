@@ -17,10 +17,8 @@ var config={
 
 var game = new Phaser.Game(config);
 
-// map -- may be change this to tile map?
-
-var mapx = 2780;
-var mapy = 2780;
+var mapx = 2780; // need a map that's 3000+200 x 
+var mapy = 2780; // and 2000+200 y 
 // global time
 var gg;
 
@@ -272,7 +270,7 @@ function update(){
         'timer: '+Math.floor(((gg-this.time.now)/1000)/60)+':'+Math.floor(((gg-this.time.now)/1000)%60)
     ]);
     text4.setText([
-        'vers: '+902
+        'vers: '+908
     ]);
 }
 
