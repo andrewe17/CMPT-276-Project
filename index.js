@@ -24,14 +24,24 @@ app.get('/', function(req, res){
 });
 
 
-io.on('connection', function(socket){
-  console.log('a user connected');
-  socket.on('disconnect', function(){ //on reload or exit
-    console.log('user disconnected');
+io.sockets.on('connection', function(socket){
+  console.log('A user connected');
+
+  //user connect
+  socket.on('username', function(username){
+    socket.username = username;
+    io.emit('is_online', '🔵 <i>' + socket.username + ' has connected.</i>');
   });
+
+  //user disconnect
+  socket.on('disconnect', function(){ //on reload or exit
+    console.log('A user disconnected');
+  });
+
+  //show chat messages
   socket.on('chat message', function(msg){
     console.log('message: ' + msg);
-    io.emit('chat message', msg);
+    io.emit('chat message',socket.username + ': ' + msg);
   });
 
 });
