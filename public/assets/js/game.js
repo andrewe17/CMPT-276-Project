@@ -292,7 +292,7 @@ function update(){
         'timer: '+Math.floor(((gg-this.time.now)/1000)/60)+':'+Math.floor(((gg-this.time.now)/1000)%60)
     ]);
     text4.setText([
-        'vers: '+500
+        'vers: '+525
     ]);
 }
 
@@ -308,6 +308,71 @@ function fy(player, wall){
 
 // update this to create a random maze generator
 function maze(mapx,mapy){
-    wallx.create(Math.random()*Math.round(mapx/500)*500, Math.random()*Math.round(mapy/500)*500, 'wallx');
-    wally.create(Math.random()*Math.round(mapy/500)*500, Math.random()*Math.round(mapy/500)*500, 'wally');
+    var disp = generator(20,20);
+    for (var i=0; i<disp.length; i++){
+        for (var j=0; j<disp[i].length; j++){
+            if (disp[i][j][0]==0) wallx.create(i*100, j*100, 'wallx');
+            if (disp[i][j][1]==0) wally.create(i*100, j*100, 'wally');
+            if (disp[i][j][2]==0) wallx.create(i*100, (j+1)*100, 'wallx');
+            if (disp[i][j][3]==0) wally.create((i+1)*100, j*100, 'wally');
+        }
+    }
+}
+
+// need to rewrite this...
+function generator(x, y){
+    // initialize starting grid
+    var total = x*y;
+    var cells = new Array();
+    var unvis = new Array();
+    for(var i=0; i<y; i++){
+        cells[i]=new Array();
+        unvis[i]=new Array();
+        for (var j = 0; j < x; j++) {
+            cells[i][j]=[0,0,0,0]; // cell grid
+            unvis[i][j]=true; // visited
+        }
+    }
+    
+    // Set a random position to start from
+    var current=[0,0]; // starting position
+    var path=[current];
+    unvis[current[0]][current[1]] = false;
+    var visited = 1;
+    
+    // Loop through all available cell positions
+    while (visited < total) {
+        // Determine neighboring cells
+        var pot = [[current[0]-1, current[1], 0, 2],
+                [current[0], current[1]+1, 1, 3],
+                [current[0]+1, current[1], 2, 0],
+                [current[0], current[1]-1, 3, 1]];
+        var neighbors=new Array();
+        
+        // Determine if each neighboring cell is in game grid, and whether it has already been checked
+        for (var l = 0; l < 4; l++) {
+            if (pot[l][0] > -1 && pot[l][0] < y && pot[l][1] > -1 && pot[l][1] < x && unvis[pot[l][0]][pot[l][1]]) { neighbors.push(pot[l]); }
+        }
+        
+        // If at least one active neighboring cell has been found
+        if (neighbors.length){
+            // Choose one of the neighbors at random
+            next = neighbors[Math.floor(Math.random()*neighbors.length)];
+            
+            // Remove the wall between the current cell and the chosen neighboring cell
+            cells[current[0]][current[1]][next[2]] = 1;
+            cells[next[0]][next[1]][next[3]] = 1;
+            
+            // Mark the neighbor as visited, and set it as the current cell
+            unvis[next[0]][next[1]] = false;
+            visited++;
+            current = [next[0], next[1]];
+            path.push(current);
+        }
+        // Otherwise go back up a step and keep going
+        else {
+            current = path.pop();
+        }
+    }
+    return cells;
 }
