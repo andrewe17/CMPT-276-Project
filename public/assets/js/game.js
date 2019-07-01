@@ -272,7 +272,7 @@ function update(){
         'timer: '+Math.floor(((gg-this.time.now)/1000)/60)+':'+Math.floor(((gg-this.time.now)/1000)%60)
     ]);
     text4.setText([
-        'vers: '+741
+        'vers: '+746
     ]);
 }
 
@@ -285,6 +285,8 @@ function fy(player, wall){
     if(wall.x>player.x) player.x-=5;
     else player.x+=5;
 }
+
+var maze = require('amazejs');
 
 // create maze
 function maze(){
@@ -323,8 +325,7 @@ function maze(){
         }
     }*/
 
-    var maze = require('amazejs');
-    var m = new maze.Backtracker(20, 20);
+    var m = new maze.Backtracker(21, 21);
     m.generate();
 
     for (var i=0; i<20; i++){
