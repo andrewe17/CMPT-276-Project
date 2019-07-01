@@ -81,7 +81,8 @@ function preload(){
     this.load.image('slash', 'assets/images/slash.png');
     this.load.image('shuriken', 'assets/images/shuriken.png');
     this.load.image('back', 'assets/images/bk.png');
-    this.load.spritesheet('dashani', 'assets/images/dashani.png', {frameWidth: 32, frameHeight: 32});
+    this.load.image('empty', 'assets/images/empty.png');
+    this.load.spritesheet('smoke', 'assets/images/smoke.png', {frameWidth: 32, frameHeight: 32});
 }
 
 function create(){
@@ -129,9 +130,9 @@ function create(){
     dash=0;
     dashtime=this.time.now;
     dashreg=this.time.now;
-    dashani=this.anims.create({
-        key: 'dashani',
-        frames: this.anims.generateFrameNumbers('dashani'),
+    smoke=this.anims.create({
+        key: 'smoke',
+        frames: this.anims.generateFrameNumbers('smoke'),
         frameRate: 16,
         repeat: 1
     });
@@ -192,7 +193,8 @@ function update(){
             dashtime=this.time.now+200;
             dash--;
             dashreg=this.time.now+10000; // only 2 dashes
-            player.play('dashani');
+            var empty=this.physics.add.sprite(player.x, player.y, 'empty');
+            empty.play('smoke');
         }
     }
     if(this.time.now>dashreg){ // dash regen
@@ -298,7 +300,7 @@ function update(){
         'timer: '+Math.floor(((gg-this.time.now)/1000)/60)+':'+Math.floor(((gg-this.time.now)/1000)%60)
     ]);
     text4.setText([
-        'vers: '+428
+        'vers: '+440
     ]);
 }
 
