@@ -292,7 +292,7 @@ function update(){
         'timer: '+Math.floor(((gg-this.time.now)/1000)/60)+':'+Math.floor(((gg-this.time.now)/1000)%60)
     ]);
     text4.setText([
-        'vers: '+525
+        'vers: '+527
     ]);
 }
 
@@ -308,7 +308,7 @@ function fy(player, wall){
 
 // update this to create a random maze generator
 function maze(mapx,mapy){
-    var disp = generator(20,20);
+    var disp = generator(10,10);
     for (var i=0; i<disp.length; i++){
         for (var j=0; j<disp[i].length; j++){
             if (disp[i][j][0]==0) wallx.create(i*100, j*100, 'wallx');
