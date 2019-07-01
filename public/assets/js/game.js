@@ -188,13 +188,14 @@ function update(){
     // dash
     if(space.isDown && dash>0){
         if(this.time.now>dashtime){
+            var empty=this.physics.add.sprite(player.x, player.y, 'empty');
+            empty.play('smoke');
+
             player.x+=Math.cos(angle)*100;
             player.y+=Math.sin(angle)*100;
             dashtime=this.time.now+200;
             dash--;
             dashreg=this.time.now+10000; // only 2 dashes
-            var empty=this.physics.add.sprite(player.x, player.y, 'empty');
-            empty.play('smoke');
         }
     }
     if(this.time.now>dashreg){ // dash regen
@@ -300,7 +301,7 @@ function update(){
         'timer: '+Math.floor(((gg-this.time.now)/1000)/60)+':'+Math.floor(((gg-this.time.now)/1000)%60)
     ]);
     text4.setText([
-        'vers: '+440
+        'vers: '+442
     ]);
 }
 
