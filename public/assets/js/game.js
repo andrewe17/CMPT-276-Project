@@ -308,6 +308,6 @@ function fy(player, wall){
 
 // update this to create a random maze generator
 function maze(mapx,mapy){
-    wallx.create(Math.random()*Math.round(mapx/100)*100, Math.random()*Math.round(mapy/100)*100, 'wallx');
-    wally.create(Math.random()*Math.round(mapy/100)*100, Math.random()*Math.round(mapy/100)*100, 'wally');
+    wallx.create(Math.random()*Math.round(mapx/500)*500, Math.random()*Math.round(mapy/500)*500, 'wallx');
+    wally.create(Math.random()*Math.round(mapy/500)*500, Math.random()*Math.round(mapy/500)*500, 'wally');
 }
