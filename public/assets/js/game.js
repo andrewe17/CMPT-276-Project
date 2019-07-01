@@ -74,15 +74,20 @@ var angle;
 
 function preload(){
     this.load.image('van', 'assets/images/van.jpg'); // delete this
-    this.load.image('ninja', 'assets/images/ninja.png');
+    
     this.load.image('wall', 'assets/images/wall.png');
     this.load.image('wallx', 'assets/images/wallx.png');
     this.load.image('wally', 'assets/images/wally.png');
     this.load.image('slash', 'assets/images/slash.png');
     this.load.image('shuriken', 'assets/images/shuriken.png');
     this.load.image('back', 'assets/images/bk.png');
+    this.load.image('ninja', 'assets/images/ninja.png');
     this.load.image('empty', 'assets/images/empty.png');
-    this.load.spritesheet('smoke', 'assets/images/smoke.png', {frameWidth: 32, frameHeight: 32});
+    this.load.spritesheet('ninja_up', 'assets/images/ninja_up.png', {frameWidth: 32, frameHeight: 32});
+    this.load.spritesheet('ninja_down', 'assets/images/ninja_down.png', {frameWidth: 32, frameHeight: 32});
+    this.load.spritesheet('ninja_left', 'assets/images/ninja_left.png', {frameWidth: 32, frameHeight: 32});
+    this.load.spritesheet('ninja_right', 'assets/images/ninja_right.png', {frameWidth: 32, frameHeight: 32});
+    this.load.spritesheet('ninja_smoke', 'assets/images/ninja_smoke.png', {frameWidth: 32, frameHeight: 32});
 }
 
 function create(){
@@ -130,11 +135,35 @@ function create(){
     dash=0;
     dashtime=this.time.now;
     dashreg=this.time.now;
-    smoke=this.anims.create({
-        key: 'smoke',
-        frames: this.anims.generateFrameNumbers('smoke'),
+    ninja_smoke=this.anims.create({
+        key: 'ninja_smoke',
+        frames: this.anims.generateFrameNumbers('ninja_smoke'),
         frameRate: 16,
         repeat: 1
+    });
+    ninja_up=this.anims.create({
+        key: 'ninja_up',
+        frames: this.anims.generateFrameNumbers('ninja_up'),
+        frameRate: 16,
+        repeat: -1
+    });
+    ninja_down=this.anims.create({
+        key: 'ninja_down',
+        frames: this.anims.generateFrameNumbers('ninja_down'),
+        frameRate: 16,
+        repeat: -1
+    });
+    ninja_left=this.anims.create({
+        key: 'ninja_left',
+        frames: this.anims.generateFrameNumbers('ninja_left'),
+        frameRate: 16,
+        repeat: -1
+    });
+    ninja_right=this.anims.create({
+        key: 'ninja_right',
+        frames: this.anims.generateFrameNumbers('ninja_right'),
+        frameRate: 16,
+        repeat: -1
     });
     // weapons
     options=1;
@@ -163,18 +192,22 @@ function create(){
 function update(){
     // keys
     if(w.isDown){
+        player.play('ninja_up');
         player.setVelocityY(-200);
     }
     else if(s.isDown){
+        player.play('ninja_down');
         player.setVelocityY(200);
     }
     else{
         player.setVelocityY(0);
     }
     if(a.isDown){
+        player.play('ninja_left');
         player.setVelocityX(-200);
     }
     else if(d.isDown){
+        player.play('ninja_right');
         player.setVelocityX(200);
     }
     else{
@@ -189,7 +222,7 @@ function update(){
     if(space.isDown && dash>0){
         if(this.time.now>dashtime){
             var empty=this.physics.add.sprite(player.x, player.y, 'empty');
-            empty.play('smoke');
+            empty.play('ninja_smoke');
 
             player.x+=Math.cos(angle)*100;
             player.y+=Math.sin(angle)*100;
@@ -301,7 +334,7 @@ function update(){
         'timer: '+Math.floor(((gg-this.time.now)/1000)/60)+':'+Math.floor(((gg-this.time.now)/1000)%60)
     ]);
     text4.setText([
-        'vers: '+442
+        'vers: '+458
     ]);
 }
 
