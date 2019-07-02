@@ -227,31 +227,35 @@ function create(){
 function update(){
     // keyboard
     if(w.isDown){
+        player.anims.resume();
         if(player.anims.getCurrentKey()!='ninja_up') player.play('ninja_up');
         if(a.isDown || d.isDown) player.setVelocityY(-vol/2);
         else player.setVelocityY(-vol);
     }
     else if(s.isDown){
+        player.anims.resume();
         if(player.anims.getCurrentKey()!='ninja_down') player.play('ninja_down');
         if(a.isDown || d.isDown) player.setVelocityY(vol/2);
         else player.setVelocityY(vol);
     }
     else{
-        player.anims.stop();
+        player.anims.pause();
         player.setVelocityY(0);
     }
     if(a.isDown){
+        player.anims.resume();
         if(player.anims.getCurrentKey()!='ninja_left') player.play('ninja_left');
         if(w.isDown || s.isDown) player.setVelocityX(-vol/2);
         else player.setVelocityX(-vol);
     }
     else if(d.isDown){
+        player.anims.resume();
         if(player.anims.getCurrentKey()!='ninja_right') player.play('ninja_right');
         if(w.isDown || s.isDown) player.setVelocityX(vol/2);
         else player.setVelocityX(vol);
     }
     else{
-        player.anims.stop();
+        player.anims.pause();
         player.setVelocityX(0);
     }
     if(one.isDown) options=1; // items
@@ -361,7 +365,7 @@ function update(){
         'timer: '+Math.floor(((gg-this.time.now)/1000)/60)+':'+Math.floor(((gg-this.time.now)/1000)%60)
     ]);
     text4.setText([
-        'vers: '+407
+        'vers: '+429
     ]);
 }
 
