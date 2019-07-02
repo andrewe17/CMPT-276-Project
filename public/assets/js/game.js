@@ -30,8 +30,8 @@ var one, two, three, four;
 var pointer;
 var mousex;
 var mousey;
-var vol=200; // velocity
-var volx=200, voly=200;
+var vel=200; // velocity
+var velx=200, vely=200;
 // objects
 var player;
 var wall;
@@ -224,40 +224,59 @@ function create(){
     text4=this.add.text(700, 580, '', {fontFamily:'"Roboto Condensed"', fill: '#000'}).setScrollFactor(0);
 }
 
+var toggle=0;
+
 function update(){
     // keyboard
     if(w.isDown){
-        player.anims.resume();
         if(player.anims.getCurrentKey()!='ninja_up') player.play('ninja_up');
-        if(a.isDown || d.isDown) player.setVelocityY(-vol/2);
-        else player.setVelocityY(-vol);
+        if(a.isDown || d.isDown) player.setVelocityY(-vel/2);
+        else player.setVelocityY(-vel);
+        toggle=1;
     }
     else if(s.isDown){
-        player.anims.resume();
         if(player.anims.getCurrentKey()!='ninja_down') player.play('ninja_down');
-        if(a.isDown || d.isDown) player.setVelocityY(vol/2);
-        else player.setVelocityY(vol);
+        if(a.isDown || d.isDown) player.setVelocityY(vel/2);
+        else player.setVelocityY(vel);
+        toggle=1;
     }
     else{
-        player.anims.pause();
+        if(toggle==1 && player.anims.getCurrentKey()!='ninja_up'){
+            player.play('ninja_up');
+            toggle=0;
+        }
+        if(toggle==1 && player.anims.getCurrentKey()!='ninja_down'){
+            player.play('ninja_down');
+            toggle=0;
+        }
         player.setVelocityY(0);
     }
+
     if(a.isDown){
-        player.anims.resume();
         if(player.anims.getCurrentKey()!='ninja_left') player.play('ninja_left');
-        if(w.isDown || s.isDown) player.setVelocityX(-vol/2);
-        else player.setVelocityX(-vol);
+        if(w.isDown || s.isDown) player.setVelocityX(-vel/2);
+        else player.setVelocityX(-vel);
+        toggle=1;
     }
     else if(d.isDown){
         player.anims.resume();
         if(player.anims.getCurrentKey()!='ninja_right') player.play('ninja_right');
-        if(w.isDown || s.isDown) player.setVelocityX(vol/2);
-        else player.setVelocityX(vol);
+        if(w.isDown || s.isDown) player.setVelocityX(vel/2);
+        else player.setVelocityX(vel);
+        toggle=1;
     }
     else{
-        player.anims.pause();
+        if(toggle==1 && player.anims.getCurrentKey()!='ninja_left'){
+            player.play('ninja_left');
+            toggle=0;
+        }
+        if(toggle==1 && player.anims.getCurrentKey()!='ninja_right'){
+            player.play('ninja_right');
+            toggle=0;
+        }
         player.setVelocityX(0);
     }
+
     if(one.isDown) options=1; // items
     if(two.isDown) options=2;
     if(three.isDown) options=3;
@@ -365,7 +384,7 @@ function update(){
         'timer: '+Math.floor(((gg-this.time.now)/1000)/60)+':'+Math.floor(((gg-this.time.now)/1000)%60)
     ]);
     text4.setText([
-        'vers: '+429
+        'vers: '+446
     ]);
 }
 
