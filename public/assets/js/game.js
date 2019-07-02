@@ -76,13 +76,14 @@ function preload(){
     this.load.image('shuriken', 'assets/images/shuriken.png');
     this.load.image('back', 'assets/images/bk.png');
     this.load.image('ninja', 'assets/images/ninja.png');
-    this.load.image('empty', 'assets/images/empty.png');
+    this.load.image('slash', 'assets/images/slash.png');
     this.load.image('shuri', 'assets/images/shuri.png');
     this.load.spritesheet('ninja_up', 'assets/images/ninja_up.png', {frameWidth: 32, frameHeight: 32});
     this.load.spritesheet('ninja_down', 'assets/images/ninja_down.png', {frameWidth: 32, frameHeight: 32});
     this.load.spritesheet('ninja_left', 'assets/images/ninja_left.png', {frameWidth: 32, frameHeight: 32});
     this.load.spritesheet('ninja_right', 'assets/images/ninja_right.png', {frameWidth: 32, frameHeight: 32});
     this.load.spritesheet('ninja_smoke', 'assets/images/ninja_smoke.png', {frameWidth: 32, frameHeight: 32});
+    this.load.spritesheet('slash_anim', 'assets/images/slash_anim.png', {frameWidth: 32, frameHeight: 32});
     this.load.spritesheet('shuri_anim', 'assets/images/shuri_anim.png', {frameWidth: 13, frameHeight: 13});
     this.load.audio('swing',  ['assets/SwordSwing.mp3'] );
 }
@@ -156,12 +157,6 @@ function create(){
     dashreg=this.time.now;
     // animations
     this.anims.create({
-        key: 'ninja_smoke',
-        frames: this.anims.generateFrameNumbers('ninja_smoke'),
-        frameRate: 16,
-        repeat: 1
-    });
-    this.anims.create({
         key: 'ninja_up',
         frames: this.anims.generateFrameNumbers('ninja_up'),
         frameRate: 16,
@@ -184,6 +179,18 @@ function create(){
         frames: this.anims.generateFrameNumbers('ninja_right'),
         frameRate: 16,
         repeat: -1
+    });
+    this.anims.create({
+        key: 'ninja_smoke',
+        frames: this.anims.generateFrameNumbers('ninja_smoke'),
+        frameRate: 16,
+        repeat: 1
+    });
+    this.anims.create({
+        key: 'slash_anim',
+        frames: this.anims.generateFrameNumbers('slash_anim'),
+        frameRate: 16,
+        repeat: 1
     });
     this.anims.create({
         key: 'shuri_anim',
@@ -248,7 +255,7 @@ function update(){
     // dash
     if(space.isDown && dash>0){
         if(this.time.now>dashtime){
-            var smoke=this.physics.add.sprite(player.x, player.y, 'empty');
+            var smoke=this.physics.add.sprite(player.x, player.y, 'ninja');
             smoke.play('ninja_smoke');
             smoke.killOnComplete = true;
 
@@ -299,8 +306,10 @@ function update(){
     pointer = this.input.activePointer;
     if(pointer.leftButtonDown()){ // left click
         if(options==1 && this.time.now>katatime && kata>0){
-            // play animation, if target infront than lose health
-            // slash = this.physics.add.sprite(player.x+Math.cos(angle)*20, player.y+Math.sin(angle)*20, 'slash');
+            var slash=this.physics.add.sprite(player.x, player.y, 'slash');
+            slash.play('slash_anim');
+            slash.killOnComplete = true;
+
             katatime=this.time.now+100;
             kata--;
             katareg=this.time.now+1000;
@@ -364,7 +373,7 @@ function update(){
         'timer: '+Math.floor(((gg-this.time.now)/1000)/60)+':'+Math.floor(((gg-this.time.now)/1000)%60)
     ]);
     text4.setText([
-        'vers: '+628
+        'vers: '+649
     ]);
 }
 
