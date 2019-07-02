@@ -270,7 +270,7 @@ function update(){
             slash.play('slash_anim');
             slash.setVelocityX(Math.cos(angle)*300);
             slash.setVelocityY(Math.sin(angle)*300);
-            smoke.killOnComplete = true;
+            slash.killOnComplete = true;
             // if hit -50 hp
             katatime=this.time.now+100;
             kata--;
@@ -337,7 +337,7 @@ function update(){
         'timer: '+Math.floor(((gg-this.time.now)/1000)/60)+':'+Math.floor(((gg-this.time.now)/1000)%60)
     ]);
     text4.setText([
-        'vers: '+728
+        'vers: '+731
     ]);
 }
 
