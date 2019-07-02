@@ -162,6 +162,13 @@ function create(){
         frameRate: 16,
         repeat: -1
     });
+    this.anims.create({
+        key: 'shuri_anim',
+        frames: this.anims.generateFrameNumbers('shuri_anim'),
+        frameRate: 16,
+        repeat: -1
+    });
+
     // weapons
     options=1;
     kata=0;
@@ -276,7 +283,7 @@ function update(){
             katareg=this.time.now+1000;
         }
         if(options==2 && this.time.now>shuritime && shuri>0){
-            shuriken=this.physics.add.sprite(player.x+Math.cos(angle)*50, player.y+Math.sin(angle)*50, 'base');
+            shuriken=this.physics.add.sprite(player.x+Math.cos(angle)*50, player.y+Math.sin(angle)*50, 'shuriken');
             shuriken.play('shuri_anim');
 
             shuriken.setVelocityX(Math.cos(angle)*300);
@@ -334,7 +341,7 @@ function update(){
         'timer: '+Math.floor(((gg-this.time.now)/1000)/60)+':'+Math.floor(((gg-this.time.now)/1000)%60)
     ]);
     text4.setText([
-        'vers: '+619
+        'vers: '+622
     ]);
 }
 
