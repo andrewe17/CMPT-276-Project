@@ -31,8 +31,6 @@ var pointer;
 var mousex;
 var mousey;
 var vol=200; // velocity
-var volx=100;
-var voly=100;
 // objects
 var player;
 var wall;
@@ -227,24 +225,41 @@ function create(){
 
 function update(){
     // keyboard
-    if(w.isDown){
+    if(w.isDown && a.isDown){
         if(player.anims.getCurrentKey()!='ninja_up') player.play('ninja_up');
-        player.setVelocityY(-voly);
+        player.setVelocityX(-vol);
+        player.setVelocityY(-vol);
+    }
+    else if(w.isDown && d.isDown){
+        if(player.anims.getCurrentKey()!='ninja_up') player.play('ninja_up');
+        player.setVelocityX(vol);
+        player.setVelocityY(-vol);
+    }
+    else if(s.isDown && a.isDown){
+        if(player.anims.getCurrentKey()!='ninja_up') player.play('ninja_down');
+        player.setVelocityX(-vol);
+        player.setVelocityY(vol);
+    }
+    else if(s.isDown && d.isDown){
+        if(player.anims.getCurrentKey()!='ninja_up') player.play('ninja_down');
+        player.setVelocityX(vol);
+        player.setVelocityY(vol);
+    }
+    else if(w.isDown){
+        if(player.anims.getCurrentKey()!='ninja_up') player.play('ninja_up');
+        player.setVelocityY(-vol);
     }
     else if(s.isDown){
         if(player.anims.getCurrentKey()!='ninja_down') player.play('ninja_down');
-        player.setVelocityY(voly);
+        player.setVelocityY(vol);
     }
-    else{
-        player.setVelocityY(0);
-    }
-    if(a.isDown){
+    else if(a.isDown){
         if(player.anims.getCurrentKey()!='ninja_left') player.play('ninja_left');
-        player.setVelocityX(-volx);
+        player.setVelocityX(-vol);
     }
     else if(d.isDown){
         if(player.anims.getCurrentKey()!='ninja_right') player.play('ninja_right');
-        player.setVelocityX(volx);
+        player.setVelocityX(vol);
     }
     else{
         player.setVelocityX(0);
@@ -264,8 +279,6 @@ function update(){
     else  mousey=pointer.y-300;
     angle = Math.atan(mousey/mousex); // angle between mouse & player
     if(mousex<0) angle+=Math.PI;
-    volx=Math.cos(angle)*vol;
-    voly=Math.sin(angle)*vol;
         
     // dash
     if(space.isDown && dash>0){
@@ -358,7 +371,7 @@ function update(){
         'timer: '+Math.floor(((gg-this.time.now)/1000)/60)+':'+Math.floor(((gg-this.time.now)/1000)%60)
     ]);
     text4.setText([
-        'vers: '+328
+        'vers: '+335
     ]);
 }
 
