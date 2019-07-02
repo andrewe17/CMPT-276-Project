@@ -187,22 +187,22 @@ function create(){
 function update(){
     // keys
     if(w.isDown){
-        player.play('ninja_up');
+        if(player.anims.getCurrentKey()!='ninja_up') player.play('ninja_up');
         player.setVelocityY(-200);
     }
     else if(s.isDown){
-        player.play('ninja_down');
+        if(player.anims.getCurrentKey()!='ninja_down') player.play('ninja_down');
         player.setVelocityY(200);
     }
     else{
         player.setVelocityY(0);
     }
     if(a.isDown){
-        player.play('ninja_left');
+        if(player.anims.getCurrentKey()!='ninja_left') player.play('ninja_left');
         player.setVelocityX(-200);
     }
     else if(d.isDown){
-        player.play('ninja_right');
+        if(player.anims.getCurrentKey()!='ninja_right') player.play('ninja_right');
         player.setVelocityX(200);
     }
     else{
@@ -330,7 +330,7 @@ function update(){
         'timer: '+Math.floor(((gg-this.time.now)/1000)/60)+':'+Math.floor(((gg-this.time.now)/1000)%60)
     ]);
     text4.setText([
-        'vers: '+523
+        'vers: '+529
     ]);
 }
 
