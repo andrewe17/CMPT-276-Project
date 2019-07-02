@@ -77,11 +77,13 @@ function preload(){
     this.load.image('back', 'assets/images/bk.png');
     this.load.image('ninja', 'assets/images/ninja.png');
     this.load.image('empty', 'assets/images/empty.png');
+    this.load.image('base', 'assets/images/base.png'); // shuriken etc
     this.load.spritesheet('ninja_up', 'assets/images/ninja_up.png', {frameWidth: 32, frameHeight: 32});
     this.load.spritesheet('ninja_down', 'assets/images/ninja_down.png', {frameWidth: 32, frameHeight: 32});
     this.load.spritesheet('ninja_left', 'assets/images/ninja_left.png', {frameWidth: 32, frameHeight: 32});
     this.load.spritesheet('ninja_right', 'assets/images/ninja_right.png', {frameWidth: 32, frameHeight: 32});
     this.load.spritesheet('ninja_smoke', 'assets/images/ninja_smoke.png', {frameWidth: 32, frameHeight: 32});
+    this.load.spritesheet('shuri_anim', 'assets/images/shuri_anim.png', {frameWidth: 13, frameHeight: 13});
 }
 
 function create(){
@@ -274,7 +276,9 @@ function update(){
             katareg=this.time.now+1000;
         }
         if(options==2 && this.time.now>shuritime && shuri>0){
-            shuriken = this.physics.add.sprite(player.x+Math.cos(angle)*20, player.y+Math.sin(angle)*20, 'shuriken');
+            shuriken=this.physics.add.sprite(player.x+Math.cos(angle)*50, player.y+Math.sin(angle)*50, 'base');
+            shuriken.play('shuri_anim');
+
             shuriken.setVelocityX(Math.cos(angle)*300);
             shuriken.setVelocityY(Math.sin(angle)*300);
             shuritime=this.time.now+100;
@@ -330,7 +334,7 @@ function update(){
         'timer: '+Math.floor(((gg-this.time.now)/1000)/60)+':'+Math.floor(((gg-this.time.now)/1000)%60)
     ]);
     text4.setText([
-        'vers: '+556
+        'vers: '+619
     ]);
 }
 
