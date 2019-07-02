@@ -229,22 +229,22 @@ function update(){
     // keyboard
     if(w.isDown){
         if(player.anims.getCurrentKey()!='ninja_up') player.play('ninja_up');
-        player.setVelocityY(-200);
+        player.setVelocityY(-voly);
     }
     else if(s.isDown){
         if(player.anims.getCurrentKey()!='ninja_down') player.play('ninja_down');
-        player.setVelocityY(200);
+        player.setVelocityY(voly);
     }
     else{
         player.setVelocityY(0);
     }
     if(a.isDown){
         if(player.anims.getCurrentKey()!='ninja_left') player.play('ninja_left');
-        player.setVelocityX(-200);
+        player.setVelocityX(-volx);
     }
     else if(d.isDown){
         if(player.anims.getCurrentKey()!='ninja_right') player.play('ninja_right');
-        player.setVelocityX(200);
+        player.setVelocityX(volx);
     }
     else{
         player.setVelocityX(0);
@@ -358,7 +358,7 @@ function update(){
         'timer: '+Math.floor(((gg-this.time.now)/1000)/60)+':'+Math.floor(((gg-this.time.now)/1000)%60)
     ]);
     text4.setText([
-        'vers: '+326
+        'vers: '+328
     ]);
 }
 
