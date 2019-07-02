@@ -84,9 +84,32 @@ function preload(){
     this.load.spritesheet('ninja_smoke', 'assets/images/ninja_smoke.png', {frameWidth: 32, frameHeight: 32});
     this.load.spritesheet('slash_anim', 'assets/images/slash_anim.png', {frameWidth: 16, frameHeight: 16});
     this.load.spritesheet('shuri_anim', 'assets/images/shuri_anim.png', {frameWidth: 13, frameHeight: 13});
+    this.load.audio('swing',  ['assets/SwordSwing.mp3'] );
 }
 
 function create(){
+    
+    // audio 
+    // example: https://phaser.io/examples/v3/view/audio/web-audio/play-sound-on-keypress
+    /*
+    if (this.sound.locked)
+    {
+        text.setText('Click to start');
+
+        this.sound.once('unlocked', function ()
+        {
+            text.setText(keys);
+        });
+    }
+    */
+    this.input.keyboard.on('keydown-SPACE', function () {
+        this.sound.stopAll();
+    }, this);
+    // for audio to play in the background, delete input function leaving "<name>.play();" inside create function
+    this.input.keyboard.on('keydown-Z', function () {
+        swing.play();
+    });
+
     // camera
     this.cameras.main.setBounds(0, 0, mapx, mapy);
     this.physics.world.setBounds(0, 0, mapx, mapy);
