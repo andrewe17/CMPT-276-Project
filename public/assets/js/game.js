@@ -237,6 +237,7 @@ function update(){
         else player.setVelocityY(vol);
     }
     else{
+        player.anims.stop();
         player.setVelocityY(0);
     }
     if(a.isDown){
@@ -250,6 +251,7 @@ function update(){
         else player.setVelocityX(vol);
     }
     else{
+        player.anims.stop();
         player.setVelocityX(0);
     }
     if(one.isDown) options=1; // items
