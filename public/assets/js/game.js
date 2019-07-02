@@ -140,25 +140,25 @@ function create(){
         key: 'ninja_up',
         frames: this.anims.generateFrameNumbers('ninja_up'),
         frameRate: 16,
-        repeat: 1
+        repeat: -1
     });
     ninja_down=this.anims.create({
         key: 'ninja_down',
         frames: this.anims.generateFrameNumbers('ninja_down'),
         frameRate: 16,
-        repeat: 1
+        repeat: -1
     });
     ninja_left=this.anims.create({
         key: 'ninja_left',
         frames: this.anims.generateFrameNumbers('ninja_left'),
         frameRate: 16,
-        repeat: 1
+        repeat: -1
     });
     ninja_right=this.anims.create({
         key: 'ninja_right',
         frames: this.anims.generateFrameNumbers('ninja_right'),
         frameRate: 16,
-        repeat: 1
+        repeat: -1
     });
     // weapons
     options=1;
@@ -187,25 +187,27 @@ function create(){
 function update(){
     // keys
     if(w.isDown){
-        if(player.anims.getCurrentKey()!='ninja_up' && player.anims.isPlaying==false) player.play('ninja_up');
+        if(player.anims.getCurrentKey()!='ninja_up') player.play('ninja_up');
         player.setVelocityY(-200);
     }
     else if(s.isDown){
-        if(player.anims.getCurrentKey()!='ninja_down' && player.anims.isPlaying==false) player.play('ninja_down');
+        if(player.anims.getCurrentKey()!='ninja_down') player.play('ninja_down');
         player.setVelocityY(200);
     }
     else{
+        player.anims.pause();
         player.setVelocityY(0);
     }
     if(a.isDown){
-        if(player.anims.getCurrentKey()!='ninja_left' && player.anims.isPlaying==false) player.play('ninja_left');
+        if(player.anims.getCurrentKey()!='ninja_left') player.play('ninja_left');
         player.setVelocityX(-200);
     }
     else if(d.isDown){
-        if(player.anims.getCurrentKey()!='ninja_right' && player.anims.isPlaying==false) player.play('ninja_right');
+        if(player.anims.getCurrentKey()!='ninja_right') player.play('ninja_right');
         player.setVelocityX(200);
     }
     else{
+        player.anims.pause();
         player.setVelocityX(0);
     }
     if(one.isDown) options=1;
@@ -330,7 +332,7 @@ function update(){
         'timer: '+Math.floor(((gg-this.time.now)/1000)/60)+':'+Math.floor(((gg-this.time.now)/1000)%60)
     ]);
     text4.setText([
-        'vers: '+535
+        'vers: '+542
     ]);
 }
 
