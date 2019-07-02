@@ -192,22 +192,22 @@ function create(){
 function update(){
     // keys
     if(w.isDown){
-        if(player.currentAnim.name!='ninja_up') player.play('ninja_up');
+        if(player.animation.currentAnim.name!='ninja_up') player.play('ninja_up');
         player.setVelocityY(-200);
     }
     else if(s.isDown){
-        if(player.currentAnim.name!='ninja_down') player.play('ninja_down');
+        if(player.animation.currentAnim.name!='ninja_down') player.play('ninja_down');
         player.setVelocityY(200);
     }
     else{
         player.setVelocityY(0);
     }
     if(a.isDown){
-        if(player.currentAnim.name!='ninja_left') player.play('ninja_left');
+        if(player.animation.currentAnim.name!='ninja_left') player.play('ninja_left');
         player.setVelocityX(-200);
     }
     else if(d.isDown){
-        if(player.currentAnim.name!='ninja_right') player.play('ninja_right');
+        if(player.animation.currentAnim.name!='ninja_right') player.play('ninja_right');
         player.setVelocityX(200);
     }
     else{
