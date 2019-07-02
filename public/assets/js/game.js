@@ -247,36 +247,21 @@ function update(){
     else{
         player.setVelocityX(0);
     }
-    if(one.isDown) options=1;
+    if(one.isDown) options=1; // items
     if(two.isDown) options=2;
     if(three.isDown) options=3;
     if(four.isDown) options=4;
 
     // mouse
-    pointer = this.input.activePointer; 
-    if(player.x<400){
-        mousex=pointer.x-player.x; // find mouse position (x) relative to player
-    } 
-    else if(player.x>(mapx-400)){
-        mousex=pointer.x-(player.x-(mapx-800));
-    }
-    else{
-        mousex=pointer.x-400;
-    }
-    if(player.y<300){
-        mousey=pointer.y-player.y; // find mouse position (y) relative to player
-    }
-    else if(player.y>(mapy-300)){
-        mousey=pointer.y-(player.y-(mapy-600));
-    }
-    else{
-        mousey=pointer.y-300;
-    }
-    // angle between player & mouse
-    angle = Math.atan(mousey/mousex); 
-    if(mousex<0){
-        angle+=Math.PI;
-    }
+    pointer = this.input.activePointer; // refresh coordinate
+    if(player.x<400) mousex=pointer.x-player.x; // distance between mouse & player
+    else if(player.x>(mapx-400)) mousex=pointer.x-(player.x-(mapx-800));
+    else mousex=pointer.x-400;
+    if(player.y<300) mousey=pointer.y-player.y; // distance between mouse & player
+    else if(player.y>(mapy-300)) mousey=pointer.y-(player.y-(mapy-600));
+    else  mousey=pointer.y-300;
+    angle = Math.atan(mousey/mousex); // angle between mouse & player
+    if(mousex<0) angle+=Math.PI;
         
     // dash
     if(space.isDown && dash>0){
@@ -302,11 +287,10 @@ function update(){
         }
     }
 
-
-    pointer = this.input.activePointer;
+    // use items
     if(pointer.leftButtonDown()){ // left click
         if(options==1 && this.time.now>katatime && kata>0){
-            var slash=this.physics.add.sprite(player.x, player.y, 'slash');
+            var slash=this.physics.add.sprite(player.x+Math.cos(angle)*32, player.y+Math.sin(angle)*32, 'slash');
             slash.play('slash_anim');
             slash.killOnComplete = true;
 
@@ -315,16 +299,18 @@ function update(){
             katareg=this.time.now+1000;
         }
         if(options==2 && this.time.now>shuritime && shuri>0){
-            shuriken=this.physics.add.sprite(player.x+Math.cos(angle)*32, player.y+Math.sin(angle)*32, 'shuri');
-            shuriken.play('shuri_anim');
+            var toss=this.physics.add.sprite(player.x+Math.cos(angle)*32, player.y+Math.sin(angle)*32, 'shuri');
+            toss.play('shuri_anim');
+            toss.setVelocityX(Math.cos(angle)*300);
+            toss.setVelocityY(Math.sin(angle)*300);
 
-            shuriken.setVelocityX(Math.cos(angle)*300);
-            shuriken.setVelocityY(Math.sin(angle)*300);
             shuritime=this.time.now+100;
             shuri--;
             shurireg=this.time.now+1000;
         }
     }
+
+    // regen
     if(this.time.now>katareg){ // kata regen
         if(kata<10){
             katareg=this.time.now+1000;
@@ -373,7 +359,7 @@ function update(){
         'timer: '+Math.floor(((gg-this.time.now)/1000)/60)+':'+Math.floor(((gg-this.time.now)/1000)%60)
     ]);
     text4.setText([
-        'vers: '+654
+        'vers: '+704
     ]);
 }
 
