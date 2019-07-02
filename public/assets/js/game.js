@@ -162,6 +162,13 @@ function create(){
         frameRate: 16,
         repeat: -1
     });
+    this.anims.create({
+        key: 'shuri_anim',
+        frames: this.anims.generateFrameNumbers('shuri_anim'),
+        frameRate: 16,
+        repeat: -1
+    });
+
     // weapons
     options=1;
     kata=0;
@@ -334,7 +341,7 @@ function update(){
         'timer: '+Math.floor(((gg-this.time.now)/1000)/60)+':'+Math.floor(((gg-this.time.now)/1000)%60)
     ]);
     text4.setText([
-        'vers: '+621
+        'vers: '+622
     ]);
 }
 
