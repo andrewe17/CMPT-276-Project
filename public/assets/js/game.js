@@ -227,23 +227,23 @@ function update(){
     // keyboard
     if(w.isDown && a.isDown){
         if(player.anims.getCurrentKey()!='ninja_up') player.play('ninja_up');
-        player.setVelocityX(-vol);
-        player.setVelocityY(-vol);
+        player.setVelocityX(-vol/2);
+        player.setVelocityY(-vol/2);
     }
     else if(w.isDown && d.isDown){
         if(player.anims.getCurrentKey()!='ninja_up') player.play('ninja_up');
-        player.setVelocityX(vol);
-        player.setVelocityY(-vol);
+        player.setVelocityX(vol/2);
+        player.setVelocityY(-vol/2);
     }
     else if(s.isDown && a.isDown){
         if(player.anims.getCurrentKey()!='ninja_up') player.play('ninja_down');
-        player.setVelocityX(-vol);
-        player.setVelocityY(vol);
+        player.setVelocityX(-vol/2);
+        player.setVelocityY(vol/2);
     }
     else if(s.isDown && d.isDown){
         if(player.anims.getCurrentKey()!='ninja_up') player.play('ninja_down');
-        player.setVelocityX(vol);
-        player.setVelocityY(vol);
+        player.setVelocityX(vol/2);
+        player.setVelocityY(vol/2);
     }
     else if(w.isDown){
         if(player.anims.getCurrentKey()!='ninja_up') player.play('ninja_up');
