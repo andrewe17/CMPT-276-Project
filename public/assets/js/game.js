@@ -268,8 +268,8 @@ function update(){
         if(options==1 && this.time.now>katatime && kata>0){
             var slash=this.physics.add.sprite(player.x+Math.cos(angle)*32, player.y+Math.sin(angle)*32, 'slash');
             slash.play('slash_anim');
-            slash.setVelocityX(Math.cos(angle)*300);
-            slash.setVelocityY(Math.sin(angle)*300);
+            slash.setVelocityX(Math.cos(angle)*50);
+            slash.setVelocityY(Math.sin(angle)*50);
             slash.killOnComplete = true;
             // if hit -50 hp
             katatime=this.time.now+100;
@@ -337,7 +337,7 @@ function update(){
         'timer: '+Math.floor(((gg-this.time.now)/1000)/60)+':'+Math.floor(((gg-this.time.now)/1000)%60)
     ]);
     text4.setText([
-        'vers: '+731
+        'vers: '+734
     ]);
 }
 
