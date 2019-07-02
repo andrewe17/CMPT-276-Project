@@ -30,6 +30,9 @@ var one, two, three, four;
 var pointer;
 var mousex;
 var mousey;
+var vol=200; // velocity
+var volx=100;
+var voly=100;
 // objects
 var player;
 var wall;
@@ -261,6 +264,8 @@ function update(){
     else  mousey=pointer.y-300;
     angle = Math.atan(mousey/mousex); // angle between mouse & player
     if(mousex<0) angle+=Math.PI;
+    volx=Math.cos(angle)*vol;
+    voly=Math.sin(angle)*vol;
         
     // dash
     if(space.isDown && dash>0){
@@ -353,7 +358,7 @@ function update(){
         'timer: '+Math.floor(((gg-this.time.now)/1000)/60)+':'+Math.floor(((gg-this.time.now)/1000)%60)
     ]);
     text4.setText([
-        'vers: '+218
+        'vers: '+326
     ]);
 }
 
