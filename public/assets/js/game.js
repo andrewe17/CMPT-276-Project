@@ -195,7 +195,7 @@ function update(){
         player.setVelocityY(200);
     }
     else{
-        player.anims.pause;
+        player.anims.stop();
         player.setVelocityY(0);
     }
     if(a.isDown){
@@ -207,7 +207,7 @@ function update(){
         player.setVelocityX(200);
     }
     else{
-        player.anims.stop;
+        player.anims.stop();
         player.setVelocityX(0);
     }
     if(one.isDown) options=1;
@@ -332,7 +332,7 @@ function update(){
         'timer: '+Math.floor(((gg-this.time.now)/1000)/60)+':'+Math.floor(((gg-this.time.now)/1000)%60)
     ]);
     text4.setText([
-        'vers: '+546
+        'vers: '+552
     ]);
 }
 
