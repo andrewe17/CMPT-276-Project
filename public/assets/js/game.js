@@ -130,31 +130,31 @@ function create(){
     dashtime=this.time.now;
     dashreg=this.time.now;
     // animations
-    ninja_smoke=this.anims.create({
+    this.anims.create({
         key: 'ninja_smoke',
         frames: this.anims.generateFrameNumbers('ninja_smoke'),
         frameRate: 16,
         repeat: 1
     });
-    ninja_up=this.anims.create({
+    this.anims.create({
         key: 'ninja_up',
         frames: this.anims.generateFrameNumbers('ninja_up'),
         frameRate: 16,
         repeat: -1
     });
-    ninja_down=this.anims.create({
+    this.anims.create({
         key: 'ninja_down',
         frames: this.anims.generateFrameNumbers('ninja_down'),
         frameRate: 16,
         repeat: -1
     });
-    ninja_left=this.anims.create({
+    this.anims.create({
         key: 'ninja_left',
         frames: this.anims.generateFrameNumbers('ninja_left'),
         frameRate: 16,
         repeat: -1
     });
-    ninja_right=this.anims.create({
+    this.anims.create({
         key: 'ninja_right',
         frames: this.anims.generateFrameNumbers('ninja_right'),
         frameRate: 16,
@@ -195,7 +195,6 @@ function update(){
         player.setVelocityY(200);
     }
     else{
-        player.anims.stop();
         player.setVelocityY(0);
     }
     if(a.isDown){
@@ -207,7 +206,6 @@ function update(){
         player.setVelocityX(200);
     }
     else{
-        player.anims.stop();
         player.setVelocityX(0);
     }
     if(one.isDown) options=1;
@@ -332,19 +330,19 @@ function update(){
         'timer: '+Math.floor(((gg-this.time.now)/1000)/60)+':'+Math.floor(((gg-this.time.now)/1000)%60)
     ]);
     text4.setText([
-        'vers: '+552
+        'vers: '+556
     ]);
 }
 
 // checks collision
 function fx(player, wall){
-    if(wall.y>player.y) player.y-=5;
-    else player.y+=5;
+    if(wall.y>player.y) player.y-=3;
+    else player.y+=3;
     
 }
 function fy(player, wall){
-    if(wall.x>player.x) player.x-=5;
-    else player.x+=5;
+    if(wall.x>player.x) player.x-=3;
+    else player.x+=3;
 }
 
 // create maze
