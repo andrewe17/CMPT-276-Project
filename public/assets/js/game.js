@@ -31,6 +31,7 @@ var pointer;
 var mousex;
 var mousey;
 var vol=200; // velocity
+var volx=200, voly=200;
 // objects
 var player;
 var wall;
@@ -225,44 +226,30 @@ function create(){
 
 function update(){
     // keyboard
-    if(w.isDown && a.isDown){
+    if(w.isDown){
         if(player.anims.getCurrentKey()!='ninja_up') player.play('ninja_up');
-        player.setVelocityX(-vol/2);
-        player.setVelocityY(-vol/2);
-    }
-    else if(w.isDown && d.isDown){
-        if(player.anims.getCurrentKey()!='ninja_up') player.play('ninja_up');
-        player.setVelocityX(vol/2);
-        player.setVelocityY(-vol/2);
-    }
-    else if(s.isDown && a.isDown){
-        if(player.anims.getCurrentKey()!='ninja_up') player.play('ninja_down');
-        player.setVelocityX(-vol/2);
-        player.setVelocityY(vol/2);
-    }
-    else if(s.isDown && d.isDown){
-        if(player.anims.getCurrentKey()!='ninja_up') player.play('ninja_down');
-        player.setVelocityX(vol/2);
-        player.setVelocityY(vol/2);
-    }
-    else if(w.isDown){
-        if(player.anims.getCurrentKey()!='ninja_up') player.play('ninja_up');
-        player.setVelocityY(-vol);
+        if(a.isDown || d.isDown) player.setVelocityY(-vol/2);
+        else player.setVelocityY(-vol);
     }
     else if(s.isDown){
         if(player.anims.getCurrentKey()!='ninja_down') player.play('ninja_down');
-        player.setVelocityY(vol);
-    }
-    else if(a.isDown){
-        if(player.anims.getCurrentKey()!='ninja_left') player.play('ninja_left');
-        player.setVelocityX(-vol);
-    }
-    else if(d.isDown){
-        if(player.anims.getCurrentKey()!='ninja_right') player.play('ninja_right');
-        player.setVelocityX(vol);
+        if(a.isDown || d.isDown) player.setVelocityY(vol/2);
+        else player.setVelocityY(vol);
     }
     else{
         player.setVelocityY(0);
+    }
+    if(a.isDown){
+        if(player.anims.getCurrentKey()!='ninja_left') player.play('ninja_left');
+        if(w.isDown || s.isDown) player.setVelocityX(-vol/2);
+        else player.setVelocityX(-vol);
+    }
+    else if(d.isDown){
+        if(player.anims.getCurrentKey()!='ninja_right') player.play('ninja_right');
+        if(w.isDown || s.isDown) player.setVelocityX(vol/2);
+        else player.setVelocityX(vol);
+    }
+    else{
         player.setVelocityX(0);
     }
     if(one.isDown) options=1; // items
@@ -372,7 +359,7 @@ function update(){
         'timer: '+Math.floor(((gg-this.time.now)/1000)/60)+':'+Math.floor(((gg-this.time.now)/1000)%60)
     ]);
     text4.setText([
-        'vers: '+338
+        'vers: '+407
     ]);
 }
 
