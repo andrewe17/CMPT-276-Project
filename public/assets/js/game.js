@@ -83,7 +83,7 @@ function preload(){
     this.load.spritesheet('ninja_left', 'assets/images/ninja_left.png', {frameWidth: 32, frameHeight: 32});
     this.load.spritesheet('ninja_right', 'assets/images/ninja_right.png', {frameWidth: 32, frameHeight: 32});
     this.load.spritesheet('ninja_smoke', 'assets/images/ninja_smoke.png', {frameWidth: 32, frameHeight: 32});
-    this.load.spritesheet('slash_anim', 'assets/images/slash_anim.png', {frameWidth: 32, frameHeight: 32});
+    this.load.spritesheet('slash_anim', 'assets/images/slash_anim.png', {frameWidth: 16, frameHeight: 16});
     this.load.spritesheet('shuri_anim', 'assets/images/shuri_anim.png', {frameWidth: 13, frameHeight: 13});
 }
 
@@ -201,7 +201,7 @@ function create(){
 }
 
 function update(){
-    // keys
+    // keyboard
     if(w.isDown){
         if(player.anims.getCurrentKey()!='ninja_up') player.play('ninja_up');
         player.setVelocityY(-200);
@@ -229,6 +229,32 @@ function update(){
     if(three.isDown) options=3;
     if(four.isDown) options=4;
 
+    // mouse
+    pointer = this.input.activePointer; 
+    if(player.x<400){
+        mousex=pointer.x-player.x; // find mouse position (x) relative to player
+    } 
+    else if(player.x>(mapx-400)){
+        mousex=pointer.x-(player.x-(mapx-800));
+    }
+    else{
+        mousex=pointer.x-400;
+    }
+    if(player.y<300){
+        mousey=pointer.y-player.y; // find mouse position (y) relative to player
+    }
+    else if(player.y>(mapy-300)){
+        mousey=pointer.y-(player.y-(mapy-600));
+    }
+    else{
+        mousey=pointer.y-300;
+    }
+    // angle between player & mouse
+    angle = Math.atan(mousey/mousex); 
+    if(mousex<0){
+        angle+=Math.PI;
+    }
+        
     // dash
     if(space.isDown && dash>0){
         if(this.time.now>dashtime){
@@ -253,33 +279,7 @@ function update(){
         }
     }
 
-    // update position of mouse
-    pointer = this.input.activePointer; 
-    // distance between player & mouse
-    if(player.x<400){
-        mousex=pointer.x-player.x; // find mouse position (x) relative to player
-    } 
-    else if(player.x>(mapx-400)){
-        mousex=pointer.x-(player.x-(mapx-800));
-    }
-    else{
-        mousex=pointer.x-400;
-    }
-    if(player.y<300){
-        mousey=pointer.y-player.y; // find mouse position (y) relative to player
-    }
-    else if(player.y>(mapy-300)){
-        mousey=pointer.y-(player.y-(mapy-600));
-    }
-    else{
-        mousey=pointer.y-300;
-    }
-    // angle between player & mouse
-    angle = Math.atan(mousey/mousex); 
-    if(mousex<0){
-        angle+=Math.PI;
-    }
-    
+
     pointer = this.input.activePointer;
     if(pointer.leftButtonDown()){ // left click
         if(options==1 && this.time.now>katatime && kata>0){
@@ -350,7 +350,7 @@ function update(){
         'timer: '+Math.floor(((gg-this.time.now)/1000)/60)+':'+Math.floor(((gg-this.time.now)/1000)%60)
     ]);
     text4.setText([
-        'vers: '+649
+        'vers: '+654
     ]);
 }
 
