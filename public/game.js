@@ -33,6 +33,8 @@ function preload(){
     this.load.image('ninja', 'assets/ninja.png');
     this.load.image('wall', 'assets/wall.png');
     this.load.image('van', 'assets/van.jpg');
+
+    this.load.audio('swing',  ['assets/SwordSwing.mp3'] );
 }
 
 function create(){
@@ -64,6 +66,29 @@ function create(){
     //this.dashcount = game.add.text(600, 20, "#dash: ", { font: "16px Arial", fill: "#ffffff", align: "right" });
     // dash angle - position of cursor
     pointer = this.input.activePointer;
+
+
+    // audio example: https://phaser.io/examples/v3/view/audio/web-audio/play-sound-on-keypress
+    /*
+    if (this.sound.locked)
+    {
+        text.setText('Click to start');
+
+        this.sound.once('unlocked', function ()
+        {
+            text.setText(keys);
+        });
+    }
+    */
+    this.input.keyboard.on('keydown-SPACE', function () {
+        this.sound.stopAll();
+    }, this);
+
+
+    // for audio to play in the background, delete input function leaving "<name>.play();" inside create function
+    this.input.keyboard.on('keydown-Z', function () {
+        swing.play();
+    });
 }
 
 function update(){
