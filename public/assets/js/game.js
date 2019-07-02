@@ -68,7 +68,6 @@ var angle;
 
 function preload(){
     this.load.image('van', 'assets/images/van.jpg'); // delete this
-    
     this.load.image('wall', 'assets/images/wall.png');
     this.load.image('wallx', 'assets/images/wallx.png');
     this.load.image('wally', 'assets/images/wally.png');
@@ -189,7 +188,7 @@ function create(){
     this.anims.create({
         key: 'slash_anim',
         frames: this.anims.generateFrameNumbers('slash_anim'),
-        frameRate: 16,
+        frameRate: 32,
         repeat: 1
     });
     this.anims.create({
@@ -292,8 +291,7 @@ function update(){
         if(options==1 && this.time.now>katatime && kata>0){
             var slash=this.physics.add.sprite(player.x+Math.cos(angle)*32, player.y+Math.sin(angle)*32, 'slash');
             slash.play('slash_anim');
-            slash.killOnComplete = true;
-
+            // if hit -50 hp
             katatime=this.time.now+100;
             kata--;
             katareg=this.time.now+1000;
@@ -303,7 +301,7 @@ function update(){
             toss.play('shuri_anim');
             toss.setVelocityX(Math.cos(angle)*300);
             toss.setVelocityY(Math.sin(angle)*300);
-
+            // if hit -10 hp
             shuritime=this.time.now+100;
             shuri--;
             shurireg=this.time.now+1000;
@@ -359,7 +357,7 @@ function update(){
         'timer: '+Math.floor(((gg-this.time.now)/1000)/60)+':'+Math.floor(((gg-this.time.now)/1000)%60)
     ]);
     text4.setText([
-        'vers: '+704
+        'vers: '+724
     ]);
 }
 
