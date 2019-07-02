@@ -262,6 +262,7 @@ function update(){
         player.setVelocityX(vol);
     }
     else{
+        player.setVelocityY(0);
         player.setVelocityX(0);
     }
     if(one.isDown) options=1; // items
@@ -371,7 +372,7 @@ function update(){
         'timer: '+Math.floor(((gg-this.time.now)/1000)/60)+':'+Math.floor(((gg-this.time.now)/1000)%60)
     ]);
     text4.setText([
-        'vers: '+335
+        'vers: '+338
     ]);
 }
 
