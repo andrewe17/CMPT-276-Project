@@ -308,12 +308,10 @@ function update(){
 
     // katana
     // mines
-    // dash need smoke effect
-    // need animation for chracter on movement
     // implement background using tiles?
     // crouch - ctrl+c - hidden
     // lava and traps
-    // limited views
+    // limited views --> we need to either have fog of war or make the camera display a smaller area...
     // health
     otext='';
     if(options==1) otext='kata: infinite'; // melee
@@ -335,7 +333,7 @@ function update(){
         'timer: '+Math.floor(((gg-this.time.now)/1000)/60)+':'+Math.floor(((gg-this.time.now)/1000)%60)
     ]);
     text4.setText([
-        'vers: '+809
+        'vers: '+813
     ]);
 }
 
