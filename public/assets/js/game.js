@@ -58,14 +58,8 @@ var saisei;
 var saiseitime;
 var saiseireg;
 // cannot use ctrl+c or move
-
-// misc
-var health;
-var kills;
-var deaths;
-
-// textbox
-var text1, text2, text3, text4;
+var health, kills, deaths; // misc
+var text1, text2, text3, text4; // textbox
 
 // mouse
 var mousex;
@@ -135,6 +129,7 @@ function create(){
     dash=0;
     dashtime=this.time.now;
     dashreg=this.time.now;
+    // animations
     ninja_smoke=this.anims.create({
         key: 'ninja_smoke',
         frames: this.anims.generateFrameNumbers('ninja_smoke'),
@@ -145,25 +140,25 @@ function create(){
         key: 'ninja_up',
         frames: this.anims.generateFrameNumbers('ninja_up'),
         frameRate: 16,
-        repeat: -1
+        repeat: 1
     });
     ninja_down=this.anims.create({
         key: 'ninja_down',
         frames: this.anims.generateFrameNumbers('ninja_down'),
         frameRate: 16,
-        repeat: -1
+        repeat: 1
     });
     ninja_left=this.anims.create({
         key: 'ninja_left',
         frames: this.anims.generateFrameNumbers('ninja_left'),
         frameRate: 16,
-        repeat: -1
+        repeat: 1
     });
     ninja_right=this.anims.create({
         key: 'ninja_right',
         frames: this.anims.generateFrameNumbers('ninja_right'),
         frameRate: 16,
-        repeat: -1
+        repeat: 1
     });
     // weapons
     options=1;
@@ -192,22 +187,22 @@ function create(){
 function update(){
     // keys
     if(w.isDown){
-        if(player.animation.currentAnim.name!='ninja_up') player.play('ninja_up');
+        player.play('ninja_up');
         player.setVelocityY(-200);
     }
     else if(s.isDown){
-        if(player.animation.currentAnim.name!='ninja_down') player.play('ninja_down');
+        player.play('ninja_down');
         player.setVelocityY(200);
     }
     else{
         player.setVelocityY(0);
     }
     if(a.isDown){
-        if(player.animation.currentAnim.name!='ninja_left') player.play('ninja_left');
+        player.play('ninja_left');
         player.setVelocityX(-200);
     }
     else if(d.isDown){
-        if(player.animation.currentAnim.name!='ninja_right') player.play('ninja_right');
+        player.play('ninja_right');
         player.setVelocityX(200);
     }
     else{
@@ -223,6 +218,7 @@ function update(){
         if(this.time.now>dashtime){
             var empty=this.physics.add.sprite(player.x, player.y, 'empty');
             empty.play('ninja_smoke');
+            empty.killOnComplete = true;
 
             player.x+=Math.cos(angle)*100;
             player.y+=Math.sin(angle)*100;
@@ -334,7 +330,7 @@ function update(){
         'timer: '+Math.floor(((gg-this.time.now)/1000)/60)+':'+Math.floor(((gg-this.time.now)/1000)%60)
     ]);
     text4.setText([
-        'vers: '+512
+        'vers: '+523
     ]);
 }
 
