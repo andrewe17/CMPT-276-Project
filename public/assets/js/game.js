@@ -195,7 +195,7 @@ function update(){
         player.setVelocityY(200);
     }
     else{
-        player.anims.pause();
+        player.anims.pause;
         player.setVelocityY(0);
     }
     if(a.isDown){
@@ -207,7 +207,7 @@ function update(){
         player.setVelocityX(200);
     }
     else{
-        player.anims.pause();
+        player.anims.stop;
         player.setVelocityX(0);
     }
     if(one.isDown) options=1;
@@ -218,9 +218,9 @@ function update(){
     // dash
     if(space.isDown && dash>0){
         if(this.time.now>dashtime){
-            var empty=this.physics.add.sprite(player.x, player.y, 'empty');
-            empty.play('ninja_smoke');
-            empty.killOnComplete = true;
+            var smoke=this.physics.add.sprite(player.x, player.y, 'empty');
+            smoke.play('ninja_smoke');
+            smoke.killOnComplete = true;
 
             player.x+=Math.cos(angle)*100;
             player.y+=Math.sin(angle)*100;
@@ -332,7 +332,7 @@ function update(){
         'timer: '+Math.floor(((gg-this.time.now)/1000)/60)+':'+Math.floor(((gg-this.time.now)/1000)%60)
     ]);
     text4.setText([
-        'vers: '+542
+        'vers: '+546
     ]);
 }
 
