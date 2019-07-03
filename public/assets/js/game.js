@@ -83,7 +83,6 @@ function preload(){
     this.load.spritesheet('ninja_down', 'assets/images/ninja_down.png', {frameWidth: 32, frameHeight: 32});
     this.load.spritesheet('ninja_left', 'assets/images/ninja_left.png', {frameWidth: 32, frameHeight: 32});
     this.load.spritesheet('ninja_right', 'assets/images/ninja_right.png', {frameWidth: 32, frameHeight: 32});
-    this.load.spritesheet('ninja_idle', 'assets/images/ninja.png', {frameWidth: 32, frameHeight: 32});
     this.load.spritesheet('ninja_smoke', 'assets/images/ninja_smoke.png', {frameWidth: 32, frameHeight: 32});
     this.load.spritesheet('slash_anim', 'assets/images/slash_anim.png', {frameWidth: 16, frameHeight: 16});
     this.load.spritesheet('shuri_anim', 'assets/images/shuri_anim.png', {frameWidth: 13, frameHeight: 13});
@@ -183,12 +182,6 @@ function create(){
         repeat: 1
     });
     this.anims.create({
-        key: 'ninja_idle',
-        frames: this.anims.generateFrameNumbers('ninja_idle'),
-        frameRate: 16,
-        repeat: 1
-    });
-    this.anims.create({
         key: 'ninja_smoke',
         frames: this.anims.generateFrameNumbers('ninja_smoke'),
         frameRate: 16,
@@ -236,32 +229,43 @@ var toggle=0;
 function update(){
     // keyboard
     if(w.isDown){
-        if(!player.anims.isPlaying) player.play('ninja_up');
+        if(player.anims.getCurrentKey()!='ninja_up') player.play('ninja_up');
         if(a.isDown || d.isDown) player.setVelocityY(-vel/2);
         else player.setVelocityY(-vel);
     }
     else if(s.isDown){
-        if(!player.anims.isPlaying) player.play('ninja_down');
+        if(player.anims.getCurrentKey()!='ninja_down') player.play('ninja_down');
         if(a.isDown || d.isDown) player.setVelocityY(vel/2);
         else player.setVelocityY(vel);
     }
     else{
-        player.play('ninja_idle');
+        if(player.anims.getCurrentKey()=='ninja_up'){
+            player.play('ninja_up');
+        }
+        if(player.anims.getCurrentKey()=='ninja_down'){
+            player.play('ninja_down');
+        }
         player.setVelocityY(0);
     }
 
     if(a.isDown){
-        if(!player.anims.isPlaying) player.play('ninja_left');
+        if(player.anims.getCurrentKey()!='ninja_left') player.play('ninja_left');
         if(w.isDown || s.isDown) player.setVelocityX(-vel/2);
         else player.setVelocityX(-vel);
     }
     else if(d.isDown){
-        if(!player.anims.isPlaying) player.play('ninja_right');
+        player.anims.resume();
+        if(player.anims.getCurrentKey()!='ninja_right') player.play('ninja_right');
         if(w.isDown || s.isDown) player.setVelocityX(vel/2);
         else player.setVelocityX(vel);
     }
     else{
-        player.play('ninja_idle');
+        if(player.anims.getCurrentKey()=='ninja_left'){
+            player.play('ninja_left');
+        }
+        if(player.anims.getCurrentKey()=='ninja_right'){
+            player.play('ninja_right');
+        }
         player.setVelocityX(0);
     }
 
@@ -287,7 +291,7 @@ function update(){
             var smoke=this.physics.add.sprite(player.x, player.y, 'ninja');
             smoke.play('ninja_smoke');
             smoke.killOnComplete = true;
-
+            // 
             player.x+=Math.cos(angle)*100;
             player.y+=Math.sin(angle)*100;
             dashtime=this.time.now+200;
@@ -372,7 +376,7 @@ function update(){
         'timer: '+Math.floor(((gg-this.time.now)/1000)/60)+':'+Math.floor(((gg-this.time.now)/1000)%60)
     ]);
     text4.setText([
-        'vers: '+522
+        'vers: '+531
     ]);
 }
 
