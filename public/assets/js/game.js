@@ -83,6 +83,7 @@ function preload(){
     this.load.spritesheet('ninja_down', 'assets/images/ninja_down.png', {frameWidth: 32, frameHeight: 32});
     this.load.spritesheet('ninja_left', 'assets/images/ninja_left.png', {frameWidth: 32, frameHeight: 32});
     this.load.spritesheet('ninja_right', 'assets/images/ninja_right.png', {frameWidth: 32, frameHeight: 32});
+    this.load.spritesheet('ninja_idle', 'assets/images/ninja.png', {frameWidth: 32, frameHeight: 32});
     this.load.spritesheet('ninja_smoke', 'assets/images/ninja_smoke.png', {frameWidth: 32, frameHeight: 32});
     this.load.spritesheet('slash_anim', 'assets/images/slash_anim.png', {frameWidth: 16, frameHeight: 16});
     this.load.spritesheet('shuri_anim', 'assets/images/shuri_anim.png', {frameWidth: 13, frameHeight: 13});
@@ -182,6 +183,12 @@ function create(){
         repeat: 1
     });
     this.anims.create({
+        key: 'ninja_idle',
+        frames: this.anims.generateFrameNumbers('ninja_idle'),
+        frameRate: 16,
+        repeat: 1
+    });
+    this.anims.create({
         key: 'ninja_smoke',
         frames: this.anims.generateFrameNumbers('ninja_smoke'),
         frameRate: 16,
@@ -239,7 +246,7 @@ function update(){
         else player.setVelocityY(vel);
     }
     else{
-        player.play(player.anims.getCurrentKey());
+        player.play('ninja_idle');
         player.setVelocityY(0);
     }
 
@@ -254,7 +261,7 @@ function update(){
         else player.setVelocityX(vel);
     }
     else{
-        player.play(player.anims.getCurrentKey());
+        player.play('ninja_idle');
         player.setVelocityX(0);
     }
 
@@ -365,7 +372,7 @@ function update(){
         'timer: '+Math.floor(((gg-this.time.now)/1000)/60)+':'+Math.floor(((gg-this.time.now)/1000)%60)
     ]);
     text4.setText([
-        'vers: '+517
+        'vers: '+522
     ]);
 }
 
