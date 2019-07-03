@@ -69,7 +69,7 @@ var mousey;
 var angle;
 
 function preload(){
-    this.load.image('van', 'assets/images/van.jpg'); // delete this
+    //this.load.image('van', 'assets/images/van.jpg'); // delete this
     this.load.image('wall', 'assets/images/wall.png');
     this.load.image('wallx', 'assets/images/wallx.png');
     this.load.image('wally', 'assets/images/wally.png');
