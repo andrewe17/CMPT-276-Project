@@ -230,11 +230,13 @@ function update(){
     // keyboard
     if(w.isDown){
         if(player.anims.getCurrentKey()!='ninja_up') player.play('ninja_up');
+        else if(!player.anims.isPlaying) player.play('ninja_up');
         if(a.isDown || d.isDown) player.setVelocityY(-vel/2);
         else player.setVelocityY(-vel);
     }
     else if(s.isDown){
         if(player.anims.getCurrentKey()!='ninja_down') player.play('ninja_down');
+        else if(!player.anims.isPlaying) player.play('ninja_down');
         if(a.isDown || d.isDown) player.setVelocityY(vel/2);
         else player.setVelocityY(vel);
     }
@@ -250,12 +252,14 @@ function update(){
 
     if(a.isDown){
         if(player.anims.getCurrentKey()!='ninja_left') player.play('ninja_left');
+        else if(!player.anims.isPlaying) player.play('ninja_left');
         if(w.isDown || s.isDown) player.setVelocityX(-vel/2);
         else player.setVelocityX(-vel);
     }
     else if(d.isDown){
         player.anims.resume();
         if(player.anims.getCurrentKey()!='ninja_right') player.play('ninja_right');
+        else if(!player.anims.isPlaying) player.play('ninja_right');
         if(w.isDown || s.isDown) player.setVelocityX(vel/2);
         else player.setVelocityX(vel);
     }
@@ -376,7 +380,7 @@ function update(){
         'timer: '+Math.floor(((gg-this.time.now)/1000)/60)+':'+Math.floor(((gg-this.time.now)/1000)%60)
     ]);
     text4.setText([
-        'vers: '+531
+        'vers: '+535 // test
     ]);
 }
 
