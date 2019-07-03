@@ -96,7 +96,7 @@ function create(){
     /*
     if (this.sound.locked)
     {
-        text.setText('Click to start');
+        //text.setText('Click to start');
 
         this.sound.once('unlocked', function ()
         {
@@ -161,25 +161,25 @@ function create(){
         key: 'ninja_up',
         frames: this.anims.generateFrameNumbers('ninja_up'),
         frameRate: 16,
-        repeat: -1
+        repeat: 1
     });
     this.anims.create({
         key: 'ninja_down',
         frames: this.anims.generateFrameNumbers('ninja_down'),
         frameRate: 16,
-        repeat: -1
+        repeat: 1
     });
     this.anims.create({
         key: 'ninja_left',
         frames: this.anims.generateFrameNumbers('ninja_left'),
         frameRate: 16,
-        repeat: -1
+        repeat: 1
     });
     this.anims.create({
         key: 'ninja_right',
         frames: this.anims.generateFrameNumbers('ninja_right'),
         frameRate: 16,
-        repeat: -1
+        repeat: 1
     });
     this.anims.create({
         key: 'ninja_smoke',
@@ -229,13 +229,13 @@ var toggle=0;
 function update(){
     // keyboard
     if(w.isDown){
-        if(player.anims.getCurrentKey()!='ninja_up') player.play('ninja_up');
+        if(!player.anims.isPlaying) player.play('ninja_up');
         if(a.isDown || d.isDown) player.setVelocityY(-vel/2);
         else player.setVelocityY(-vel);
         toggle=1;
     }
     else if(s.isDown){
-        if(player.anims.getCurrentKey()!='ninja_down') player.play('ninja_down');
+        if(!player.anims.isPlaying) player.play('ninja_down');
         if(a.isDown || d.isDown) player.setVelocityY(vel/2);
         else player.setVelocityY(vel);
         toggle=1;
@@ -253,14 +253,14 @@ function update(){
     }
 
     if(a.isDown){
-        if(player.anims.getCurrentKey()!='ninja_left') player.play('ninja_left');
+        if(!player.anims.isPlaying) player.play('ninja_left');
         if(w.isDown || s.isDown) player.setVelocityX(-vel/2);
         else player.setVelocityX(-vel);
         toggle=1;
     }
     else if(d.isDown){
         player.anims.resume();
-        if(player.anims.getCurrentKey()!='ninja_right') player.play('ninja_right');
+        if(!player.anims.isPlaying) player.play('ninja_right');
         if(w.isDown || s.isDown) player.setVelocityX(vel/2);
         else player.setVelocityX(vel);
         toggle=1;
@@ -299,7 +299,8 @@ function update(){
             var smoke=this.physics.add.sprite(player.x, player.y, 'ninja');
             smoke.play('ninja_smoke');
             smoke.killOnComplete = true;
-
+            // testing bryan's audio
+            swing.play();
             player.x+=Math.cos(angle)*100;
             player.y+=Math.sin(angle)*100;
             dashtime=this.time.now+200;
@@ -384,7 +385,7 @@ function update(){
         'timer: '+Math.floor(((gg-this.time.now)/1000)/60)+':'+Math.floor(((gg-this.time.now)/1000)%60)
     ]);
     text4.setText([
-        'vers: '+449
+        'vers: '+502
     ]);
 }
 
