@@ -232,23 +232,14 @@ function update(){
         if(!player.anims.isPlaying) player.play('ninja_up');
         if(a.isDown || d.isDown) player.setVelocityY(-vel/2);
         else player.setVelocityY(-vel);
-        toggle=1;
     }
     else if(s.isDown){
         if(!player.anims.isPlaying) player.play('ninja_down');
         if(a.isDown || d.isDown) player.setVelocityY(vel/2);
         else player.setVelocityY(vel);
-        toggle=1;
     }
     else{
-        if(toggle==1 && player.anims.getCurrentKey()=='ninja_up'){
-            player.play('ninja_up');
-            toggle=0;
-        }
-        if(toggle==1 && player.anims.getCurrentKey()=='ninja_down'){
-            player.play('ninja_down');
-            toggle=0;
-        }
+        player.play(player.anims.getCurrentKey());
         player.setVelocityY(0);
     }
 
@@ -256,24 +247,14 @@ function update(){
         if(!player.anims.isPlaying) player.play('ninja_left');
         if(w.isDown || s.isDown) player.setVelocityX(-vel/2);
         else player.setVelocityX(-vel);
-        toggle=1;
     }
     else if(d.isDown){
-        player.anims.resume();
         if(!player.anims.isPlaying) player.play('ninja_right');
         if(w.isDown || s.isDown) player.setVelocityX(vel/2);
         else player.setVelocityX(vel);
-        toggle=1;
     }
     else{
-        if(toggle==1 && player.anims.getCurrentKey()=='ninja_left'){
-            player.play('ninja_left');
-            toggle=0;
-        }
-        if(toggle==1 && player.anims.getCurrentKey()=='ninja_right'){
-            player.play('ninja_right');
-            toggle=0;
-        }
+        player.play(player.anims.getCurrentKey());
         player.setVelocityX(0);
     }
 
@@ -299,8 +280,7 @@ function update(){
             var smoke=this.physics.add.sprite(player.x, player.y, 'ninja');
             smoke.play('ninja_smoke');
             smoke.killOnComplete = true;
-            // testing bryan's audio
-            swing.play();
+
             player.x+=Math.cos(angle)*100;
             player.y+=Math.sin(angle)*100;
             dashtime=this.time.now+200;
@@ -385,7 +365,7 @@ function update(){
         'timer: '+Math.floor(((gg-this.time.now)/1000)/60)+':'+Math.floor(((gg-this.time.now)/1000)%60)
     ]);
     text4.setText([
-        'vers: '+502
+        'vers: '+517
     ]);
 }
 
