@@ -17,8 +17,8 @@ var config={
 
 var game = new Phaser.Game(config);
 
-var mapx = 2780; // need a map that's 3000+200 x 
-var mapy = 2780; // and 2000+200 y 
+var mapx = 2780; // need a map that's 3000+200 x
+var mapy = 2780; // and 2000+200 y
 // global time
 var gg;
 
@@ -41,7 +41,7 @@ var dashtime;
 var dashreg;
 var dashani;
 // weapons
-var options; 
+var options;
 var otext;
 // melee weapon
 var kata;
@@ -55,7 +55,7 @@ var shurireg;
 var kibaku;
 var kibakutime;
 var kibakureg;
-// healing 
+// healing
 var saisei;
 var saiseitime;
 var saiseireg;
@@ -90,8 +90,8 @@ function preload(){
 }
 
 function create(){
-    
-    // audio 
+    this.socket = io();
+    // audio
     // example: https://phaser.io/examples/v3/view/audio/web-audio/play-sound-on-keypress
     /*
     if (this.sound.locked)
@@ -288,14 +288,14 @@ function update(){
     else  mousey=pointer.y-300;
     angle = Math.atan(mousey/mousex); // angle between mouse & player
     if(mousex<0) angle+=Math.PI;
-        
+
     // dash
     if(space.isDown && dash>0){
         if(this.time.now>dashtime){
             var smoke=this.physics.add.sprite(player.x, player.y, 'ninja');
             smoke.play('ninja_smoke');
             smoke.killOnComplete = true;
-            // 
+            //
             player.x+=Math.cos(angle)*100;
             player.y+=Math.sin(angle)*100;
             dashtime=this.time.now+200;
@@ -357,7 +357,7 @@ function update(){
     }
 
     // SPAWNING POINTS
-    // UPGRADE AREA: UPGRADE CHANGED TO OPTIONS 1,2,3,4 
+    // UPGRADE AREA: UPGRADE CHANGED TO OPTIONS 1,2,3,4
     // UPGRADES: #SHURIKENS, SHURIKEN SPEED, REGEN SPEED, DAMAGE, EXPLOSION RADIUS
     // limited views --> we need to either have fog of war or make the camera display a smaller area...
     otext='';
@@ -388,7 +388,7 @@ function update(){
 function fx(player, wall){
     if(wall.y>player.y) player.y-=3;
     else player.y+=3;
-    
+
 }
 function fy(player, wall){
     if(wall.x>player.x) player.x-=3;
@@ -447,7 +447,7 @@ function maze(){
             }
             if(maze[i][j]==2){
                 // rune
-            } 
+            }
         }
     }
 }
