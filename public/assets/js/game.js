@@ -17,8 +17,8 @@ var config={
 
 var game = new Phaser.Game(config);
 
-var mapx = 2780; // need a map that's 3000+200 x 
-var mapy = 2780; // and 2000+200 y 
+var mapx = 2780; // need a map that's 3000+200 x
+var mapy = 2780; // and 2000+200 y
 // global time
 var gg;
 
@@ -30,6 +30,8 @@ var one, two, three, four;
 var pointer;
 var mousex;
 var mousey;
+var vel=200; // velocity
+var velx=200, vely=200;
 // objects
 var player;
 var wall;
@@ -39,7 +41,7 @@ var dashtime;
 var dashreg;
 var dashani;
 // weapons
-var options; 
+var options;
 var otext;
 // melee weapon
 var kata;
@@ -53,7 +55,7 @@ var shurireg;
 var kibaku;
 var kibakutime;
 var kibakureg;
-// healing 
+// healing
 var saisei;
 var saiseitime;
 var saiseireg;
@@ -67,7 +69,7 @@ var mousey;
 var angle;
 
 function preload(){
-    this.load.image('van', 'assets/images/van.jpg'); // delete this
+    //this.load.image('van', 'assets/images/van.jpg'); // delete this
     this.load.image('wall', 'assets/images/wall.png');
     this.load.image('wallx', 'assets/images/wallx.png');
     this.load.image('wally', 'assets/images/wally.png');
@@ -89,13 +91,24 @@ function preload(){
 }
 
 function create(){
-    
-    // audio 
+    var self = this;
+    this.socket = io();
+    //
+    // this.socket.on('currentPlayers', function (players) {
+    //   Object.keys(players).forEach(function (id) {
+    //     if (players[id].playerId === self.socket.id) {
+    //       addPlayer(self, players[id]);
+    //     }
+    //   });
+    // });
+
+
+    // audio
     // example: https://phaser.io/examples/v3/view/audio/web-audio/play-sound-on-keypress
     /*
     if (this.sound.locked)
     {
-        text.setText('Click to start');
+        //text.setText('Click to start');
 
         this.sound.once('unlocked', function ()
         {
@@ -165,25 +178,25 @@ function create(){
         key: 'up',
         frames: this.anims.generateFrameNumbers('ninja_up'),
         frameRate: 16,
-        repeat: -1
+        repeat: 1
     });
     this.anims.create({
         key: 'ninja_down',
         frames: this.anims.generateFrameNumbers('ninja_down'),
         frameRate: 16,
-        repeat: -1
+        repeat: 1
     });
     this.anims.create({
         key: 'ninja_left',
         frames: this.anims.generateFrameNumbers('ninja_left'),
         frameRate: 16,
-        repeat: -1
+        repeat: 1
     });
     this.anims.create({
         key: 'ninja_right',
         frames: this.anims.generateFrameNumbers('ninja_right'),
         frameRate: 16,
-        repeat: -1
+        repeat: 1
     });
     this.anims.create({
         key: 'ninja_smoke',
@@ -227,21 +240,49 @@ function create(){
     text3=this.add.text(0, 580, '', {fontFamily:'"Roboto Condensed"', fill: '#000'}).setScrollFactor(0);
     text4=this.add.text(700, 580, '', {fontFamily:'"Roboto Condensed"', fill: '#000'}).setScrollFactor(0);
 }
-var isMovingHorizontal = false;
+
+
+var toggle=0;
+
+
 function update(){
    
     // keyboard
+
+    if(w.isDown){
+        if(player.anims.getCurrentKey()!='ninja_up') player.play('ninja_up');
+        else if(!player.anims.isPlaying) player.play('ninja_up');
+        if(a.isDown || d.isDown) player.setVelocityY(-vel/2);
+        else player.setVelocityY(-vel);
+    }
+    else if(s.isDown){
+        if(player.anims.getCurrentKey()!='ninja_down') player.play('ninja_down');
+        else if(!player.anims.isPlaying) player.play('ninja_down');
+        if(a.isDown || d.isDown) player.setVelocityY(vel/2);
+        else player.setVelocityY(vel);
+    }
+    else{
+        if(player.anims.getCurrentKey()=='ninja_up'){
+            player.play('ninja_up');
+        }
+        if(player.anims.getCurrentKey()=='ninja_down'){
+            player.play('ninja_down');
+        }
+        player.setVelocityY(0);
+    }
+
     if(a.isDown){
-        //if(player.anims.getCurrentKey()!='ninja_left') 
-        isMovingHorizontal = true;
-        player.anims.play('ninja_left',true);
-        player.setVelocityX(-200);
+        if(player.anims.getCurrentKey()!='ninja_left') player.play('ninja_left');
+        else if(!player.anims.isPlaying) player.play('ninja_left');
+        if(w.isDown || s.isDown) player.setVelocityX(-vel/2);
+        else player.setVelocityX(-vel);
     }
     else if(d.isDown){
-        //if(player.anims.getCurrentKey()!='ninja_right') 
-        isMovingHorizontal = true;
-        player.anims.play('ninja_right',true);
-        player.setVelocityX(200);
+        player.anims.resume();
+        if(player.anims.getCurrentKey()!='ninja_right') player.play('ninja_right');
+        else if(!player.anims.isPlaying) player.play('ninja_right');
+        if(w.isDown || s.isDown) player.setVelocityX(vel/2);
+        else player.setVelocityX(vel);
     }
     else if(w.isDown){
         //if(player.anims.getCurrentKey()!='ninja_up')
@@ -258,9 +299,14 @@ function update(){
         player.setVelocityY(200);
     }
     else{
-        isMovingHorizontal = false;
-        player.anims.play('ninja_idles');
-        player.setVelocityY(0);
+
+        if(player.anims.getCurrentKey()=='ninja_left'){
+            player.play('ninja_left');
+        }
+        if(player.anims.getCurrentKey()=='ninja_right'){
+            player.play('ninja_right');
+        }
+        player.setVelocityX(0);
     }
 
 
@@ -279,14 +325,14 @@ function update(){
     else  mousey=pointer.y-300;
     angle = Math.atan(mousey/mousex); // angle between mouse & player
     if(mousex<0) angle+=Math.PI;
-        
+
     // dash
     if(space.isDown && dash>0){
         if(this.time.now>dashtime){
             var smoke=this.physics.add.sprite(player.x, player.y, 'ninja');
             smoke.play('ninja_smoke');
             smoke.killOnComplete = true;
-
+            //
             player.x+=Math.cos(angle)*100;
             player.y+=Math.sin(angle)*100;
             dashtime=this.time.now+200;
@@ -348,7 +394,7 @@ function update(){
     }
 
     // SPAWNING POINTS
-    // UPGRADE AREA: UPGRADE CHANGED TO OPTIONS 1,2,3,4 
+    // UPGRADE AREA: UPGRADE CHANGED TO OPTIONS 1,2,3,4
     // UPGRADES: #SHURIKENS, SHURIKEN SPEED, REGEN SPEED, DAMAGE, EXPLOSION RADIUS
     // limited views --> we need to either have fog of war or make the camera display a smaller area...
     otext='';
@@ -371,7 +417,7 @@ function update(){
         'timer: '+Math.floor(((gg-this.time.now)/1000)/60)+':'+Math.floor(((gg-this.time.now)/1000)%60)
     ]);
     text4.setText([
-        'vers: '+218
+        'vers: '+535 // test
     ]);
 }
 
@@ -379,7 +425,7 @@ function update(){
 function fx(player, wall){
     if(wall.y>player.y) player.y-=3;
     else player.y+=3;
-    
+
 }
 function fy(player, wall){
     if(wall.x>player.x) player.x-=3;
@@ -438,7 +484,7 @@ function maze(){
             }
             if(maze[i][j]==2){
                 // rune
-            } 
+            }
         }
     }
 }
