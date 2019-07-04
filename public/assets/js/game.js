@@ -77,6 +77,7 @@ function preload(){
     this.load.image('ninja', 'assets/images/ninja.png');
     this.load.image('slash', 'assets/images/slash.png');
     this.load.image('shuri', 'assets/images/shuri.png');
+    this.load.spritesheet('ninja_idle', 'assets/images/ninja_idle.png', {frameWidth: 32, frameHeight: 32});
     this.load.spritesheet('ninja_up', 'assets/images/ninja_up.png', {frameWidth: 32, frameHeight: 32});
     this.load.spritesheet('ninja_down', 'assets/images/ninja_down.png', {frameWidth: 32, frameHeight: 32});
     this.load.spritesheet('ninja_left', 'assets/images/ninja_left.png', {frameWidth: 32, frameHeight: 32});
@@ -156,7 +157,12 @@ function create(){
     dashreg=this.time.now;
     // animations
     this.anims.create({
-        key: 'ninja_up',
+        key: 'ninja_idles',
+        frames: [ { key: 'ninja_idle', frame: 0 } ],
+        frameRate: 16,
+    });
+    this.anims.create({
+        key: 'up',
         frames: this.anims.generateFrameNumbers('ninja_up'),
         frameRate: 16,
         repeat: -1
@@ -221,31 +227,43 @@ function create(){
     text3=this.add.text(0, 580, '', {fontFamily:'"Roboto Condensed"', fill: '#000'}).setScrollFactor(0);
     text4=this.add.text(700, 580, '', {fontFamily:'"Roboto Condensed"', fill: '#000'}).setScrollFactor(0);
 }
-
+var isMovingHorizontal = false;
 function update(){
+   
     // keyboard
-    if(w.isDown){
-        if(player.anims.getCurrentKey()!='ninja_up') player.play('ninja_up');
-        player.setVelocityY(-200);
-    }
-    else if(s.isDown){
-        if(player.anims.getCurrentKey()!='ninja_down') player.play('ninja_down');
-        player.setVelocityY(200);
-    }
-    else{
-        player.setVelocityY(0);
-    }
     if(a.isDown){
-        if(player.anims.getCurrentKey()!='ninja_left') player.play('ninja_left');
+        //if(player.anims.getCurrentKey()!='ninja_left') 
+        isMovingHorizontal = true;
+        player.anims.play('ninja_left',true);
         player.setVelocityX(-200);
     }
     else if(d.isDown){
-        if(player.anims.getCurrentKey()!='ninja_right') player.play('ninja_right');
+        //if(player.anims.getCurrentKey()!='ninja_right') 
+        isMovingHorizontal = true;
+        player.anims.play('ninja_right',true);
         player.setVelocityX(200);
     }
-    else{
-        player.setVelocityX(0);
+    else if(w.isDown){
+        //if(player.anims.getCurrentKey()!='ninja_up')
+        if(!isMovingHorizontal){
+            player.anims.play('ninja_up',true);
+        } 
+        player.setVelocityY(-200);
     }
+    else if(s.isDown){
+        //if(player.anims.getCurrentKey()!='ninja_down') 
+        if(!isMovingHorizontal){
+            player.anims.play('ninja_down',true)
+        }
+        player.setVelocityY(200);
+    }
+    else{
+        isMovingHorizontal = false;
+        player.anims.play('ninja_idles');
+        player.setVelocityY(0);
+    }
+
+
     if(one.isDown) options=1; // items
     if(two.isDown) options=2;
     if(three.isDown) options=3;
