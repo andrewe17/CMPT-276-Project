@@ -92,6 +92,16 @@ function preload(){
 function create(){
     var self = this;
     this.socket = io();
+    //
+    // this.socket.on('currentPlayers', function (players) {
+    //   Object.keys(players).forEach(function (id) {
+    //     if (players[id].playerId === self.socket.id) {
+    //       addPlayer(self, players[id]);
+    //     }
+    //   });
+    // });
+
+
     // audio
     // example: https://phaser.io/examples/v3/view/audio/web-audio/play-sound-on-keypress
     /*

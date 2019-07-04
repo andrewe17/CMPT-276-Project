@@ -8,7 +8,7 @@ const { Pool } = require('pg');
 var http = require('http').createServer(app);
 var io = require('socket.io')(http);
 
-var players = {};
+// var players = {};
 
 var pool = new Pool({
   connectionString : process.env.DATABASE_URL//connecting the database
@@ -22,7 +22,7 @@ app.set('view engine', 'ejs')//using ejs
 
 //app.get('/', (req, res) => res.render('pages/index'))
 app.get('/', function(req, res){
-  res.sendFile(__dirname + '/game.html');
+  res.sendFile(__dirname + '/index.html');
 });
 
 
@@ -30,40 +30,40 @@ io.sockets.on('connection', function(socket){
   console.log('A user connected');
 
 
-  //create new player and add to objects
-  players[socket.id] = {
-    rotation: 0,
-    x: Math.floor(Math.random()*700)+50,
-    y: Math.floor(Math.random() * 500)+50,
-    playerId: socket.id,
-    team: (Math.floor(Math.random()*2) == 0) ? 'red': 'blue'
-  };
+  // //create new player and add to objects
+  // players[socket.id] = {
+  //   rotation: 0,
+  //   x: Math.floor(Math.random()*700)+50,
+  //   y: Math.floor(Math.random() * 500)+50,
+  //   playerId: socket.id,
+  //   team: (Math.floor(Math.random()*2) == 0) ? 'red': 'blue'
+  // };
   //send players object to new player
-  socket.emit('currentPlayers', players);
+    // socket.emit('currentPlayers', players);
   //update all current players that new player has connected
-  socket.broadcast.emit('newPlayer', players[socket.id]);
+    // socket.broadcast.emit('newPlayer', players[socket.id]);
 
-  //user connect
-  //socket.on('username', function(username){
-    //socket.username = username;
-    //io.emit('is_online', '🔵 <i>' + socket.username + ' has connected.</i>');
-//  });
+  // user connect (chat)
+  socket.on('username', function(username){
+    socket.username = username;
+    io.emit('is_online', '🔵 <i>' + socket.username + ' has connected.</i>');
+ });
 
   //user disconnect
   socket.on('disconnect', function(){ //on reload or exit
     console.log('A user disconnected');
     //remove player from object
-    delete players[socket.id];
+      // delete players[socket.id];
     //emit to all players that player was removed
-    io.emit('disconnect', socket.id);
+      //io.emit('disconnect', socket.id);
 
   });
 
   //show chat messages
-  //socket.on('chat message', function(msg){
-    //console.log('message: ' + msg);
-    //io.emit('chat message',socket.username + ': ' + msg);
-//  });
+  socket.on('chat message', function(msg){
+    console.log('message: ' + msg);
+    io.emit('chat message',socket.username + ': ' + msg);
+  });
 
 });
 
