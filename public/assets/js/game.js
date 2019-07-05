@@ -126,6 +126,8 @@ function create(){
                     smoke.killOnComplete = true;
                 }
                 otherPlayer.setPosition(playerInfo.x, playerInfo.y);
+
+                // animation handling of otherplayers
                 if(playerInfo.f==1) otherPlayer.anims.play('ninja_up');
                 else if(playerInfo.f==3) otherPlayer.anims.play('ninja_left');
                 else if(playerInfo.f==4) otherPlayer.anims.play('ninja_right');
@@ -238,11 +240,8 @@ function create(){
     text4=this.add.text(700, 580, '', {fontFamily:'"Roboto Condensed"', fill: '#000'}).setScrollFactor(0);
 }
 
-//var ourNinja;
 function addPlayer(self, playerInfo) {
-    //player = this.physics.add.sprite(playerInfo.x, playerInfo.y, 'ninja');
     self.ninja = self.physics.add.sprite(playerInfo.x, playerInfo.y, 'ninja');
-    ourNinja = self.ninja;
     self.ninja.setCollideWorldBounds(true);
     self.ninja.setVelocity(0, 0);
     // camera follow player
