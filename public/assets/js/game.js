@@ -97,7 +97,8 @@ function create(){
         Object.keys(players).forEach(function (id) {
             if (players[id].playerId === self.socket.id) {
                 addPlayer(self, players[id]);
-            } else {
+            } 
+            else {
                 addOtherPlayers(self, players[id]);
             }
         });
@@ -122,8 +123,6 @@ function create(){
             }
         });
     });
-
-    
 
     // camera
     this.cameras.main.setBounds(0, 0, mapx, mapy);
@@ -308,7 +307,7 @@ function update(){
         var y = this.ninja.y;
 
         if (this.ninja.oldPosition && (x !== this.ninja.oldPosition.x || y !== this.ninja.oldPosition.y)) {
-            this.socket.emit('playerMovement', { x: this.ninja.x, y: this.ninja.y });
+            this.socket.emit('playerMovement', { x: this.ninja.x, y: this.ninja.y }); // send player info to server
         }
 
         this.ninja.oldPosition = {
