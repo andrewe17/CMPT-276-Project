@@ -92,6 +92,7 @@ function preload(){
 function create(){
     var self = this;
     this.socket = io();
+    this.otherPlayers = this.physics.add.group();
     this.socket.on('currentPlayers', function (players) {
         Object.keys(players).forEach(function (id) {
             if (players[id].playerId === self.socket.id) {
@@ -113,27 +114,16 @@ function create(){
             }
         });
     });
-    
-    // audio
-    // example: https://phaser.io/examples/v3/view/audio/web-audio/play-sound-on-keypress
-    /*
-    if (this.sound.locked)
-    {
-        //text.setText('Click to start');
 
-        this.sound.once('unlocked', function ()
-        {
-            text.setText(keys);
+    this.socket.on('playerMoved', function (playerInfo) {
+        self.otherPlayers.getChildren().forEach(function (otherPlayer) {
+            if (playerInfo.playerId === otherPlayer.playerId) {
+                otherPlayer.setPosition(playerInfo.x, playerInfo.y);
+            }
         });
-    }
-    */
-    // this.input.keyboard.on('keydown-SPACE', function () {
-    //     this.sound.stopAll();
-    // }, this);
-    // // for audio to play in the background, delete input function leaving "<name>.play();" inside create function
-    // this.input.keyboard.on('keydown-Z', function () {
-    //     swing.play();
-    // });
+    });
+
+    
 
     // camera
     this.cameras.main.setBounds(0, 0, mapx, mapy);
@@ -145,8 +135,8 @@ function create(){
     // global time
     gg=this.time.now+(1000*60*10);
 
-    // keyboard
-    cursor = this.input.keyboard.createCursorKeys();
+    // // keyboard
+     cursor = this.input.keyboard.createCursorKeys();
     w = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
     a = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
     s = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
@@ -160,15 +150,13 @@ function create(){
     // mouse
     pointer = this.input.activePointer; // mouse location relative to screen
 
-    // player
-    //player = this.physics.add.sprite(400, 300, 'ninja');
 
-    // walls
-    wallx = this.physics.add.staticGroup();
-    wally = this.physics.add.staticGroup();
-    maze(mapx,mapy);
-    this.physics.add.collider(this.ninja, wallx, fx);
-    this.physics.add.collider(this.ninja, wally, fy);
+    // // walls
+    // wallx = this.physics.add.staticGroup();
+    // wally = this.physics.add.staticGroup();
+    // maze(mapx,mapy);
+    // this.physics.add.collider(this.ninja, wallx, fx);
+    // this.physics.add.collider(this.ninja, wally, fy);
 
     // dash
     dash=0;
@@ -242,63 +230,92 @@ function create(){
     text4=this.add.text(700, 580, '', {fontFamily:'"Roboto Condensed"', fill: '#000'}).setScrollFactor(0);
 }
 
-var toggle=0;
+//var toggle=0;
+
+//var ourNinja;
+function addPlayer(self, playerInfo) {
+    //player = this.physics.add.sprite(playerInfo.x, playerInfo.y, 'ninja');
+    self.ninja = self.physics.add.sprite(playerInfo.x, playerInfo.y, 'ninja');
+    ourNinja = self.ninja;
+    self.ninja.setCollideWorldBounds(true);
+    self.ninja.setVelocity(0, 0);
+    // camera follow player
+    self.cameras.main.startFollow(self.ninja, true, 0.05, 0.05, 0.05, 0.05);
+}
+
+function addOtherPlayers(self, playerInfo) {
+    const otherPlayer = self.physics.add.sprite(playerInfo.x, playerInfo.y, 'ninja');
+    otherPlayer.playerId = playerInfo.playerId;
+    self.otherPlayers.add(otherPlayer);
+}
 
 function update(){
     if(this.ninja){
         // keyboard
         if(w.isDown){
-            // if(this.ninja.anims.getCurrentKey()!='ninja_up') this.ninja.play('ninja_up');
-            // else if(!this.ninja.anims.isPlaying) this.ninja.play('ninja_up');
-            // if(a.isDown || d.isDown) this.ninja.setVelocityY(-vel/2);
-            // else this.ninja.setVelocityY(-vel);
+            if(this.ninja.anims.getCurrentKey()!='ninja_up') this.ninja.play('ninja_up');
+            else if(!this.ninja.anims.isPlaying) this.ninja.play('ninja_up');
+            if(a.isDown || d.isDown) this.ninja.setVelocityY(-vel/2);
+            else this.ninja.setVelocityY(-vel);
 
             this.ninja.setVelocityY(-vel);
         }
         else if(s.isDown){
-            // if(this.ninja.anims.getCurrentKey()!='ninja_down') this.ninja.play('ninja_down');
-            // else if(!this.ninja.anims.isPlaying) this.ninja.play('ninja_down');
-            // if(a.isDown || d.isDown) this.ninja.setVelocityY(vel/2);
-            // else this.ninja.setVelocityY(vel);
+            if(this.ninja.anims.getCurrentKey()!='ninja_down') this.ninja.play('ninja_down');
+            else if(!this.ninja.anims.isPlaying) this.ninja.play('ninja_down');
+            if(a.isDown || d.isDown) this.ninja.setVelocityY(vel/2);
+            else this.ninja.setVelocityY(vel);
 
             this.ninja.setVelocityY(vel);
         }
         else{
-            // if(this.ninja.anims.getCurrentKey()=='ninja_up'){
-            //     this.ninja.play('ninja_up');
-            // }
-            // if(this.ninja.anims.getCurrentKey()=='ninja_down'){
-            //     this.ninja.play('ninja_down');
-            // }
+            if(this.ninja.anims.getCurrentKey()=='ninja_up'){
+                this.ninja.play('ninja_up');
+            }
+            if(this.ninja.anims.getCurrentKey()=='ninja_down'){
+                this.ninja.play('ninja_down');
+            }
             this.ninja.setVelocityY(0);
         }
 
         if(a.isDown){
-            // if(this.ninja.anims.getCurrentKey()!='ninja_left') this.ninja.play('ninja_left');
-            // else if(!this.ninja.anims.isPlaying) this.ninja.play('ninja_left');
-            // if(w.isDown || s.isDown) this.ninja.setVelocityX(-vel/2);
-            // else this.ninja.setVelocityX(-vel);
+            if(this.ninja.anims.getCurrentKey()!='ninja_left') this.ninja.play('ninja_left');
+            else if(!this.ninja.anims.isPlaying) this.ninja.play('ninja_left');
+            if(w.isDown || s.isDown) this.ninja.setVelocityX(-vel/2);
+            else this.ninja.setVelocityX(-vel);
 
             this.ninja.setVelocityX(-vel);
         }
         else if(d.isDown){
-            // this.ninja.anims.resume();
-            // if(this.ninja.anims.getCurrentKey()!='ninja_right') this.ninja.play('ninja_right');
-            // else if(!this.ninja.anims.isPlaying) this.ninja.play('ninja_right');
-            // if(w.isDown || s.isDown) this.ninja.setVelocityX(vel/2);
-            // else this.ninja.setVelocityX(vel);
+            this.ninja.anims.resume();
+            if(this.ninja.anims.getCurrentKey()!='ninja_right') this.ninja.play('ninja_right');
+            else if(!this.ninja.anims.isPlaying) this.ninja.play('ninja_right');
+            if(w.isDown || s.isDown) this.ninja.setVelocityX(vel/2);
+            else this.ninja.setVelocityX(vel);
 
             this.ninja.setVelocityX(vel);
         }
         else{
-            // if(this.ninja.anims.getCurrentKey()=='ninja_left'){
-            //     this.ninja.play('ninja_left');
-            // }
-            // if(this.ninja.anims.getCurrentKey()=='ninja_right'){
-            //     this.ninja.play('ninja_right');
-            // }
+            if(this.ninja.anims.getCurrentKey()=='ninja_left'){
+                this.ninja.play('ninja_left');
+            }
+            if(this.ninja.anims.getCurrentKey()=='ninja_right'){
+                this.ninja.play('ninja_right');
+            }
             this.ninja.setVelocityX(0);
         }
+        var x = this.ninja.x;
+        var y = this.ninja.y;
+
+        //f (this.ninja.oldPosition && (x !== this.ninja.oldPosition.x || y !== this.ninja.oldPosition.y)) {
+            this.socket.emit('playerMovement', { x: this.ninja.x, y: this.ninja.y });
+        //}
+
+        this.ninja.oldPosition = {
+          x: this.ninja.x,
+          y: this.ninja.y,
+          rotation: this.ninja.rotation
+        };
 
     }
     
@@ -309,25 +326,25 @@ function update(){
     // if(four.isDown) options=4;
 
     // // mouse
-    // pointer = this.input.activePointer; // refresh coordinate
-    // if(player.x<400) mousex=pointer.x-player.x; // distance between mouse & player
-    // else if(player.x>(mapx-400)) mousex=pointer.x-(player.x-(mapx-800));
-    // else mousex=pointer.x-400;
-    // if(player.y<300) mousey=pointer.y-player.y; // distance between mouse & player
-    // else if(player.y>(mapy-300)) mousey=pointer.y-(player.y-(mapy-600));
-    // else  mousey=pointer.y-300;
-    // angle = Math.atan(mousey/mousex); // angle between mouse & player
-    // if(mousex<0) angle+=Math.PI;
+    // // pointer = this.input.activePointer; // refresh coordinate
+    // // if(this.ninja.x<400) mousex=pointer.x-this.ninja.x; // distance between mouse & this.ninja
+    // // else if(this.ninja.x>(mapx-400)) mousex=pointer.x-(this.ninja.x-(mapx-800));
+    // // else mousex=pointer.x-400;
+    // // if(this.ninja.y<300) mousey=pointer.y-this.ninja.y; // distance between mouse & this.ninja
+    // // else if(this.ninja.y>(mapy-300)) mousey=pointer.y-(this.ninja.y-(mapy-600));
+    // // else  mousey=pointer.y-300;
+    // // angle = Math.atan(mousey/mousex); // angle between mouse & this.ninja
+    // // if(mousex<0) angle+=Math.PI;
 
     // // dash
     // if(space.isDown && dash>0){
     //     if(this.time.now>dashtime){
-    //         var smoke=this.physics.add.sprite(player.x, player.y, 'ninja');
+    //         var smoke=this.physics.add.sprite(this.ninja.x, this.ninja.y, 'ninja');
     //         smoke.play('ninja_smoke');
     //         smoke.killOnComplete = true;
     //         //
-    //         player.x+=Math.cos(angle)*100;
-    //         player.y+=Math.sin(angle)*100;
+    //         this.ninja.x+=Math.cos(angle)*100;
+    //         this.ninja.y+=Math.sin(angle)*100;
     //         dashtime=this.time.now+200;
     //         dash--;
     //         dashreg=this.time.now+10000; // only 2 dashes
@@ -346,7 +363,7 @@ function update(){
     // // use items
     // if(pointer.leftButtonDown()){ // left click
     //     if(options==1 && this.time.now>katatime && kata>0){
-    //         var slash=this.physics.add.sprite(player.x+Math.cos(angle)*32, player.y+Math.sin(angle)*32, 'slash');
+    //         var slash=this.physics.add.sprite(this.ninja.x+Math.cos(angle)*32, this.ninja.y+Math.sin(angle)*32, 'slash');
     //         slash.play('slash_anim');
     //         slash.killOnComplete = true;
     //         // if hit -50 hp
@@ -355,7 +372,7 @@ function update(){
     //         katareg=this.time.now+1000;
     //     }
     //     if(options==2 && this.time.now>shuritime && shuri>0){
-    //         var toss=this.physics.add.sprite(player.x+Math.cos(angle)*32, player.y+Math.sin(angle)*32, 'shuri');
+    //         var toss=this.physics.add.sprite(this.ninja.x+Math.cos(angle)*32, this.ninja.y+Math.sin(angle)*32, 'shuri');
     //         toss.play('shuri_anim');
     //         toss.setVelocityX(Math.cos(angle)*300);
     //         toss.setVelocityY(Math.sin(angle)*300);
@@ -366,7 +383,7 @@ function update(){
     //     }
     // }
 
-    // regen
+    // //regen
     // if(this.time.now>katareg){ // kata regen
     //     if(kata<10){
     //         katareg=this.time.now+1000;
@@ -414,88 +431,73 @@ function update(){
     // ]);
 }
 
-// checks collision
-function fx(player, wall){
-    if(wall.y>player.y) player.y-=3;
-    else player.y+=3;
+// //checks collision
+// function fx(player, wall){
+//     if(wall.y>player.y) player.y-=3;
+//     else player.y+=3;
 
-}
-function fy(player, wall){
-    if(wall.x>player.x) player.x-=3;
-    else player.x+=3;
-}
+// }
+// function fy(player, wall){
+//     if(wall.x>player.x) player.x-=3;
+//     else player.x+=3;
+// }
 
-// create maze
-function maze(){
-    var maze=[
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,2,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,1,0,0,0,1,0,1,1,1,1,1,0,1,0,0,0,1,0,1,1,1,1,1,0,0,1,1,1,0,0,0,0,0,0,1,1,1,1,0,0,0,1,1,1,0,0,1,1,1,1,1,0,1,0,0,0,1,0,0],
-        [0,0,1,1,0,0,1,0,0,0,1,0,0,0,1,1,0,0,1,0,0,0,0,1,0,0,1,0,0,0,1,0,0,0,0,0,1,0,0,0,1,0,1,0,0,0,1,0,1,0,0,0,0,0,1,0,0,0,1,0,0],
-        [0,0,1,0,1,0,1,0,0,0,1,0,0,0,1,0,1,0,1,0,0,0,0,1,0,0,1,0,0,0,1,0,1,1,1,0,1,0,0,0,1,0,1,0,0,0,1,0,1,1,1,1,1,0,1,1,1,1,1,0,0],
-        [0,0,1,0,0,1,1,0,0,0,1,0,0,0,1,0,0,1,1,0,1,0,0,1,0,0,1,1,1,1,1,0,0,0,0,0,1,0,0,0,1,0,1,1,1,1,1,0,0,0,0,0,1,0,1,0,0,0,1,0,0],
-        [0,0,1,0,0,0,1,0,1,1,1,1,1,0,1,0,0,0,1,0,1,1,1,1,0,0,1,0,0,0,1,0,0,0,0,0,1,1,1,1,0,0,1,0,0,0,1,0,1,1,1,1,1,0,1,0,0,0,1,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    ];
+// //create maze
+// function maze(){
+//     var maze=[
+//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,2,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+//         [0,0,1,0,0,0,1,0,1,1,1,1,1,0,1,0,0,0,1,0,1,1,1,1,1,0,0,1,1,1,0,0,0,0,0,0,1,1,1,1,0,0,0,1,1,1,0,0,1,1,1,1,1,0,1,0,0,0,1,0,0],
+//         [0,0,1,1,0,0,1,0,0,0,1,0,0,0,1,1,0,0,1,0,0,0,0,1,0,0,1,0,0,0,1,0,0,0,0,0,1,0,0,0,1,0,1,0,0,0,1,0,1,0,0,0,0,0,1,0,0,0,1,0,0],
+//         [0,0,1,0,1,0,1,0,0,0,1,0,0,0,1,0,1,0,1,0,0,0,0,1,0,0,1,0,0,0,1,0,1,1,1,0,1,0,0,0,1,0,1,0,0,0,1,0,1,1,1,1,1,0,1,1,1,1,1,0,0],
+//         [0,0,1,0,0,1,1,0,0,0,1,0,0,0,1,0,0,1,1,0,1,0,0,1,0,0,1,1,1,1,1,0,0,0,0,0,1,0,0,0,1,0,1,1,1,1,1,0,0,0,0,0,1,0,1,0,0,0,1,0,0],
+//         [0,0,1,0,0,0,1,0,1,1,1,1,1,0,1,0,0,0,1,0,1,1,1,1,0,0,1,0,0,0,1,0,0,0,0,0,1,1,1,1,0,0,1,0,0,0,1,0,1,1,1,1,1,0,1,0,0,0,1,0,0],
+//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+//     ];
 
-    for (var i=0; i<=34; i++){
-        for (var j=0; j<=60; j++){
-            if(maze[i][j]==1){
-                if(maze[i][j-1]==0 || maze[i][j+1]==0){
-                    wally.create((j*50)+100,(i*50)+100, 'wally');
-                }
-                else{
-                    wallx.create((j*50)+100,(i*50)+100, 'wallx');
-                }
-            }
-            if(maze[i][j]==2){
-                // rune
-            }
-        }
-    }
-}
+//     for (var i=0; i<=34; i++){
+//         for (var j=0; j<=60; j++){
+//             if(maze[i][j]==1){
+//                 if(maze[i][j-1]==0 || maze[i][j+1]==0){
+//                     wally.create((j*50)+100,(i*50)+100, 'wally');
+//                 }
+//                 else{
+//                     wallx.create((j*50)+100,(i*50)+100, 'wallx');
+//                 }
+//             }
+//             if(maze[i][j]==2){
+//                 // rune
+//             }
+//         }
+//     }
+// }
 
-var thisninja;
 
-function addPlayer(self, playerInfo) {
-    //player = this.physics.add.sprite(playerInfo.x, playerInfo.y, 'ninja');
-    self.ninja = self.physics.add.sprite(400, 500, 'ninja');
-    self.ninja.setCollideWorldBounds(true);
-    self.ninja.setVelocity(0, 0);
-    // camera follow player
-    self.cameras.main.startFollow(self.ninja, true, 0.05, 0.05, 0.05, 0.05);
-}
-
-function addOtherPlayers(self, playerInfo) {
-    const otherPlayer = self.add.sprite(playerInfo.x, playerInfo.y, 'ninja');
-    otherPlayer.playerId = playerInfo.playerId;
-    self.otherPlayers.add(otherPlayer);
-}
 

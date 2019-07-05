@@ -63,6 +63,15 @@ io.sockets.on('connection', function(socket){
     io.emit('disconnect', socket.id);
   });
 
+  socket.on('playerMovement', function (movementData) {
+    players[socket.id].x = movementData.x;
+    players[socket.id].y = movementData.y;
+    // emit a message to all players about the player that moved
+    socket.broadcast.emit('playerMoved', players[socket.id]);
+    console.log(movementData.x);
+    console.log(movementData.y);
+  });
+
   //show chat messages
   socket.on('chat message', function(msg){
     console.log('message: ' + msg);
