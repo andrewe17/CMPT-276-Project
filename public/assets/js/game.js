@@ -34,7 +34,7 @@ var vel=200; // velocity
 var velx=200, vely=200;
 // objects
 var player;
-var wall;
+var star;
 // dash
 var dash;
 var dashtime;
@@ -70,7 +70,7 @@ var angle;
 
 function preload(){
     //this.load.image('van', 'assets/images/van.jpg'); // delete this
-    this.load.image('wall', 'assets/images/wall.png');
+    this.load.image('wall', 'assets/images/star.png');
     this.load.image('wallx', 'assets/images/wallx.png');
     this.load.image('wally', 'assets/images/wally.png');
     this.load.image('slash', 'assets/images/slash.png');
@@ -234,8 +234,6 @@ function create(){
     text3=this.add.text(0, 580, '', {fontFamily:'"Roboto Condensed"', fill: '#000'}).setScrollFactor(0);
     text4=this.add.text(700, 580, '', {fontFamily:'"Roboto Condensed"', fill: '#000'}).setScrollFactor(0);
 }
-
-var toggle=0;
 
 function update(){
     // keyboard
@@ -462,3 +460,6 @@ function maze(){
         }
     }
 }
+
+var test=1;
+// comment
