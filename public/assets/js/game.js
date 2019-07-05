@@ -92,6 +92,7 @@ function preload(){
 function create(){
     var self = this;
     this.socket = io();
+<<<<<<< Updated upstream
     this.otherPlayers = this.physics.add.group();
     this.socket.on('currentPlayers', function (players) {
         Object.keys(players).forEach(function (id) {
@@ -101,6 +102,15 @@ function create(){
                 addOtherPlayers(self, players[id]);
             }
         });
+=======
+    
+    this.socket.on('currentPlayers', function (players) {
+      Object.keys(players).forEach(function (id) {
+        if (players[id].playerId === self.socket.id) {
+          addPlayer(self, players[id]);
+        }
+      });
+>>>>>>> Stashed changes
     });
 
     this.socket.on('newPlayer', function (playerInfo) {
