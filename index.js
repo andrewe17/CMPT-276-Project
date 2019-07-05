@@ -42,6 +42,8 @@ io.sockets.on('connection', function(socket){
     x: Math.floor(Math.random() * 700) + 50,
     y: Math.floor(Math.random() * 500) + 50,
     playerId: socket.id,
+    f: 0,
+    dashed:0,
   };
   // send the players object to the new player
   socket.emit('currentPlayers', players);
@@ -66,6 +68,8 @@ io.sockets.on('connection', function(socket){
   socket.on('playerMovement', function (movementData) {
     players[socket.id].x = movementData.x;
     players[socket.id].y = movementData.y;
+    players[socket.id].f = movementData.f;
+    players[socket.id].dashed = movementData.dashed;
     // emit a message to all players about the player that moved
     socket.broadcast.emit('playerMoved', players[socket.id]);
   });
