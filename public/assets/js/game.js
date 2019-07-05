@@ -90,30 +90,7 @@ function preload(){
 }
 
 function create(){
-    var self = this;
-    this.socket = io();
-
-    this.socket.on('currentPlayers', function (players) {
-      Object.keys(players).forEach(function (id) {
-        if (players[id].playerId === self.socket.id) {
-          addPlayer(self, players[id]);
-        }
-        else{
-          addOtherPlayers(self, players[id]);
-        }
-      });
-    });
-    this.socket.on('newPlayer', function(playerInfo){
-      addOtherPlayers(self, playerInfo);
-    });
-    this.socket.on('disconnect', function(playerId){
-      self.otherPlayers.getChildren().forEach(function(otherPlayer){
-        if(playerId === otherPlayer.playerId){
-          otherPlayer.destroy();
-        }
-      });
-    });
-
+    
     // audio
     // example: https://phaser.io/examples/v3/view/audio/web-audio/play-sound-on-keypress
     /*
@@ -161,19 +138,19 @@ function create(){
     pointer = this.input.activePointer; // mouse location relative to screen
 
     // player
-    // player = this.physics.add.sprite(400, 300, 'ninja');
-    // player.setCollideWorldBounds(true);
-    // player.setVelocity(0, 0);
+    player = this.physics.add.sprite(400, 300, 'ninja');
+    player.setCollideWorldBounds(true);
+    player.setVelocity(0, 0);
 
     // camera follow player
-    this.cameras.main.startFollow(this.ninja, true, 0.05, 0.05, 0.05, 0.05);
+    this.cameras.main.startFollow(player, true, 0.05, 0.05, 0.05, 0.05);
 
     // walls
     wallx = this.physics.add.staticGroup();
     wally = this.physics.add.staticGroup();
     maze(mapx,mapy);
-    this.physics.add.collider(this.ninja, wallx, fx);
-    this.physics.add.collider(this.ninja, wally, fy);
+    this.physics.add.collider(player, wallx, fx);
+    this.physics.add.collider(player, wally, fy);
 
     // dash
     dash=0;
@@ -250,52 +227,50 @@ function create(){
 var toggle=0;
 
 function update(){
-
-
     // keyboard
     if(w.isDown){
-        if(this.ninja.anims.getCurrentKey()!='ninja_up') this.ninja.play('ninja_up');
-        else if(!this.ninja.anims.isPlaying) this.ninja.play('ninja_up');
-        if(a.isDown || d.isDown) this.ninja.setVelocityY(-vel/2);
-        else this.ninja.setVelocityY(-vel);
+        if(player.anims.getCurrentKey()!='ninja_up') player.play('ninja_up');
+        else if(!player.anims.isPlaying) player.play('ninja_up');
+        if(a.isDown || d.isDown) player.setVelocityY(-vel/2);
+        else player.setVelocityY(-vel);
     }
     else if(s.isDown){
-        if(this.ninja.anims.getCurrentKey()!='ninja_down') this.ninja.play('ninja_down');
-        else if(!this.ninja.anims.isPlaying) this.ninja.play('ninja_down');
-        if(a.isDown || d.isDown) this.ninja.setVelocityY(vel/2);
-        else this.ninja.setVelocityY(vel);
+        if(player.anims.getCurrentKey()!='ninja_down') player.play('ninja_down');
+        else if(!player.anims.isPlaying) player.play('ninja_down');
+        if(a.isDown || d.isDown) player.setVelocityY(vel/2);
+        else player.setVelocityY(vel);
     }
     else{
-        if(this.ninja.anims.getCurrentKey()=='ninja_up'){
-            this.ninja.play('ninja_up');
+        if(player.anims.getCurrentKey()=='ninja_up'){
+            player.play('ninja_up');
         }
-        if(this.ninja.anims.getCurrentKey()=='ninja_down'){
-            this.ninja.play('ninja_down');
+        if(player.anims.getCurrentKey()=='ninja_down'){
+            player.play('ninja_down');
         }
-        this.ninja.setVelocityY(0);
+        player.setVelocityY(0);
     }
 
     if(a.isDown){
-        if(this.ninja.anims.getCurrentKey()!='ninja_left') this.ninja.play('ninja_left');
-        else if(!this.ninja.anims.isPlaying) this.ninja.play('ninja_left');
-        if(w.isDown || s.isDown) this.ninja.setVelocityX(-vel/2);
-        else this.ninja.setVelocityX(-vel);
+        if(player.anims.getCurrentKey()!='ninja_left') player.play('ninja_left');
+        else if(!player.anims.isPlaying) player.play('ninja_left');
+        if(w.isDown || s.isDown) player.setVelocityX(-vel/2);
+        else player.setVelocityX(-vel);
     }
     else if(d.isDown){
-        this.ninja.anims.resume();
-        if(this.ninja.anims.getCurrentKey()!='ninja_right') this.ninja.play('ninja_right');
-        else if(!this.ninja.anims.isPlaying) this.ninja.play('ninja_right');
-        if(w.isDown || s.isDown) this.ninja.setVelocityX(vel/2);
-        else this.ninja.setVelocityX(vel);
+        player.anims.resume();
+        if(player.anims.getCurrentKey()!='ninja_right') player.play('ninja_right');
+        else if(!player.anims.isPlaying) player.play('ninja_right');
+        if(w.isDown || s.isDown) player.setVelocityX(vel/2);
+        else player.setVelocityX(vel);
     }
     else{
-        if(this.ninja.anims.getCurrentKey()=='ninja_left'){
-            this.ninja.play('ninja_left');
+        if(player.anims.getCurrentKey()=='ninja_left'){
+            player.play('ninja_left');
         }
-        if(this.ninja.anims.getCurrentKey()=='ninja_right'){
-            this.ninja.play('ninja_right');
+        if(player.anims.getCurrentKey()=='ninja_right'){
+            player.play('ninja_right');
         }
-        this.ninja.setVelocityX(0);
+        player.setVelocityX(0);
     }
 
     if(one.isDown) options=1; // items
@@ -305,11 +280,11 @@ function update(){
 
     // mouse
     pointer = this.input.activePointer; // refresh coordinate
-    if(this.ninja.x<400) mousex=pointer.x-this.ninja.x; // distance between mouse & this.ninja
-    else if(this.ninja.x>(mapx-400)) mousex=pointer.x-(this.ninja.x-(mapx-800));
+    if(player.x<400) mousex=pointer.x-player.x; // distance between mouse & player
+    else if(player.x>(mapx-400)) mousex=pointer.x-(player.x-(mapx-800));
     else mousex=pointer.x-400;
-    if(this.ninja.y<300) mousey=pointer.y-this.ninja.y; // distance between mouse & this.ninja
-    else if(this.ninja.y>(mapy-300)) mousey=pointer.y-(this.ninja.y-(mapy-600));
+    if(player.y<300) mousey=pointer.y-player.y; // distance between mouse & player
+    else if(player.y>(mapy-300)) mousey=pointer.y-(player.y-(mapy-600));
     else  mousey=pointer.y-300;
     angle = Math.atan(mousey/mousex); // angle between mouse & player
     if(mousex<0) angle+=Math.PI;
@@ -475,20 +450,4 @@ function maze(){
             }
         }
     }
-}
-
-function addPlayer(self, playerInfo) {
-  self.ninja = self.physics.add.sprite(playerInfo.x, playerInfo.y, 'ninja');
-  // if (playerInfo.team === 'blue') {
-  //   self.ship.setTint(0x0000ff);
-  // } else {
-  //   self.ship.setTint(0xff0000);
-  // }
-  self.ninja.setCollideWorldBounds(true);
-}
-
-function addOtherPlayers(self, playerInfo) {
-  const otherPlayer = self.add.sprite(playerInfo.x, playerInfo.y, 'ninja');
-  otherPlayer.playerId = playerInfo.playerId;
-  self.otherPlayers.add(otherPlayer);
 }
