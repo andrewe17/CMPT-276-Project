@@ -68,8 +68,6 @@ io.sockets.on('connection', function(socket){
     players[socket.id].y = movementData.y;
     // emit a message to all players about the player that moved
     socket.broadcast.emit('playerMoved', players[socket.id]);
-    console.log(movementData.x);
-    console.log(movementData.y);
   });
 
   //show chat messages

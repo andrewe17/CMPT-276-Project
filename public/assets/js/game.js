@@ -307,9 +307,9 @@ function update(){
         var x = this.ninja.x;
         var y = this.ninja.y;
 
-        //f (this.ninja.oldPosition && (x !== this.ninja.oldPosition.x || y !== this.ninja.oldPosition.y)) {
+        if (this.ninja.oldPosition && (x !== this.ninja.oldPosition.x || y !== this.ninja.oldPosition.y)) {
             this.socket.emit('playerMovement', { x: this.ninja.x, y: this.ninja.y });
-        //}
+        }
 
         this.ninja.oldPosition = {
           x: this.ninja.x,
