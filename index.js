@@ -8,20 +8,20 @@ const { Pool } = require('pg');
 var http = require('http').createServer(app);
 var io = require('socket.io')(http);
 
-var pool = new Pool({
-  user: 'postgres',
-  password: 'root',
-  host: 'localhost',
-  database: 'postgres'
-});
+// var pool = new Pool({
+//   user: 'postgres',
+//   password: 'root',
+//   host: 'localhost',
+//   database: 'postgres'
+// });
 
 // var playercount = 0;
 
 // var players = {};
 
-// var pool = new Pool({
-//   connectionString : process.env.DATABASE_URL//connecting the database
-// })
+var pool = new Pool({
+  connectionString : process.env.DATABASE_URL//connecting the database
+})
 
 app.use(express.static(path.join(__dirname, 'public')))//joining the files public and current folder
 app.use(express.json());
