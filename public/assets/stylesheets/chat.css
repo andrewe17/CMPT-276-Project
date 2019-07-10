@@ -1,23 +1,22 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box; }
+
 body {
   font: 13px Helvetica, Arial;
 }
 form {
+  margin: 0;
+  padding: 0;
   float: right;
   background: #000;
   padding: 3px;
   bottom: 0;
   right: 0;
   position: fixed;
-  width: 50%;
+  width: 25%;
     }
 form input {
   border: 0;
   padding: 10px;
-  width: 90%;
+  width: 70%;
   margin-right: .5%; }
 form button {
   width: 9%;
@@ -28,8 +27,9 @@ form button {
   list-style-type: none;
   margin: 0;
   padding: 0;
-  width: 50%;
+  width: 25%;
   float: right;
+  overflow: scroll;
 }
 #messages li {
   padding: 5px 10px;
