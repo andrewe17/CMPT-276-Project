@@ -147,6 +147,12 @@ function create(){
             }
         });
     });
+    // katana slash
+    this.socket.on('playerSlashed', function (slashInfo) {
+        var slash=self.physics.add.sprite(slashInfo.x, slashInfo.y, 'slash');
+        slash.play('slash_anim');
+        slash.killOnComplete = true;
+    });
 
     // camera
     this.cameras.main.setBounds(0, 0, mapx, mapy);
@@ -376,10 +382,15 @@ function update(){
     // use items
     if(pointer.leftButtonDown()){ // left click
         if(options==1 && this.time.now>katatime && kata>0){
-            var slash=this.physics.add.sprite(this.ninja.x+Math.cos(angle)*32, this.ninja.y+Math.sin(angle)*32, 'slash');
+            var slashx = this.ninja.x+Math.cos(angle)*32;
+            var slashy = this.ninja.y+Math.sin(angle)*32;
+            var slash=this.physics.add.sprite(slashx, slashy, 'slash');
             slash.play('slash_anim');
             slash.killOnComplete = true;
+            this.socket.emit('playerSlash', { x:slashx, y:slashy}); // slash location info
+
             // if hit -50 hp
+
             katatime=this.time.now+100;
             kata--;
             katareg=this.time.now+1000;
