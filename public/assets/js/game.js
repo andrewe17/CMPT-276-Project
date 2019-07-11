@@ -104,9 +104,9 @@ function create(){
         });
     });
 
-    this.socket.on('newPlayer', function (playerInfo) {
-        addOtherPlayers(self, playerInfo);
-    });
+    // this.socket.on('newPlayer', function (playerInfo) {
+    //     addOtherPlayers(self, playerInfo);
+    // });
 
     this.socket.on('disconnect', function (playerId) {
         self.otherPlayers.getChildren().forEach(function (otherPlayer) {
@@ -430,7 +430,7 @@ function update(){
     // text4.setText([
     //     'vers: '+535 // test
     // ]);
-}
+
 
 // //checks collision
 // function fx(player, wall){
@@ -498,4 +498,4 @@ function update(){
 //             }
 //         }
 //     }
-// }
+}
