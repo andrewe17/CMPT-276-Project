@@ -104,9 +104,9 @@ function create(){
         });
     });
 
-    // this.socket.on('newPlayer', function (playerInfo) {
-    //     addOtherPlayers(self, playerInfo);
-    // });
+    this.socket.on('newPlayer', function (playerInfo) {
+        addOtherPlayers(self, playerInfo);
+    });
 
     this.socket.on('disconnect', function (playerId) {
         self.otherPlayers.getChildren().forEach(function (otherPlayer) {
