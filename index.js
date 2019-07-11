@@ -8,26 +8,36 @@ const { Pool } = require('pg');
 var http = require('http').createServer(app);
 var io = require('socket.io')(http);
 
+var players = {};
+<<<<<<< Updated upstream
+
 // var pool = new Pool({
 //   user: 'postgres',
 //   password: 'root',
 //   host: 'localhost',
 //   database: 'postgres'
 // });
-
-// var playercount = 0;
-
-// var players = {};
+=======
+>>>>>>> Stashed changes
 
 var pool = new Pool({
   connectionString : process.env.DATABASE_URL//connecting the database
 })
 
-app.use(express.static(path.join(__dirname, 'public')))//joining the files public and current folder
+// const { Pool } = require('pg');
+//    var pool = new Pool({
+//    user: 'jchan01010',
+//    password: 'jchanpass123',
+//    host: 'localhost',
+//    database: 'postgres'
+//  });
+
+
+app.use(express.static(path.join(__dirname, 'public')));//joining the files public and current folder
 app.use(express.json());
 app.use(express.urlencoded({extended:false}));
-app.set('views', path.join(__dirname, 'views'))// joining the files views and current folder
-app.set('view engine', 'ejs')//using ejs
+app.set('views', path.join(__dirname, 'views'));// joining the files views and current folder
+app.set('view engine', 'ejs');//using ejs
 
 //app.get('/', (req, res) => res.render('pages/index'))
 app.get('/', function(req, res){
@@ -39,34 +49,41 @@ io.sockets.on('connection', function(socket){
   // playercount++;
   console.log('A user connected');
 
-
-  //create new player and add to objects
-  // players[socket.id] = {
-  //   rotation: 0,
-  //   x: Math.floor(Math.random()*700)+50,
-  //   y: Math.floor(Math.random() * 500)+50,
-  //   playerId: socket.id,
-  //   team: (Math.floor(Math.random()*2) == 0) ? 'red': 'blue'
-  // // };
-  // // //send players object to new player
-  //    socket.emit('currentPlayers', players);
-  // // //update all current players that new player has connected
-  //   socket.broadcast.emit('newPlayer', players[socket.id]);
+  // create a new player and add it to our players object
+  players[socket.id] = {
+    x: Math.floor(Math.random() * 700) + 50,
+    y: Math.floor(Math.random() * 500) + 50,
+    playerId: socket.id,
+    f: 0,
+    dashed:0,
+  };
+  // send the players object to the new player
+  socket.emit('currentPlayers', players);
+  // update all other players of the new player
+  socket.broadcast.emit('newPlayer', players[socket.id]);
 
   // user connect (chat)
   socket.on('username', function(username){
     socket.username = username;
     io.emit('is_online', '🔵 <i>' + socket.username + ' has connected.</i>');
- });
+  });
 
-  //user disconnect
+  // when a player disconnects, remove them from our players object
   socket.on('disconnect', function(){ //on reload or exit
     console.log('A user disconnected');
-    //remove player from object
-       // delete players[socket.id];
-    //emit to all players that player was removed
-      io.emit('disconnect', socket.id);
+    // remove this player from our players object
+    delete players[socket.id];
+    // emit a message to all players to remove this player
+    io.emit('disconnect', socket.id);
+  });
 
+  socket.on('playerMovement', function (movementData) {
+    players[socket.id].x = movementData.x;
+    players[socket.id].y = movementData.y;
+    players[socket.id].f = movementData.f;
+    players[socket.id].dashed = movementData.dashed;
+    // emit a message to all players about the player that moved
+    socket.broadcast.emit('playerMoved', players[socket.id]);
   });
 
   //show chat messages
@@ -74,7 +91,6 @@ io.sockets.on('connection', function(socket){
     console.log('message: ' + msg);
     io.emit('chat message',socket.username + ': ' + msg);
   });
-
 });
 
 app.use(express.static(path.join(__dirname, 'node_modules')))
