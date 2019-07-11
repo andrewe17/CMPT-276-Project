@@ -244,6 +244,7 @@ function addPlayer(self, playerInfo) {
     self.ninja = self.physics.add.sprite(playerInfo.x, playerInfo.y, 'ninja');
     self.ninja.setCollideWorldBounds(true);
     self.ninja.setVelocity(0, 0);
+    //self.ninja.healthBar = new HealthBar(self.game, {x:playerInfo.x, y:playerInfo.y});
     // camera follow player
     self.cameras.main.startFollow(self.ninja, true, 0.05, 0.05, 0.05, 0.05);
 }
@@ -252,7 +253,7 @@ function addOtherPlayers(self, playerInfo) {
     const otherPlayer = self.physics.add.sprite(playerInfo.x, playerInfo.y, 'ninja');
     otherPlayer.playerId = playerInfo.playerId;
     self.otherPlayers.add(otherPlayer);
-}
+} 
 
 function update(){
     if(this.ninja){
@@ -361,39 +362,39 @@ function update(){
     // if(three.isDown) options=3;
     // if(four.isDown) options=4;
 
-    // // use items
-    // if(pointer.leftButtonDown()){ // left click
-    //     if(options==1 && this.time.now>katatime && kata>0){
-    //         var slash=this.physics.add.sprite(this.ninja.x+Math.cos(angle)*32, this.ninja.y+Math.sin(angle)*32, 'slash');
-    //         slash.play('slash_anim');
-    //         slash.killOnComplete = true;
-    //         // if hit -50 hp
-    //         katatime=this.time.now+100;
-    //         kata--;
-    //         katareg=this.time.now+1000;
-    //     }
-    //     if(options==2 && this.time.now>shuritime && shuri>0){
-    //         var toss=this.physics.add.sprite(this.ninja.x+Math.cos(angle)*32, this.ninja.y+Math.sin(angle)*32, 'shuri');
-    //         toss.play('shuri_anim');
-    //         toss.setVelocityX(Math.cos(angle)*300);
-    //         toss.setVelocityY(Math.sin(angle)*300);
-    //         // if hit -10 hp
-    //         shuritime=this.time.now+100;
-    //         shuri--;
-    //         shurireg=this.time.now+1000;
-    //     }
-    // }
+    // use items
+    if(pointer.leftButtonDown()){ // left click
+        if(options==1 && this.time.now>katatime && kata>0){
+            var slash=this.physics.add.sprite(this.ninja.x+Math.cos(angle)*32, this.ninja.y+Math.sin(angle)*32, 'slash');
+            slash.play('slash_anim');
+            slash.killOnComplete = true;
+            // if hit -50 hp
+            katatime=this.time.now+100;
+            kata--;
+            katareg=this.time.now+1000;
+        }
+        // if(options==2 && this.time.now>shuritime && shuri>0){
+        //     var toss=this.physics.add.sprite(this.ninja.x+Math.cos(angle)*32, this.ninja.y+Math.sin(angle)*32, 'shuri');
+        //     toss.play('shuri_anim');
+        //     toss.setVelocityX(Math.cos(angle)*300);
+        //     toss.setVelocityY(Math.sin(angle)*300);
+        //     // if hit -10 hp
+        //     shuritime=this.time.now+100;
+        //     shuri--;
+        //     shurireg=this.time.now+1000;
+        // }
+    }
 
-    // //regen
-    // if(this.time.now>katareg){ // kata regen
-    //     if(kata<10){
-    //         katareg=this.time.now+1000;
-    //         kata++;
-    //     }
-    //     else{
-    //         katareg=this.time.now;
-    //     }
-    // }
+    //regen
+    if(this.time.now>katareg){ // kata regen
+        if(kata<10){
+            katareg=this.time.now+1000;
+            kata++;
+        }
+        else{
+            katareg=this.time.now;
+        }
+    }
     // if(this.time.now>shurireg){ // shuri regen
     //     if(shuri<10){
     //         shurireg=this.time.now+1000;
