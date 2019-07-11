@@ -90,6 +90,18 @@ function preload(){
 }
 
 function create(){
+    // audio example: https://phaser.io/examples/v3/view/audio/web-audio/play-sound-on-keypress
+    var swing = this.sound.add('swing');
+
+    this.input.keyboard.on('keydown-SPACE', function () {
+        this.sound.stopAll();
+    }, this);
+    // for audio to play in the background, delete input function leaving "<name>.play();" inside create function
+    this.input.keyboard.on('keydown-Z', function () {
+        swing.play();
+    });
+
+
     var self = this;
     this.socket = io();
     this.otherPlayers = this.physics.add.group();
@@ -134,6 +146,12 @@ function create(){
                 else if(playerInfo.f==2) otherPlayer.anims.play('ninja_down');
             }
         });
+    });
+    // katana slash
+    this.socket.on('playerSlashed', function (slashInfo) {
+        var slash=self.physics.add.sprite(slashInfo.x, slashInfo.y, 'slash');
+        slash.play('slash_anim');
+        slash.killOnComplete = true;
     });
 
     // camera
@@ -357,7 +375,7 @@ function update(){
 
     }
 
-    // if(one.isDown) options=1; // items
+    if(one.isDown) options=1; // items
     // if(two.isDown) options=2;
     // if(three.isDown) options=3;
     // if(four.isDown) options=4;
@@ -365,25 +383,31 @@ function update(){
     // use items
     if(pointer.leftButtonDown()){ // left click
         if(options==1 && this.time.now>katatime && kata>0){
-            var slash=this.physics.add.sprite(this.ninja.x+Math.cos(angle)*32, this.ninja.y+Math.sin(angle)*32, 'slash');
+
+            var slashx = this.ninja.x+Math.cos(angle)*32;
+            var slashy = this.ninja.y+Math.sin(angle)*32;
+            var slash=this.physics.add.sprite(slashx, slashy, 'slash');
             slash.play('slash_anim');
             slash.killOnComplete = true;
+            this.socket.emit('playerSlash', { x:slashx, y:slashy}); // slash location info
+
             // if hit -50 hp
             katatime=this.time.now+100;
             kata--;
             katareg=this.time.now+1000;
         }
-        // if(options==2 && this.time.now>shuritime && shuri>0){
-        //     var toss=this.physics.add.sprite(this.ninja.x+Math.cos(angle)*32, this.ninja.y+Math.sin(angle)*32, 'shuri');
-        //     toss.play('shuri_anim');
-        //     toss.setVelocityX(Math.cos(angle)*300);
-        //     toss.setVelocityY(Math.sin(angle)*300);
-        //     // if hit -10 hp
-        //     shuritime=this.time.now+100;
-        //     shuri--;
-        //     shurireg=this.time.now+1000;
-        // }
     }
+    //     if(options==2 && this.time.now>shuritime && shuri>0){
+    //         var toss=this.physics.add.sprite(this.ninja.x+Math.cos(angle)*32, this.ninja.y+Math.sin(angle)*32, 'shuri');
+    //         toss.play('shuri_anim');
+    //         toss.setVelocityX(Math.cos(angle)*300);
+    //         toss.setVelocityY(Math.sin(angle)*300);
+    //         // if hit -10 hp
+    //         shuritime=this.time.now+100;
+    //         shuri--;
+    //         shurireg=this.time.now+1000;
+    //     }
+    // }
 
     //regen
     if(this.time.now>katareg){ // kata regen
