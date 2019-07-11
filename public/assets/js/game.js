@@ -103,7 +103,7 @@ function create(){
                 addOtherPlayers(self, players[id]);
             }
         });
-=======
+//=======
     
     this.socket.on('currentPlayers', function (players) {
       Object.keys(players).forEach(function (id) {
@@ -111,7 +111,7 @@ function create(){
           addPlayer(self, players[id]);
         }
       });
->>>>>>> Stashed changes
+//>>>>>>> Stashed changes
     });
 
     this.socket.on('newPlayer', function (playerInfo) {
