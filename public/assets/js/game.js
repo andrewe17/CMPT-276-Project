@@ -368,22 +368,23 @@ function update(){
 
     }
 
-    // if(one.isDown) options=1; // items
+    if(one.isDown) options=1; // items
     // if(two.isDown) options=2;
     // if(three.isDown) options=3;
     // if(four.isDown) options=4;
 
-    // // use items
-    // if(pointer.leftButtonDown()){ // left click
-    //     if(options==1 && this.time.now>katatime && kata>0){
-    //         var slash=this.physics.add.sprite(this.ninja.x+Math.cos(angle)*32, this.ninja.y+Math.sin(angle)*32, 'slash');
-    //         slash.play('slash_anim');
-    //         slash.killOnComplete = true;
-    //         // if hit -50 hp
-    //         katatime=this.time.now+100;
-    //         kata--;
-    //         katareg=this.time.now+1000;
-    //     }
+    // use items
+    if(pointer.leftButtonDown()){ // left click
+        if(options==1 && this.time.now>katatime && kata>0){
+            var slash=this.physics.add.sprite(this.ninja.x+Math.cos(angle)*32, this.ninja.y+Math.sin(angle)*32, 'slash');
+            slash.play('slash_anim');
+            slash.killOnComplete = true;
+            // if hit -50 hp
+            katatime=this.time.now+100;
+            kata--;
+            katareg=this.time.now+1000;
+        }
+    }
     //     if(options==2 && this.time.now>shuritime && shuri>0){
     //         var toss=this.physics.add.sprite(this.ninja.x+Math.cos(angle)*32, this.ninja.y+Math.sin(angle)*32, 'shuri');
     //         toss.play('shuri_anim');
@@ -396,16 +397,16 @@ function update(){
     //     }
     // }
 
-    // //regen
-    // if(this.time.now>katareg){ // kata regen
-    //     if(kata<10){
-    //         katareg=this.time.now+1000;
-    //         kata++;
-    //     }
-    //     else{
-    //         katareg=this.time.now;
-    //     }
-    // }
+    //regen
+    if(this.time.now>katareg){ // kata regen
+        if(kata<10){
+            katareg=this.time.now+1000;
+            kata++;
+        }
+        else{
+            katareg=this.time.now;
+        }
+    }
     // if(this.time.now>shurireg){ // shuri regen
     //     if(shuri<10){
     //         shurireg=this.time.now+1000;
