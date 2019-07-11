@@ -9,7 +9,7 @@ var http = require('http').createServer(app);
 var io = require('socket.io')(http);
 
 var players = {};
-<<<<<<< Updated upstream
+//<<<<<<< Updated upstream
 
 // var pool = new Pool({
 //   user: 'postgres',
@@ -17,8 +17,8 @@ var players = {};
 //   host: 'localhost',
 //   database: 'postgres'
 // });
-=======
->>>>>>> Stashed changes
+//=======
+//>>>>>>> Stashed changes
 
 var pool = new Pool({
   connectionString : process.env.DATABASE_URL//connecting the database
