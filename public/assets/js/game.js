@@ -90,6 +90,18 @@ function preload(){
 }
 
 function create(){
+    // audio example: https://phaser.io/examples/v3/view/audio/web-audio/play-sound-on-keypress
+    var swing = this.sound.add('swing');
+
+    this.input.keyboard.on('keydown-SPACE', function () {
+        this.sound.stopAll();
+    }, this);
+    // for audio to play in the background, delete input function leaving "<name>.play();" inside create function
+    this.input.keyboard.on('keydown-Z', function () {
+        swing.play();
+    });
+
+
     var self = this;
     this.socket = io();
     this.otherPlayers = this.physics.add.group();
