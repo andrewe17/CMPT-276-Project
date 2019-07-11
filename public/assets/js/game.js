@@ -98,7 +98,8 @@ function create(){
         Object.keys(players).forEach(function (id) {
             if (players[id].playerId === self.socket.id) {
                 addPlayer(self, players[id]);
-            } else {
+            } 
+            else {
                 addOtherPlayers(self, players[id]);
             }
         });
@@ -128,12 +129,22 @@ function create(){
     this.socket.on('playerMoved', function (playerInfo) {
         self.otherPlayers.getChildren().forEach(function (otherPlayer) {
             if (playerInfo.playerId === otherPlayer.playerId) {
+                console.log(playerInfo.dashed);
+                if(playerInfo.dashed==1){
+                    var smoke=self.physics.add.sprite(playerInfo.x, playerInfo.y, 'ninja');
+                    smoke.anims.play('ninja_smoke');
+                    smoke.killOnComplete = true;
+                }
                 otherPlayer.setPosition(playerInfo.x, playerInfo.y);
+
+                // animation handling of otherplayers
+                if(playerInfo.f==1) otherPlayer.anims.play('ninja_up');
+                else if(playerInfo.f==3) otherPlayer.anims.play('ninja_left');
+                else if(playerInfo.f==4) otherPlayer.anims.play('ninja_right');
+                else if(playerInfo.f==2) otherPlayer.anims.play('ninja_down');
             }
         });
     });
-
-    
 
     // camera
     this.cameras.main.setBounds(0, 0, mapx, mapy);
@@ -159,7 +170,6 @@ function create(){
 
     // mouse
     pointer = this.input.activePointer; // mouse location relative to screen
-
 
     // // walls
     // wallx = this.physics.add.staticGroup();
@@ -240,13 +250,8 @@ function create(){
     text4=this.add.text(700, 580, '', {fontFamily:'"Roboto Condensed"', fill: '#000'}).setScrollFactor(0);
 }
 
-//var toggle=0;
-
-//var ourNinja;
 function addPlayer(self, playerInfo) {
-    //player = this.physics.add.sprite(playerInfo.x, playerInfo.y, 'ninja');
     self.ninja = self.physics.add.sprite(playerInfo.x, playerInfo.y, 'ninja');
-    ourNinja = self.ninja;
     self.ninja.setCollideWorldBounds(true);
     self.ninja.setVelocity(0, 0);
     // camera follow player
@@ -267,24 +272,18 @@ function update(){
             else if(!this.ninja.anims.isPlaying) this.ninja.play('ninja_up');
             if(a.isDown || d.isDown) this.ninja.setVelocityY(-vel/2);
             else this.ninja.setVelocityY(-vel);
-
-            this.ninja.setVelocityY(-vel);
+            this.ninja.f=1;
         }
         else if(s.isDown){
             if(this.ninja.anims.getCurrentKey()!='ninja_down') this.ninja.play('ninja_down');
             else if(!this.ninja.anims.isPlaying) this.ninja.play('ninja_down');
             if(a.isDown || d.isDown) this.ninja.setVelocityY(vel/2);
             else this.ninja.setVelocityY(vel);
-
-            this.ninja.setVelocityY(vel);
+            this.ninja.f=2;
         }
         else{
-            if(this.ninja.anims.getCurrentKey()=='ninja_up'){
-                this.ninja.play('ninja_up');
-            }
-            if(this.ninja.anims.getCurrentKey()=='ninja_down'){
-                this.ninja.play('ninja_down');
-            }
+            if(this.ninja.anims.getCurrentKey()=='ninja_up') this.ninja.play('ninja_up');
+            if(this.ninja.anims.getCurrentKey()=='ninja_down') this.ninja.play('ninja_down');
             this.ninja.setVelocityY(0);
         }
 
@@ -293,8 +292,7 @@ function update(){
             else if(!this.ninja.anims.isPlaying) this.ninja.play('ninja_left');
             if(w.isDown || s.isDown) this.ninja.setVelocityX(-vel/2);
             else this.ninja.setVelocityX(-vel);
-
-            this.ninja.setVelocityX(-vel);
+            this.ninja.f=3;
         }
         else if(d.isDown){
             this.ninja.anims.resume();
@@ -302,23 +300,62 @@ function update(){
             else if(!this.ninja.anims.isPlaying) this.ninja.play('ninja_right');
             if(w.isDown || s.isDown) this.ninja.setVelocityX(vel/2);
             else this.ninja.setVelocityX(vel);
-
-            this.ninja.setVelocityX(vel);
+            this.ninja.f=4;
         }
         else{
-            if(this.ninja.anims.getCurrentKey()=='ninja_left'){
-                this.ninja.play('ninja_left');
-            }
-            if(this.ninja.anims.getCurrentKey()=='ninja_right'){
-                this.ninja.play('ninja_right');
-            }
+            if(this.ninja.anims.getCurrentKey()=='ninja_left') this.ninja.play('ninja_left');
+            if(this.ninja.anims.getCurrentKey()=='ninja_right') this.ninja.play('ninja_right');
             this.ninja.setVelocityX(0);
         }
+
+        // mouse
+        pointer = this.input.activePointer; // refresh coordinate
+        if(this.ninja.x<400) mousex=pointer.x-this.ninja.x; // distance between mouse & this.ninja
+        else if(this.ninja.x>(mapx-400)) mousex=pointer.x-(this.ninja.x-(mapx-800));
+        else mousex=pointer.x-400;
+        if(this.ninja.y<300) mousey=pointer.y-this.ninja.y; // distance between mouse & this.ninja
+        else if(this.ninja.y>(mapy-300)) mousey=pointer.y-(this.ninja.y-(mapy-600));
+        else  mousey=pointer.y-300;
+        angle = Math.atan(mousey/mousex); // angle between mouse & this.ninja
+        if(mousex<0) angle+=Math.PI;
+
+        // dash
+        if(space.isDown && dash>0){
+            if(this.time.now>dashtime){
+                var smoke=this.physics.add.sprite(this.ninja.x, this.ninja.y, 'ninja');
+                smoke.play('ninja_smoke');
+                smoke.killOnComplete = true;
+                //
+                this.ninja.x+=Math.cos(angle)*100;
+                this.ninja.y+=Math.sin(angle)*100;
+                dashtime=this.time.now+200;
+                dash--;
+                dashreg=this.time.now+10000; // only 2 dashes
+                this.ninja.dash=1;
+            }
+        }
+        if(this.time.now>dashreg){ // dash regen
+            if(dash<2){
+                dashreg=this.time.now+10000;
+                dash++;
+            }
+            else{
+                dashreg=this.time.now;
+            }
+        }
+
         var x = this.ninja.x;
         var y = this.ninja.y;
+        var f = this.ninja.f;
+        var dashed = this.ninja.dashed;
+        text4.setText([
+            this.ninja.f
+        ]);
+        //var d = angle;
 
         if (this.ninja.oldPosition && (x !== this.ninja.oldPosition.x || y !== this.ninja.oldPosition.y)) {
-            this.socket.emit('playerMovement', { x: this.ninja.x, y: this.ninja.y });
+            this.socket.emit('playerMovement', { x:this.ninja.x, y:this.ninja.y, f:this.ninja.f, dashed:this.ninja.dashed}); // send player info to server
+            this.ninja.dashed=0;
         }
 
         this.ninja.oldPosition = {
@@ -329,46 +366,10 @@ function update(){
 
     }
     
-
     // if(one.isDown) options=1; // items
     // if(two.isDown) options=2;
     // if(three.isDown) options=3;
     // if(four.isDown) options=4;
-
-    // // mouse
-    // // pointer = this.input.activePointer; // refresh coordinate
-    // // if(this.ninja.x<400) mousex=pointer.x-this.ninja.x; // distance between mouse & this.ninja
-    // // else if(this.ninja.x>(mapx-400)) mousex=pointer.x-(this.ninja.x-(mapx-800));
-    // // else mousex=pointer.x-400;
-    // // if(this.ninja.y<300) mousey=pointer.y-this.ninja.y; // distance between mouse & this.ninja
-    // // else if(this.ninja.y>(mapy-300)) mousey=pointer.y-(this.ninja.y-(mapy-600));
-    // // else  mousey=pointer.y-300;
-    // // angle = Math.atan(mousey/mousex); // angle between mouse & this.ninja
-    // // if(mousex<0) angle+=Math.PI;
-
-    // // dash
-    // if(space.isDown && dash>0){
-    //     if(this.time.now>dashtime){
-    //         var smoke=this.physics.add.sprite(this.ninja.x, this.ninja.y, 'ninja');
-    //         smoke.play('ninja_smoke');
-    //         smoke.killOnComplete = true;
-    //         //
-    //         this.ninja.x+=Math.cos(angle)*100;
-    //         this.ninja.y+=Math.sin(angle)*100;
-    //         dashtime=this.time.now+200;
-    //         dash--;
-    //         dashreg=this.time.now+10000; // only 2 dashes
-    //     }
-    // }
-    // if(this.time.now>dashreg){ // dash regen
-    //     if(dash<2){
-    //         dashreg=this.time.now+10000;
-    //         dash++;
-    //     }
-    //     else{
-    //         dashreg=this.time.now;
-    //     }
-    // }
 
     // // use items
     // if(pointer.leftButtonDown()){ // left click
