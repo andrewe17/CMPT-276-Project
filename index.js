@@ -33,11 +33,11 @@ var pool = new Pool({
 //  });
 
 
-app.use(express.static(path.join(__dirname, 'public')))//joining the files public and current folder
+app.use(express.static(path.join(__dirname, 'public')));//joining the files public and current folder
 app.use(express.json());
 app.use(express.urlencoded({extended:false}));
-app.set('views', path.join(__dirname, 'views'))// joining the files views and current folder
-app.set('view engine', 'ejs')//using ejs
+app.set('views', path.join(__dirname, 'views'));// joining the files views and current folder
+app.set('view engine', 'ejs');//using ejs
 
 //app.get('/', (req, res) => res.render('pages/index'))
 app.get('/', function(req, res){
