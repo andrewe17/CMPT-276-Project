@@ -53,6 +53,7 @@ io.sockets.on('connection', function(socket){
     playerId: socket.id,
     f: 0,
     dashed:0,
+    health:100,
   };
   // send the players object to the new player
   socket.emit('currentPlayers', players);
