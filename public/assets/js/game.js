@@ -426,8 +426,6 @@ function update(){
             toss.setVelocityY(velY);
             this.socket.emit('shuriken', { initX:initX, initY:initY, velX:velX, velY:velY, now:now}); // slash location info
             // if hit -10 hp
-            if()
-                this.toss.removeInteractive();
             shuritime=this.time.now+100;
             shuri--;
             shurireg=this.time.now+1000;
