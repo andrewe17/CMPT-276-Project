@@ -67,6 +67,7 @@ var text1, text2, text3, text4; // textbox
 var mousex;
 var mousey;
 var angle;
+var healthText;
 
 function preload(){
     //this.load.image('van', 'assets/images/van.jpg'); // delete this
@@ -152,6 +153,9 @@ function create(){
                     smoke.killOnComplete = true;
                 }
                 otherPlayer.setPosition(playerInfo.x, playerInfo.y);
+                otherPlayer.healthText.x = playerInfo.x - 12;
+                otherPlayer.healthText.y = playerInfo.y - 30;
+                otherPlayer.healthText.setText(playerInfo.health);
 
                 // animation handling of otherplayers
                 if(playerInfo.f==1) otherPlayer.anims.play('ninja_up');
@@ -281,19 +285,23 @@ function addPlayer(self, playerInfo) {
     self.ninja.setCollideWorldBounds(true);
     self.ninja.setVelocity(0, 0);
     self.cameras.main.startFollow(self.ninja, true, 0.05, 0.05, 0.05, 0.05);
-    self.ninja.healthText = self.add.text(playerInfo.x - 16, playerInfo.y + 20, playerInfo.health, {fontFamily:'"Roboto Condensed"', fill: '#000'});
+    self.ninja.healthText = self.add.text(playerInfo.x - 12, playerInfo.y - 30, playerInfo.health, {fontFamily:'"Roboto Condensed"', fill: '#000'});
     self.physics.add.collider(self.ninja, wx, pb);
 }
 
 function addOtherPlayers(self, playerInfo) {
     const otherPlayer = self.physics.add.sprite(playerInfo.x, playerInfo.y, 'ninja');
     otherPlayer.playerId = playerInfo.playerId;
+    otherPlayer.healthText = self.add.text(playerInfo.x - 12, playerInfo.y - 30, playerInfo.health, {fontFamily:'"Roboto Condensed"', fill: '#000'});
     self.otherPlayers.add(otherPlayer);
 } 
 
 
 function update(){
     if(this.ninja){
+        this.ninja.healthText.x = this.ninja.x - 12;
+        this.ninja.healthText.y = this.ninja.y - 30;
+
         // keyboard
         if(w.isDown){
             if(this.ninja.anims.getCurrentKey()!='ninja_up') this.ninja.play('ninja_up');
@@ -394,8 +402,7 @@ function update(){
 
     }
 
-   if(one.isDown) options=1; // items
-
+    if(one.isDown) options=1; // items
     if(two.isDown) options=2;
     if(three.isDown) options=3;
     if(four.isDown) options=4;
@@ -410,18 +417,16 @@ function update(){
             slash.play('slash_anim');
             slash.killOnComplete = true;
             this.socket.emit('playerSlash', { x:slashx, y:slashy}); // slash location info
-
             // if hit -50 hp
-            katatime=this.time.now+100;
+            katatime = this.time.now+100;
             kata--;
-            katareg=this.time.now+1000;
+            katareg = this.time.now+1000;
         }
 
         if(options==2 && this.time.now>shuritime && shuri>0){
             var initX = this.ninja.x+Math.cos(angle)*32;
             var initY = this.ninja.y+Math.sin(angle)*32;
-            //shuris.add.group();
-            var toss=ss.create(initX, initY, 'shuri');
+            var toss = this.physics.add.sprite(initX, initY, 'shuri');
             toss.play('shuri_anim');
             var velX = Math.cos(angle)*300;
             var velY = Math.sin(angle)*300;
@@ -481,6 +486,8 @@ function update(){
     text4.setText([
         'vers: '+535 // test
     ]);
+
+
 }
 
 // create maze
