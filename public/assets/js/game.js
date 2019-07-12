@@ -138,6 +138,7 @@ function create(){
     this.socket.on('disconnect', function (playerId) {
         self.otherPlayers.getChildren().forEach(function (otherPlayer) {
             if (playerId === otherPlayer.playerId) {
+                otherplayer.healthText.destroy();
                 otherPlayer.destroy();
             }
         });
