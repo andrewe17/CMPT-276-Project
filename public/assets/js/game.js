@@ -107,15 +107,15 @@ function create(){
     wy = this.physics.add.staticGroup();
     maze();
     // audio example: https://phaser.io/examples/v3/view/audio/web-audio/play-sound-on-keypress
-    var swing = this.sound.add('swing');
+    // var swing = this.sound.add('swing');
 
-    this.input.keyboard.on('keydown-SPACE', function () {
-        this.sound.stopAll();
-    }, this);
-    // for audio to play in the background, delete input function leaving "<name>.play();" inside create function
-    this.input.keyboard.on('keydown-Z', function () {
-        swing.play();
-    });
+    // this.input.keyboard.on('keydown-SPACE', function () {
+    //     this.sound.stopAll();
+    // }, this);
+    // // for audio to play in the background, delete input function leaving "<name>.play();" inside create function
+    // this.input.keyboard.on('keydown-Z', function () {
+    //     swing.play();
+    // });
 
     var self = this;
     this.socket = io();
@@ -183,7 +183,7 @@ function create(){
     gg=this.time.now+(1000*60*10);
 
     // // keyboard
-     cursor = this.input.keyboard.createCursorKeys();
+    cursor = this.input.keyboard.createCursorKeys();
     w = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
     a = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
     s = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
@@ -196,11 +196,7 @@ function create(){
 
     // mouse
     pointer = this.input.activePointer; // mouse location relative to screen
-
-
-    
-    
-    
+   
     // dash
     dash=0;
     dashtime=this.time.now;
@@ -278,7 +274,7 @@ function addPlayer(self, playerInfo) {
     self.ninja.setCollideWorldBounds(true);
     self.ninja.setVelocity(0, 0);
     self.cameras.main.startFollow(self.ninja, true, 0.05, 0.05, 0.05, 0.05);
-    self.ninja.healthText = self.add.text(playerInfo.x, playerInfo.y, playerInfo.health, {fontFamily:'"Roboto Condensed"', fill: '#000'});
+    //self.ninja.healthText = self.add.text(playerInfo.x, playerInfo.y, playerInfo.health, {fontFamily:'"Roboto Condensed"', fill: '#000'});
 
     self.physics.add.collider(self.ninja, wx, pb);
 }

@@ -54,7 +54,7 @@ io.sockets.on('connection', function(socket){
     f: 0,
     dashed:0,
     health:100,
-    shuri:s[100]
+    //shuri:s[100]
   };
   // send the players object to the new player
   socket.emit('currentPlayers', players);
