@@ -441,8 +441,10 @@ function update(){
         if(options==2 && this.time.now>shuritime && shuri>0){
             var initX = this.ninja.x+Math.cos(angle)*32;
             var initY = this.ninja.y+Math.sin(angle)*32;
-            //var toss = this.physics.add.sprite(initX, initY, 'shuri');
+
+            //shuris.add.group();
             var toss=ss.create(initX, initY, 'shuri');
+
             toss.play('shuri_anim');
             var velX = Math.cos(angle)*300;
             var velY = Math.sin(angle)*300;
