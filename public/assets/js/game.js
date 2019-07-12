@@ -427,7 +427,7 @@ function update(){
             var velY = Math.sin(angle)*300;
             toss.setVelocityX(velX);
             toss.setVelocityY(velY);
-            this.socket.emit('shuriken', { initX:initX, initY:initY, velX:velX, velY:velY, now:now}); // slash location info
+            this.socket.emit('shuriken', { initX:initX, initY:initY, velX:velX, velY:velY}); // slash location info
             // if hit -10 hp
             shuritime=this.time.now+100;
             shuri--;
