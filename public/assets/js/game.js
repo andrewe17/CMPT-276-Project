@@ -419,8 +419,7 @@ function update(){
             
             var toss=this.physics.add.sprite(initX, initY, 'shuri');
             toss.play('shuri_anim');
-            
-            var shuri_now=;
+
             var velX = Math.cos(angle)*300;
             var velY = Math.sin(angle)*300;
             toss.setVelocityX(velX);
