@@ -428,7 +428,7 @@ function update(){
             var initX = this.ninja.x+Math.cos(angle)*32;
             var initY = this.ninja.y+Math.sin(angle)*32;
             //shuris.add.group();
-            var toss=ss.create(initX, initY, 'shuri');
+            var toss = ss.create(initX, initY, 'shuri');
 
             toss.play('shuri_anim');
             var velX = Math.cos(angle)*300;
