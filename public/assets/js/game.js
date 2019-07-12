@@ -179,12 +179,25 @@ function create(){
         toss.setVelocityX(shurikenInfo.velX);
         toss.setVelocityY(shurikenInfo.velY);
     });
-    this.socket.on('shurikenHit', function (playerInfo) {
-        self.otherPlayers.getChildren().forEach(function (otherPlayer) {
-            if (playerInfo.playerId === otherPlayer.playerId) {
-                otherPlayer.health = playerInfo.health;
-            }
-        });
+    this.socket.on('shurikenHit', function (playerInfo){
+        //console.log(playerInfo.playerId);
+        //console.log(self.socket.id);
+        if(playerInfo.playerId === self.socket.id){
+            console.log('selfplayer');
+            self.ninja.health = playerInfo.health;
+            self.ninja.healthText.setText(playerInfo.health);
+        }
+        else{
+            
+            self.otherPlayers.getChildren().forEach(function (otherPlayer) {
+                if (playerInfo.playerId === otherPlayer.playerId) {
+                    console.log('otherplayer');
+                    otherPlayer.health = playerInfo.health;
+                    otherPlayer.healthText.setText(playerInfo.health);
+                }
+            });
+        }
+
     });
     
     // global time
@@ -254,7 +267,9 @@ function create(){
     });
     // shuris
     ss = this.physics.add.group();
-    this.physics.add.overlap(this.otherPlayers, ss, shurihit);
+    this.physics.add.overlap(this.otherPlayers, ss, function(player, ss){
+        shurihit(self, player, ss);
+    });
 
     // weapons
     options=1;
@@ -426,7 +441,8 @@ function update(){
         if(options==2 && this.time.now>shuritime && shuri>0){
             var initX = this.ninja.x+Math.cos(angle)*32;
             var initY = this.ninja.y+Math.sin(angle)*32;
-            var toss = this.physics.add.sprite(initX, initY, 'shuri');
+            //var toss = this.physics.add.sprite(initX, initY, 'shuri');
+            var toss=ss.create(initX, initY, 'shuri');
             toss.play('shuri_anim');
             var velX = Math.cos(angle)*300;
             var velY = Math.sin(angle)*300;
@@ -545,9 +561,13 @@ function pb(player, wall){
     else player.x+=0.1;
 }
 
-function shurihit(otherPlayers, ss){
+function shurihit(self, otherPlayer, ss){
     //ss.setVelocityX(0);
     //ss.setVelocityY(0);
-    //this.socket.emit('hit', {id:otherPlayers.id});
+    //
     ss.destroy();
+    //otherPlayer.health -=25;
+    //console.log(otherPlayer.health);
+ //   self.otherPlayers[otherPlayer.playerId].healthText.setText(otherPlayer.health);
+    self.socket.emit('shuri_hit', {id:otherPlayer.playerId});
 }
