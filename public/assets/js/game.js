@@ -69,8 +69,6 @@ var mousey;
 var angle;
 var healthText;
 
-
-
 function preload(){
     //this.load.image('van', 'assets/images/van.jpg'); // delete this
     this.load.image('wall', 'assets/images/wall.png');
@@ -107,6 +105,7 @@ function create(){
     wx = this.physics.add.staticGroup();
     wy = this.physics.add.staticGroup();
     maze();
+
     // audio example: https://phaser.io/examples/v3/view/audio/web-audio/play-sound-on-keypress
     var swing = this.sound.add('swing');
 
@@ -173,13 +172,19 @@ function create(){
         slash.killOnComplete = true;
     });
 
-
     // shuriken
-    this.socket.on('shurikenHit', function (shurikenInfo) {
+    this.socket.on('shurikenToss', function (shurikenInfo) {
         var toss = self.physics.add.sprite(shurikenInfo.initX, shurikenInfo.initY, 'shuri');
         toss.play('shuri_anim');
         toss.setVelocityX(shurikenInfo.velX);
         toss.setVelocityY(shurikenInfo.velY);
+    });
+    this.socket.on('shurikenHit', function (playerInfo) {
+        self.otherPlayers.getChildren().forEach(function (otherPlayer) {
+            if (playerInfo.playerId === otherPlayer.playerId) {
+                otherPlayer.health = playerInfo.health;
+            }
+        });
     });
     
     // global time
@@ -199,11 +204,7 @@ function create(){
 
     // mouse
     pointer = this.input.activePointer; // mouse location relative to screen
-
-
-    
-    
-    
+ 
     // dash
     dash=0;
     dashtime=this.time.now;
@@ -251,6 +252,9 @@ function create(){
         frameRate: 16,
         repeat: -1
     });
+    // shuris
+    ss = this.physics.add.group();
+    this.physics.add.overlap(this.otherPlayers, ss, shurihit);
 
     // weapons
     options=1;
@@ -403,8 +407,6 @@ function update(){
     if(three.isDown) options=3;
     if(four.isDown) options=4;
 
-
-
     // use items
     if(pointer.leftButtonDown()){ // left click
         if(options==1 && this.time.now>katatime && kata>0){
@@ -424,7 +426,9 @@ function update(){
         if(options==2 && this.time.now>shuritime && shuri>0){
             var initX = this.ninja.x+Math.cos(angle)*32;
             var initY = this.ninja.y+Math.sin(angle)*32;
-            var toss = this.physics.add.sprite(initX, initY, 'shuri');
+            //shuris.add.group();
+            var toss=ss.create(initX, initY, 'shuri');
+
             toss.play('shuri_anim');
             var velX = Math.cos(angle)*300;
             var velY = Math.sin(angle)*300;
@@ -541,4 +545,11 @@ function pb(player, wall){
     else player.y+=0.1;
     if(wall.x>player.x) player.x-=0.1;
     else player.x+=0.1;
+}
+
+function shurihit(otherPlayers, ss){
+    //ss.setVelocityX(0);
+    //ss.setVelocityY(0);
+    //this.socket.emit('hit', {id:otherPlayers.id});
+    ss.destroy();
 }

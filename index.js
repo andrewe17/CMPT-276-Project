@@ -91,7 +91,12 @@ io.sockets.on('connection', function(socket){
   
   socket.on('shuriken', function (shurikenData) {
     // emit a message to all players about the player that moved
-    socket.broadcast.emit('shurikenHit', shurikenData);
+    socket.broadcast.emit('shurikenToss', shurikenData);
+  });
+
+  socket.on('hit', function (input) {
+    players[input.id].health-=25;
+    socket.broadcast.emit('shurikenHit', players[input.id]);
   });
 
   //show chat messages
