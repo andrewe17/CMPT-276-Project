@@ -177,14 +177,6 @@ function create(){
         toss.setVelocityX(shurikenInfo.velX);
         toss.setVelocityY(shurikenInfo.velY);
     });
-
-    // camera
-    this.cameras.main.setBounds(0, 0, mapx, mapy);
-    this.physics.world.setBounds(0, 0, mapx, mapy);
-
-    // background
-    this.add.image(mapy/2, mapy/2, 'back');
-
     
 
     // global time
