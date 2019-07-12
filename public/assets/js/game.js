@@ -263,6 +263,7 @@ function addPlayer(self, playerInfo) {
     self.ninja.setCollideWorldBounds(true);
     self.ninja.setVelocity(0, 0);
     self.cameras.main.startFollow(self.ninja, true, 0.05, 0.05, 0.05, 0.05);
+    self.ninja.healthText = self.add.text(playerInfo.x, playerInfo.y, playerInfo.health, {fontFamily:'"Roboto Condensed"', fill: '#000'});
 }
 
 function addOtherPlayers(self, playerInfo) {
