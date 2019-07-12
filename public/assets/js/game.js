@@ -422,14 +422,12 @@ function update(){
             
             var toss=this.physics.add.sprite(initX, initY, 'shuri');
             toss.play('shuri_anim');
-            
             var velX = Math.cos(angle)*300;
             var velY = Math.sin(angle)*300;
             toss.setVelocityX(velX);
             toss.setVelocityY(velY);
             this.socket.emit('shuriken', { initX:initX, initY:initY, velX:velX, velY:velY, now:now}); // slash location info
             // if hit -10 hp
-            this.toss.removeInteractive();
             shuritime=this.time.now+100;
             shuri--;
             shurireg=this.time.now+1000;
