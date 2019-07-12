@@ -262,8 +262,6 @@ function addPlayer(self, playerInfo) {
     self.ninja = self.physics.add.sprite(playerInfo.x, playerInfo.y, 'ninja');
     self.ninja.setCollideWorldBounds(true);
     self.ninja.setVelocity(0, 0);
-    //self.ninja.healthBar = new HealthBar(self.game, {x:playerInfo.x, y:playerInfo.y});
-    // camera follow player
     self.cameras.main.startFollow(self.ninja, true, 0.05, 0.05, 0.05, 0.05);
 }
 
