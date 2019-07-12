@@ -1,39 +1,13 @@
-# node-js-getting-started
+# Ninja-Dash Developing progress
 
-A barebones Node.js app using [Express 4](http://expressjs.com/).
+A user will be able to login, play the game, and view their profile to track their stats. The game itself is in 2D bird’s eye view. Players of up to 5 are placed in a map based on real cities where they fight until the last person standing wins. Basic controls include movement (up, down, left, right), dashing and attacking using weapons picked up from the map. The map will consist of obstacles where players can turn invisible (for a period of time) and implement a weather API to change the map settings depending on real-time weather. The weather will affect game settings and player abilities and the API for this function will probably be weather.com.
 
-This application supports the [Getting Started with Node on Heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs) article - check it out.
-
-## Running Locally
-
-Make sure you have [Node.js](http://nodejs.org/) and the [Heroku CLI](https://cli.heroku.com/) installed.
-
-```sh
-$ git clone https://github.com/heroku/node-js-getting-started.git # or clone your own fork
-$ cd node-js-getting-started
-$ npm install
-$ npm start
-```
-
-Your app should now be running on [localhost:5000](http://localhost:5000/).
-
-## Deploying to Heroku
-
-```
-$ heroku create
-$ git push heroku master
-$ heroku open
-```
-or
-
-[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
-
-## Documentation
-
-For more information about using Node.js on Heroku, see these Dev Center articles:
-
-- [Getting Started with Node.js on Heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs)
-- [Heroku Node.js Support](https://devcenter.heroku.com/articles/nodejs-support)
-- [Node.js on Heroku](https://devcenter.heroku.com/categories/nodejs)
-- [Best Practices for Node.js Development](https://devcenter.heroku.com/articles/node-best-practices)
-- [Using WebSockets on Heroku with Node.js](https://devcenter.heroku.com/articles/node-websockets)
+## To Do
+  - damage calculation for katana or dash
+  - merge login into game
+  
+## Finished
+  - login
+  - multiplayer
+  - animation
+  - damage calculation for shuriken
