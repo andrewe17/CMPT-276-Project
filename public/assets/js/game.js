@@ -278,8 +278,7 @@ function addPlayer(self, playerInfo) {
     self.ninja.setCollideWorldBounds(true);
     self.ninja.setVelocity(0, 0);
     self.cameras.main.startFollow(self.ninja, true, 0.05, 0.05, 0.05, 0.05);
-    self.ninja.healthText = self.add.text(playerInfo.x, playerInfo.y, playerInfo.health, {fontFamily:'"Roboto Condensed"', fill: '#000'});
-
+    self.ninja.healthText = self.add.text(playerInfo.x - 16, playerInfo.y + 20, playerInfo.health, {fontFamily:'"Roboto Condensed"', fill: '#000'});
     self.physics.add.collider(self.ninja, wx, pb);
 }
 
@@ -424,15 +423,13 @@ function update(){
             var toss=this.physics.add.sprite(initX, initY, 'shuri');
             toss.play('shuri_anim');
             
-            var shuri_now=;
             var velX = Math.cos(angle)*300;
             var velY = Math.sin(angle)*300;
             toss.setVelocityX(velX);
             toss.setVelocityY(velY);
             this.socket.emit('shuriken', { initX:initX, initY:initY, velX:velX, velY:velY, now:now}); // slash location info
             // if hit -10 hp
-            if()
-                this.toss.removeInteractive();
+            this.toss.removeInteractive();
             shuritime=this.time.now+100;
             shuri--;
             shurireg=this.time.now+1000;
