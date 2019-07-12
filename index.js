@@ -85,6 +85,12 @@ io.sockets.on('connection', function(socket){
     socket.broadcast.emit('playerMoved', players[socket.id]);
   });
 
+  socket.on('playerSlash', function (slashData) {
+    // emit a message to all players about the player that moved
+    socket.broadcast.emit('playerSlashed', slashData);
+  });
+
+
   //show chat messages
   socket.on('chat message', function(msg){
     console.log('message: ' + msg);
