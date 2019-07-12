@@ -8,11 +8,11 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test": "node test.js",
     "test": "mocha"
   },
   "dependencies": {
     "amazejs": "^1.0.2",
+    "chai": "^4.2.0",
     "chai-http": "^4.3.0",
     "cors": "^2.8.5",
     "ejs": "^2.5.6",

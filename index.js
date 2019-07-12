@@ -44,6 +44,9 @@ app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
 });
 
+app.get('/players'), function(req, res){
+  res.send(players);
+}
 
 io.sockets.on('connection', function(socket){
   // playercount++;
@@ -149,3 +152,5 @@ app.post('/signup', async (req, res) => {//this updates the form when the form f
 
 //app.listen(PORT, () => console.log(`Listening on ${ PORT }`))
 http.listen(PORT, () => console.log(`Listening on ${ PORT }`))
+
+module.exports = app;
