@@ -7,7 +7,7 @@ const { Pool } = require('pg');
 
 var http = require('http').createServer(app);
 var io = require('socket.io')(http);
-
+var cors = require('cors')
 var players = {};
 
 // var pool = new Pool({
@@ -33,6 +33,9 @@ var pool = new Pool({
 app.use(express.static(path.join(__dirname, 'public')));//joining the files public and current folder
 app.use(express.json());
 app.use(express.urlencoded({extended:false}));
+
+app.use('/', cors());
+
 app.set('views', path.join(__dirname, 'views'));// joining the files views and current folder
 app.set('view engine', 'ejs');//using ejs
 
@@ -88,7 +91,7 @@ io.sockets.on('connection', function(socket){
     // emit a message to all players about the player that moved
     socket.broadcast.emit('playerSlashed', slashData);
   });
-  
+
   socket.on('shuriken', function (shurikenData) {
     // emit a message to all players about the player that moved
     socket.broadcast.emit('shurikenToss', shurikenData);
