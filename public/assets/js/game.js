@@ -154,6 +154,14 @@ function create(){
         slash.killOnComplete = true;
     });
 
+    // shuriken
+    this.socket.on('shurikenHit', function (shurikenInfo) {
+        var toss = self.physics.add.sprite(shurikenInfo.initX, shurikenInfo.initY, 'shuri');
+        toss.play('shuri_anim');
+        toss.setVelocityX(shurikenInfo.velX);
+        toss.setVelocityY(shurikenInfo.velY);
+    });
+
     // camera
     this.cameras.main.setBounds(0, 0, mapx, mapy);
     this.physics.world.setBounds(0, 0, mapx, mapy);
@@ -374,8 +382,9 @@ function update(){
 
     }
 
-    if(one.isDown) options=1; // items
-    // if(two.isDown) options=2;
+    // items
+    if(one.isDown) options=1;
+    if(two.isDown) options=2;
     // if(three.isDown) options=3;
     // if(four.isDown) options=4;
 
@@ -384,7 +393,7 @@ function update(){
         if(options==1 && this.time.now>katatime && kata>0){
             var slashx = this.ninja.x+Math.cos(angle)*32;
             var slashy = this.ninja.y+Math.sin(angle)*32;
-            var slash=this.physics.add.sprite(slashx, slashy, 'slash');
+            var slash = this.physics.add.sprite(slashx, slashy, 'slash');
             slash.play('slash_anim');
             slash.killOnComplete = true;
             this.socket.emit('playerSlash', { x:slashx, y:slashy}); // slash location info
@@ -395,18 +404,25 @@ function update(){
             kata--;
             katareg=this.time.now+1000;
         }
+
+        if(options==2 && this.time.now>shuritime && shuri>0){
+            var initX = this.ninja.x+Math.cos(angle)*32;
+            var initY = this.ninja.y+Math.sin(angle)*32;
+            
+            var toss=this.physics.add.sprite(initX, initY, 'shuri');
+            toss.play('shuri_anim');
+            
+            var velX = Math.cos(angle)*300;
+            var velY = Math.sin(angle)*300;
+            toss.setVelocityX(velX);
+            toss.setVelocityY(velY);
+            this.socket.emit('shuriken', { initX:initX, initY:initY, velX:velX, velY:velY}); // slash location info
+            // if hit -10 hp
+            shuritime=this.time.now+100;
+            shuri--;
+            shurireg=this.time.now+1000;
+        }
     }
-    //     if(options==2 && this.time.now>shuritime && shuri>0){
-    //         var toss=this.physics.add.sprite(this.ninja.x+Math.cos(angle)*32, this.ninja.y+Math.sin(angle)*32, 'shuri');
-    //         toss.play('shuri_anim');
-    //         toss.setVelocityX(Math.cos(angle)*300);
-    //         toss.setVelocityY(Math.sin(angle)*300);
-    //         // if hit -10 hp
-    //         shuritime=this.time.now+100;
-    //         shuri--;
-    //         shurireg=this.time.now+1000;
-    //     }
-    // }
 
     //regen
     if(this.time.now>katareg){ // kata regen
@@ -418,15 +434,15 @@ function update(){
             katareg=this.time.now;
         }
     }
-    // if(this.time.now>shurireg){ // shuri regen
-    //     if(shuri<10){
-    //         shurireg=this.time.now+1000;
-    //         shuri++;
-    //     }
-    //     else{
-    //         shurireg=this.time.now;
-    //     }
-    // }
+    if(this.time.now>shurireg){ // shuri regen
+        if(shuri<10){
+            shurireg=this.time.now+1000;
+            shuri++;
+        }
+        else{
+            shurireg=this.time.now;
+        }
+    }
 
     // // SPAWNING POINTS
     // // UPGRADE AREA: UPGRADE CHANGED TO OPTIONS 1,2,3,4

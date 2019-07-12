@@ -88,7 +88,11 @@ io.sockets.on('connection', function(socket){
     // emit a message to all players about the player that moved
     socket.broadcast.emit('playerSlashed', slashData);
   });
-
+  
+  socket.on('shuriken', function (shurikenData) {
+    // emit a message to all players about the player that moved
+    socket.broadcast.emit('shurikenHit', shurikenData);
+  });
 
   //show chat messages
   socket.on('chat message', function(msg){
