@@ -395,14 +395,14 @@ function update(){
         if(w.isDown){
             if(this.ninja.anims.getCurrentKey()!='ninja_up') this.ninja.play('ninja_up');
             else if(!this.ninja.anims.isPlaying) this.ninja.play('ninja_up');
-            if(a.isDown || d.isDown) this.ninja.setVelocityY(-vel/2);
+            if(a.isDown || d.isDown) this.ninja.setVelocityY(-vel/1.4);
             else this.ninja.setVelocityY(-vel);
             this.ninja.f=1;
         }
         else if(s.isDown){
             if(this.ninja.anims.getCurrentKey()!='ninja_down') this.ninja.play('ninja_down');
             else if(!this.ninja.anims.isPlaying) this.ninja.play('ninja_down');
-            if(a.isDown || d.isDown) this.ninja.setVelocityY(vel/2);
+            if(a.isDown || d.isDown) this.ninja.setVelocityY(vel/1.4);
             else this.ninja.setVelocityY(vel);
             this.ninja.f=2;
         }
@@ -415,7 +415,7 @@ function update(){
         if(a.isDown){
             if(this.ninja.anims.getCurrentKey()!='ninja_left') this.ninja.play('ninja_left');
             else if(!this.ninja.anims.isPlaying) this.ninja.play('ninja_left');
-            if(w.isDown || s.isDown) this.ninja.setVelocityX(-vel/2);
+            if(w.isDown || s.isDown) this.ninja.setVelocityX(-vel/1.4);
             else this.ninja.setVelocityX(-vel);
             this.ninja.f=3;
         }
@@ -423,7 +423,7 @@ function update(){
             this.ninja.anims.resume();
             if(this.ninja.anims.getCurrentKey()!='ninja_right') this.ninja.play('ninja_right');
             else if(!this.ninja.anims.isPlaying) this.ninja.play('ninja_right');
-            if(w.isDown || s.isDown) this.ninja.setVelocityX(vel/2);
+            if(w.isDown || s.isDown) this.ninja.setVelocityX(vel/1.4);
             else this.ninja.setVelocityX(vel);
             this.ninja.f=4;
         }
