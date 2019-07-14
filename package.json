@@ -8,15 +8,19 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test": "node test.js"
+    "test": "mocha"
   },
   "dependencies": {
     "amazejs": "^1.0.2",
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
+    "cors": "^2.8.5",
     "ejs": "^2.5.6",
     "express": "^4.17.1",
     "generate-maze": "^0.2.0",
     "http-server": "^0.11.1",
-    "npm": "^6.9.2",
+    "mocha": "^6.1.4",
+    "npm": "^6.10.1",
     "pg": "^7.11.0",
     "socket.io": "^2.2.0"
   },

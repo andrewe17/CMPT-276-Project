@@ -7,7 +7,7 @@ const { Pool } = require('pg');
 
 var http = require('http').createServer(app);
 var io = require('socket.io')(http);
-
+//var cors = require('cors');
 var players = {};
 
 // var pool = new Pool({
@@ -33,6 +33,9 @@ var pool = new Pool({
 app.use(express.static(path.join(__dirname, 'public')));//joining the files public and current folder
 app.use(express.json());
 app.use(express.urlencoded({extended:false}));
+
+//app.use('/', cors());
+
 app.set('views', path.join(__dirname, 'views'));// joining the files views and current folder
 app.set('view engine', 'ejs');//using ejs
 
@@ -41,6 +44,9 @@ app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
 });
 
+app.get('/players', function(req, res){
+  res.send(players);
+});
 
 io.sockets.on('connection', function(socket){
   // playercount++;
@@ -80,20 +86,22 @@ io.sockets.on('connection', function(socket){
     players[socket.id].y = movementData.y;
     players[socket.id].f = movementData.f;
     players[socket.id].dashed = movementData.dashed;
-    // emit a message to all players about the player that moved
     socket.broadcast.emit('playerMoved', players[socket.id]);
   });
 
+  // Broadcast Katana
   socket.on('playerSlash', function (slashData) {
-    // emit a message to all players about the player that moved
     socket.broadcast.emit('playerSlashed', slashData);
   });
-  
+  // Broadcast Shuriken
   socket.on('shuriken', function (shurikenData) {
-    // emit a message to all players about the player that moved
     socket.broadcast.emit('shurikenToss', shurikenData);
   });
-
+  // Broadcast Smoke
+  socket.on('smoke', function (smokeData) {
+    socket.broadcast.emit('smoke_ani', smokeData);
+  });
+  // Broadcast shuriken hit
   socket.on('shuri_hit', function (otherPlayer) {
     players[otherPlayer.id].health = players[otherPlayer.id].health-25;
     //console.log(player.id);
@@ -146,3 +154,5 @@ app.post('/signup', async (req, res) => {//this updates the form when the form f
 
 //app.listen(PORT, () => console.log(`Listening on ${ PORT }`))
 http.listen(PORT, () => console.log(`Listening on ${ PORT }`))
+
+module.exports = app;
