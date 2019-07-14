@@ -7,7 +7,7 @@ var config={
         arcade: {
             //debug: true,
             gravity: { y: 0 }
-            
+
         }
     },
     scene:{
@@ -33,7 +33,7 @@ var pointer;
 var mousex;
 var mousey;
 var vel=200; // velocity
-var velx=200, vely=200;
+var velx=vel, vely=vel;
 // objects
 var player;
 var wall;
@@ -84,6 +84,8 @@ function preload(){
     this.load.image('slash', 'assets/images/slash.png');
     this.load.image('shuri', 'assets/images/shuri.png');
     this.load.image('rain', 'assets/images/rain.png');
+    this.load.image('snow', 'assets/images/snow.png');
+    this.load.image('cloud', 'assets/images/cloud.png');
     this.load.spritesheet('ninja_up', 'assets/images/ninja_up.png', {frameWidth: 32, frameHeight: 32});
     this.load.spritesheet('ninja_down', 'assets/images/ninja_down.png', {frameWidth: 32, frameHeight: 32});
     this.load.spritesheet('ninja_left', 'assets/images/ninja_left.png', {frameWidth: 32, frameHeight: 32});
@@ -203,7 +205,7 @@ function create(){
             self.ninja.healthText.setText(playerInfo.health);
         }
         else{
-            
+
             self.otherPlayers.getChildren().forEach(function (otherPlayer) {
                 if (playerInfo.playerId === otherPlayer.playerId) {
                     console.log('otherplayer');
@@ -234,7 +236,7 @@ function create(){
     // ask username
     var username = prompt('Please tell me your name');
     this.socket.emit('username', username);
-    
+
     // global time
     gg=this.time.now+(1000*60*10);
 
@@ -252,7 +254,7 @@ function create(){
 
     // mouse
     pointer = this.input.activePointer; // mouse location relative to screen
- 
+
     // dash
     dash=0;
     dashtime=this.time.now;
@@ -324,40 +326,50 @@ function create(){
     deaths=0;
 
     // text
-    text1=this.add.text(0, 0, '', {fontFamily:'"Roboto Condensed"', fill: '#000'}).setScrollFactor(0);
-    text2=this.add.text(700, 0, '', {fontFamily:'"Roboto Condensed"', fill: '#000'}).setScrollFactor(0);
-    text3=this.add.text(0, 580, '', {fontFamily:'"Roboto Condensed"', fill: '#000'}).setScrollFactor(0);
-    text4=this.add.text(700, 580, '', {fontFamily:'"Roboto Condensed"', fill: '#000'}).setScrollFactor(0);
-    
+    text1=this.add.text(0, 0, '', {fontFamily:'"Roboto Condensed"', fill: '#ffffff'}).setScrollFactor(0);
+    text2=this.add.text(700, 0, '', {fontFamily:'"Roboto Condensed"', fill: '#ffffff'}).setScrollFactor(0);
+    text3=this.add.text(0, 580, '', {fontFamily:'"Roboto Condensed"', fill: '#ffffff'}).setScrollFactor(0);
+    text4=this.add.text(700, 580, '', {fontFamily:'"Roboto Condensed"', fill: '#ffffff'}).setScrollFactor(0);
+
     // weather effects
-    var particles = this.add.particles('rain');
+    var rain_particles = this.add.particles('rain');
+    var snow_particles = this.add.particles('snow');
+    var cloud_particles = this.add.particles('cloud');
     this.socket.on('weather', function(current_weather) {
+        //current_weather='Snow'; // testing only
         console.log(current_weather);
         // Thunderstorm, Drizzle, Rain, Snow, Clear, Clouds
         // Mist, Smoke, Haze, Dust, Fog, Sand, Dust, Ash, Squall, Tornado
-        if(current_weather=='Drizzle'){
-            // rain
-            particles.createEmitter({
-                // frame: 'blue',
+        if(current_weather=='Drizzle' || current_weather=='Rain'){
+            rain_particles.createEmitter({
+                x:{min:0, max: mapx},
+                y:{min:0, max: mapy},
+                lifespan:4000,
+                speedX: {min:0, max:-100},
+                speedY: {min:400, max:800},
+                scale: {start:0.5, end: 0},
+                quantity:12,
+            });
+        }
+        else if(current_weather=='Snow'){
+            snow_particles.createEmitter({
                 x:{min:0, max: mapx},
                 y:{min:0, max: mapy},
                 lifespan:2000,
-                speedX: {min:-100, max:-100},
-                speedY: {min:200, max:400},
-                scale: {start:1, end: 0},
+                speedX: {min:0, max:0},
+                speedY: {min:0, max:100},
+                scale: {start:0.5, end: 0},
                 quantity:4,
             });
         }
-        if(current_weather=='Clouds'){
-            // rain
-            particles.createEmitter({
-                // frame: 'blue',
+        else if(current_weather=='Clouds'){
+            cloud_particles.createEmitter({
                 x:{min:0, max: mapx},
                 y:{min:0, max: mapy},
-                lifespan:2000,
-                speedX: {min:-100, max:-100},
-                speedY: {min:200, max:400},
-                scale: {start:1, end: 0},
+                lifespan:20000,
+                speedX: {min:0, max:10},
+                speedY: {min:0, max:0},
+                scale: {start:10, end: 0},
                 quantity:4,
             });
         }
@@ -372,7 +384,7 @@ function addPlayer(self, playerInfo) {
     self.ninja.setCollideWorldBounds(true);
     self.ninja.setVelocity(0, 0);
     self.cameras.main.startFollow(self.ninja, true, 0.05, 0.05, 0.05, 0.05);
-    self.ninja.healthText = self.add.text(playerInfo.x - 12, playerInfo.y - 30, playerInfo.health, {fontFamily:'"Roboto Condensed"', fill: '#000'});
+    self.ninja.healthText = self.add.text(playerInfo.x - 12, playerInfo.y - 30, playerInfo.health, {fontFamily:'"Roboto Condensed"', fill: '#ffffff'});
     self.physics.add.collider(self.ninja, wx, pb);
     self.physics.add.overlap(self.ninja, waterLayer, slowdown);
     self.ninja.setSize(15,10).setOffset(8,20);
@@ -381,9 +393,9 @@ function addPlayer(self, playerInfo) {
 function addOtherPlayers(self, playerInfo) {
     const otherPlayer = self.physics.add.sprite(playerInfo.x, playerInfo.y, 'ninja');
     otherPlayer.playerId = playerInfo.playerId;
-    otherPlayer.healthText = self.add.text(playerInfo.x - 12, playerInfo.y - 30, playerInfo.health, {fontFamily:'"Roboto Condensed"', fill: '#000'});
+    otherPlayer.healthText = self.add.text(playerInfo.x - 12, playerInfo.y - 30, playerInfo.health, {fontFamily:'"Roboto Condensed"', fill: '#ffffff'});
     self.otherPlayers.add(otherPlayer);
-} 
+}
 
 
 function update(){
@@ -452,7 +464,7 @@ function update(){
                 var smoke=this.physics.add.sprite(this.ninja.x, this.ninja.y, 'ninja');
                 smoke.play('ninja_smoke');
                 smoke.killOnComplete = true;
-                
+
                 this.socket.emit('smoke', { x:this.ninja.x, y:this.ninja.y}); // dash location info
 
                 this.ninja.x+=Math.cos(angle)*100;
@@ -561,26 +573,26 @@ function update(){
     // // UPGRADES: #SHURIKENS, SHURIKEN SPEED, REGEN SPEED, DAMAGE, EXPLOSION RADIUS
     // // limited views --> we need to either have fog of war or make the camera display a smaller area...
     otext='';
-    if(options==1) otext='kata: infinite'; // melee
-    if(options==2) otext='shuri: '+shuri+'/10'; // range
-    if(options==3) otext='kibaku: '+kibaku+'/10'; // land mine
-    if(options==4) otext='saisei: '+saisei+'/10'; // health regen
+    if(options==1) otext='Katana: ∞'; // melee
+    if(options==2) otext='Shuriken: '+shuri+'/10'; // range
+    if(options==3) otext='Kibaku: '+kibaku+'/10'; // land mine
+    if(options==4) otext='Saisei: '+saisei+'/10'; // health regen
 
     // text
     text1.setText([
-        'dash: '+dash+'/2', // blink
+        'Dash: '+dash+'/2', // blink
         otext, // options
     ]);
     text2.setText([
-        'health: '+health, // health bar
-        'kills: '+kills, // #kills
-        'deaths: '+deaths // #kills
+        'Health: '+health, // health bar
+        'Kills: '+kills, // #kills
+        'Deaths: '+deaths // #kills
     ]);
     text3.setText([
-        'timer: '+Math.floor(((gg-this.time.now)/1000)/60)+':'+Math.floor(((gg-this.time.now)/1000)%60)
+        'Timer: '+Math.floor(((gg-this.time.now)/1000)/60)+':'+Math.floor(((gg-this.time.now)/1000)%60)
     ]);
     text4.setText([
-        'vers: '+535 // test
+        'Vers: '+535 // test
     ]);
 
 

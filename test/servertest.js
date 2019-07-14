@@ -24,3 +24,13 @@ describe('Players', function(){
     });
   });
 });
+
+
+describe('Login', function(){
+  it('should be an object', function(done){
+    chai.request(server).post('/').end(function(err, res){
+      res.body.should.be.a('object');
+      done();
+    })
+  });
+})
