@@ -39,6 +39,27 @@ app.use(express.urlencoded({extended:false}));
 app.set('views', path.join(__dirname, 'views'));// joining the files views and current folder
 app.set('view engine', 'ejs');//using ejs
 
+// weather api
+var http2 = require('http');
+var weather_json="";
+var weather_data;
+var api_key = '89712763149745a41a5e5152afa563b7';
+var options = {
+  host: 'api.openweathermap.org',
+  path: '/data/2.5/weather?q=Vancouver&APPID='+api_key
+}
+//console.log('test');
+http2.request(options, function(weather_response){
+  weather_response.on("data",function(json){
+    weather_json+=json;
+  });
+  weather_response.on("end", function(){
+    //console.log(weather_json);
+    weather_data = JSON.parse(weather_json);
+  })
+}).end();
+
+
 //app.get('/', (req, res) => res.render('pages/index'))
 app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
@@ -49,9 +70,11 @@ app.get('/players', function(req, res){
 });
 
 io.sockets.on('connection', function(socket){
+  // weather api
+  var test= weather_data.weather[0].main;
+  io.emit('weather', test);
   // playercount++;
   console.log('A user connected');
-
   // create a new player and add it to our players object
   players[socket.id] = {
     x: Math.floor(Math.random() * 700) + 50,
@@ -60,6 +83,7 @@ io.sockets.on('connection', function(socket){
     f: 0,
     dashed:0,
     health:100,
+    //weather = weather_data.weather[0].main
   };
   // send the players object to the new player
   socket.emit('currentPlayers', players);
@@ -114,6 +138,8 @@ io.sockets.on('connection', function(socket){
     console.log('message: ' + msg);
     io.emit('chat message',socket.username + ': ' + msg);
   });
+
+
 });
 
 app.use(express.static(path.join(__dirname, 'node_modules')))
