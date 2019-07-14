@@ -33,7 +33,7 @@ var pointer;
 var mousex;
 var mousey;
 var vel=200; // velocity
-var velx=200, vely=200;
+var velx=vel, vely=vel;
 // objects
 var player;
 var wall;
@@ -84,6 +84,8 @@ function preload(){
     this.load.image('slash', 'assets/images/slash.png');
     this.load.image('shuri', 'assets/images/shuri.png');
     this.load.image('rain', 'assets/images/rain.png');
+    this.load.image('snow', 'assets/images/snow.png');
+    this.load.image('cloud', 'assets/images/cloud.png');
     this.load.spritesheet('ninja_up', 'assets/images/ninja_up.png', {frameWidth: 32, frameHeight: 32});
     this.load.spritesheet('ninja_down', 'assets/images/ninja_down.png', {frameWidth: 32, frameHeight: 32});
     this.load.spritesheet('ninja_left', 'assets/images/ninja_left.png', {frameWidth: 32, frameHeight: 32});
@@ -330,34 +332,44 @@ function create(){
     text4=this.add.text(700, 580, '', {fontFamily:'"Roboto Condensed"', fill: '#000'}).setScrollFactor(0);
     
     // weather effects
-    var particles = this.add.particles('rain');
+    var rain_particles = this.add.particles('rain');
+    var snow_particles = this.add.particles('snow');
+    var cloud_particles = this.add.particles('cloud');
     this.socket.on('weather', function(current_weather) {
+        //current_weather='Snow'; // testing only
         console.log(current_weather);
         // Thunderstorm, Drizzle, Rain, Snow, Clear, Clouds
         // Mist, Smoke, Haze, Dust, Fog, Sand, Dust, Ash, Squall, Tornado
-        if(current_weather=='Drizzle'){
-            // rain
-            particles.createEmitter({
-                // frame: 'blue',
+        if(current_weather=='Drizzle' || current_weather=='Rain'){
+            rain_particles.createEmitter({
+                x:{min:0, max: mapx},
+                y:{min:0, max: mapy},
+                lifespan:4000,
+                speedX: {min:0, max:-100},
+                speedY: {min:400, max:800},
+                scale: {start:0.5, end: 0},
+                quantity:12,
+            });
+        }
+        else if(current_weather=='Snow'){
+            snow_particles.createEmitter({
                 x:{min:0, max: mapx},
                 y:{min:0, max: mapy},
                 lifespan:2000,
-                speedX: {min:-100, max:-100},
-                speedY: {min:200, max:400},
-                scale: {start:1, end: 0},
+                speedX: {min:0, max:0},
+                speedY: {min:0, max:100},
+                scale: {start:0.5, end: 0},
                 quantity:4,
             });
         }
-        if(current_weather=='Clouds'){
-            // rain
-            particles.createEmitter({
-                // frame: 'blue',
+        else if(current_weather=='Clouds'){
+            cloud_particles.createEmitter({
                 x:{min:0, max: mapx},
                 y:{min:0, max: mapy},
-                lifespan:2000,
-                speedX: {min:-100, max:-100},
-                speedY: {min:200, max:400},
-                scale: {start:1, end: 0},
+                lifespan:20000,
+                speedX: {min:0, max:10},
+                speedY: {min:0, max:0},
+                scale: {start:10, end: 0},
                 quantity:4,
             });
         }
