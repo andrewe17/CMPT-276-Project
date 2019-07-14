@@ -208,6 +208,26 @@ function create(){
         }
 
     });
+
+    //submit chat message
+    $('form').submit(function(e){
+        e.preventDefault(); // prevents page reloading
+        self.socket.emit('chat message', $('#m').val());
+        $('#m').val('');
+        return false;
+    });
+
+    //append chat message
+    this.socket.on('chat message', function(msg){
+        $('#messages').append($('<li>').text(msg));
+    });
+    //append online user
+    this.socket.on('is_online', function(username) {
+        $('#messages').append($('<li>').html(username));
+    });
+    // ask username
+    var username = prompt('Please tell me your name');
+    this.socket.emit('username', username);
     
     // global time
     gg=this.time.now+(1000*60*10);
