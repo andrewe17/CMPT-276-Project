@@ -11,9 +11,21 @@
     "test": "node test.js"
   },
   "dependencies": {
+<<<<<<< Updated upstream
     "ejs": "^2.5.6",
     "express": "^4.15.2",
     "pg": "^7.11.0"
+=======
+    "amazejs": "^1.0.2",
+    "chai-http": "^4.3.0",
+    "ejs": "^2.5.6",
+    "express": "^4.17.1",
+    "generate-maze": "^0.2.0",
+    "http-server": "^0.11.1",
+    "npm": "^6.10.1",
+    "pg": "^7.11.0",
+    "socket.io": "^2.2.0"
+>>>>>>> Stashed changes
   },
   "devDependencies": {
     "request": "^2.81.0",
