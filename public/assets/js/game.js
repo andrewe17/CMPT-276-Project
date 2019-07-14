@@ -166,20 +166,28 @@ function create(){
             }
         });
     });
-    // katana slash
+    // receiving katana slash
     this.socket.on('playerSlashed', function (slashInfo) {
         var slash=self.physics.add.sprite(slashInfo.x, slashInfo.y, 'slash');
         slash.play('slash_anim');
         slash.killOnComplete = true;
     });
 
-    // shuriken
+     // receiving dash
+    this.socket.on('smoke_ani', function (smokeInfo) {
+        var smoke=self.physics.add.sprite(smokeInfo.x, smokeInfo.y, 'ninja');
+        smoke.play('ninja_smoke');
+        smoke.killOnComplete = true;
+    });
+    // receiving shuriken toss
     this.socket.on('shurikenToss', function (shurikenInfo) {
         var toss = self.physics.add.sprite(shurikenInfo.initX, shurikenInfo.initY, 'shuri');
         toss.play('shuri_anim');
         toss.setVelocityX(shurikenInfo.velX);
         toss.setVelocityY(shurikenInfo.velY);
     });
+
+    // receiving shuriken hit
     this.socket.on('shurikenHit', function (playerInfo){
         //console.log(playerInfo.playerId);
         //console.log(self.socket.id);
@@ -377,7 +385,9 @@ function update(){
                 var smoke=this.physics.add.sprite(this.ninja.x, this.ninja.y, 'ninja');
                 smoke.play('ninja_smoke');
                 smoke.killOnComplete = true;
-                //
+                
+                this.socket.emit('smoke', { x:this.ninja.x, y:this.ninja.y}); // dash location info
+
                 this.ninja.x+=Math.cos(angle)*100;
                 this.ninja.y+=Math.sin(angle)*100;
                 dashtime=this.time.now+200;
@@ -564,6 +574,7 @@ function pb(player, wall){
     else player.x+=0.1;
 }
 
+// shuriken hits target
 function shurihit(self, otherPlayer, ss){
     //ss.setVelocityX(0);
     //ss.setVelocityY(0);
