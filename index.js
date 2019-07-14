@@ -9,7 +9,9 @@ var http = require('http').createServer(app);
 var io = require('socket.io')(http);
 
 var players = {};
+
 //<<<<<<< Updated upstream
+
 
 // var pool = new Pool({
 //   user: 'postgres',
@@ -17,8 +19,10 @@ var players = {};
 //   host: 'localhost',
 //   database: 'postgres'
 // });
+
 //=======
 //>>>>>>> Stashed changes
+
 
 var pool = new Pool({
   connectionString : process.env.DATABASE_URL//connecting the database
@@ -33,11 +37,11 @@ var pool = new Pool({
 //  });
 
 
-app.use(express.static(path.join(__dirname, 'public')))//joining the files public and current folder
+app.use(express.static(path.join(__dirname, 'public')));//joining the files public and current folder
 app.use(express.json());
 app.use(express.urlencoded({extended:false}));
-app.set('views', path.join(__dirname, 'views'))// joining the files views and current folder
-app.set('view engine', 'ejs')//using ejs
+app.set('views', path.join(__dirname, 'views'));// joining the files views and current folder
+app.set('view engine', 'ejs');//using ejs
 
 //app.get('/', (req, res) => res.render('pages/index'))
 app.get('/', function(req, res){
@@ -54,6 +58,10 @@ io.sockets.on('connection', function(socket){
     x: Math.floor(Math.random() * 700) + 50,
     y: Math.floor(Math.random() * 500) + 50,
     playerId: socket.id,
+    f: 0,
+    dashed:0,
+    health:100,
+    //shuri:s[100]
   };
   // send the players object to the new player
   socket.emit('currentPlayers', players);
@@ -78,8 +86,20 @@ io.sockets.on('connection', function(socket){
   socket.on('playerMovement', function (movementData) {
     players[socket.id].x = movementData.x;
     players[socket.id].y = movementData.y;
+    players[socket.id].f = movementData.f;
+    players[socket.id].dashed = movementData.dashed;
     // emit a message to all players about the player that moved
     socket.broadcast.emit('playerMoved', players[socket.id]);
+  });
+
+  socket.on('playerSlash', function (slashData) {
+    // emit a message to all players about the player that moved
+    socket.broadcast.emit('playerSlashed', slashData);
+  });
+  
+  socket.on('shuriken', function (shurikenData) {
+    // emit a message to all players about the player that moved
+    socket.broadcast.emit('shurikenHit', shurikenData);
   });
 
   //show chat messages

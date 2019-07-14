@@ -68,6 +68,8 @@ var mousex;
 var mousey;
 var angle;
 
+
+
 function preload(){
     //this.load.image('van', 'assets/images/van.jpg'); // delete this
     this.load.image('wall', 'assets/images/wall.png');
@@ -89,28 +91,44 @@ function preload(){
     this.load.audio('swing',  ['assets/SwordSwing.mp3'] );
 }
 
+
+
+
 function create(){
+    // camera
+    this.cameras.main.setBounds(0, 0, mapx, mapy);
+    this.physics.world.setBounds(0, 0, mapx, mapy);
+
+    // background
+    this.add.image(mapy/2, mapy/2, 'back');
+
+    // // walls
+    wx = this.physics.add.staticGroup();
+    wy = this.physics.add.staticGroup();
+    maze();
+    // audio example: https://phaser.io/examples/v3/view/audio/web-audio/play-sound-on-keypress
+    // var swing = this.sound.add('swing');
+
+    // this.input.keyboard.on('keydown-SPACE', function () {
+    //     this.sound.stopAll();
+    // }, this);
+    // // for audio to play in the background, delete input function leaving "<name>.play();" inside create function
+    // this.input.keyboard.on('keydown-Z', function () {
+    //     swing.play();
+    // });
+
     var self = this;
     this.socket = io();
-<<<<<<< Updated upstream
     this.otherPlayers = this.physics.add.group();
     this.socket.on('currentPlayers', function (players) {
         Object.keys(players).forEach(function (id) {
             if (players[id].playerId === self.socket.id) {
                 addPlayer(self, players[id]);
-            } else {
+            }
+            else {
                 addOtherPlayers(self, players[id]);
             }
         });
-=======
-    
-    this.socket.on('currentPlayers', function (players) {
-      Object.keys(players).forEach(function (id) {
-        if (players[id].playerId === self.socket.id) {
-          addPlayer(self, players[id]);
-        }
-      });
->>>>>>> Stashed changes
     });
 
     this.socket.on('newPlayer', function (playerInfo) {
@@ -128,25 +146,44 @@ function create(){
     this.socket.on('playerMoved', function (playerInfo) {
         self.otherPlayers.getChildren().forEach(function (otherPlayer) {
             if (playerInfo.playerId === otherPlayer.playerId) {
+                console.log(playerInfo.dashed);
+                if(playerInfo.dashed==1){
+                    var smoke=self.physics.add.sprite(playerInfo.x, playerInfo.y, 'ninja');
+                    smoke.anims.play('ninja_smoke');
+                    smoke.killOnComplete = true;
+                }
                 otherPlayer.setPosition(playerInfo.x, playerInfo.y);
+
+                // animation handling of otherplayers
+                if(playerInfo.f==1) otherPlayer.anims.play('ninja_up');
+                else if(playerInfo.f==3) otherPlayer.anims.play('ninja_left');
+                else if(playerInfo.f==4) otherPlayer.anims.play('ninja_right');
+                else if(playerInfo.f==2) otherPlayer.anims.play('ninja_down');
             }
         });
     });
+    // katana slash
+    this.socket.on('playerSlashed', function (slashInfo) {
+        var slash=self.physics.add.sprite(slashInfo.x, slashInfo.y, 'slash');
+        slash.play('slash_anim');
+        slash.killOnComplete = true;
+    });
 
+
+    // shuriken
+    this.socket.on('shurikenHit', function (shurikenInfo) {
+        var toss = self.physics.add.sprite(shurikenInfo.initX, shurikenInfo.initY, 'shuri');
+        toss.play('shuri_anim');
+        toss.setVelocityX(shurikenInfo.velX);
+        toss.setVelocityY(shurikenInfo.velY);
+    });
     
-
-    // camera
-    this.cameras.main.setBounds(0, 0, mapx, mapy);
-    this.physics.world.setBounds(0, 0, mapx, mapy);
-
-    // background
-    this.add.image(mapy/2, mapy/2, 'back');
 
     // global time
     gg=this.time.now+(1000*60*10);
 
     // // keyboard
-     cursor = this.input.keyboard.createCursorKeys();
+    cursor = this.input.keyboard.createCursorKeys();
     w = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
     a = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
     s = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
@@ -159,15 +196,7 @@ function create(){
 
     // mouse
     pointer = this.input.activePointer; // mouse location relative to screen
-
-
-    // // walls
-    // wallx = this.physics.add.staticGroup();
-    // wally = this.physics.add.staticGroup();
-    // maze(mapx,mapy);
-    // this.physics.add.collider(this.ninja, wallx, fx);
-    // this.physics.add.collider(this.ninja, wally, fy);
-
+   
     // dash
     dash=0;
     dashtime=this.time.now;
@@ -242,24 +271,22 @@ function create(){
     
 }
 
-//var toggle=0;
-
-//var ourNinja;
 function addPlayer(self, playerInfo) {
-    //player = this.physics.add.sprite(playerInfo.x, playerInfo.y, 'ninja');
     self.ninja = self.physics.add.sprite(playerInfo.x, playerInfo.y, 'ninja');
-    ourNinja = self.ninja;
     self.ninja.setCollideWorldBounds(true);
     self.ninja.setVelocity(0, 0);
-    // camera follow player
     self.cameras.main.startFollow(self.ninja, true, 0.05, 0.05, 0.05, 0.05);
+    //self.ninja.healthText = self.add.text(playerInfo.x, playerInfo.y, playerInfo.health, {fontFamily:'"Roboto Condensed"', fill: '#000'});
+
+    self.physics.add.collider(self.ninja, wx, pb);
 }
 
 function addOtherPlayers(self, playerInfo) {
     const otherPlayer = self.physics.add.sprite(playerInfo.x, playerInfo.y, 'ninja');
     otherPlayer.playerId = playerInfo.playerId;
     self.otherPlayers.add(otherPlayer);
-}
+} 
+
 
 function update(){
     if(this.ninja){
@@ -269,24 +296,18 @@ function update(){
             else if(!this.ninja.anims.isPlaying) this.ninja.play('ninja_up');
             if(a.isDown || d.isDown) this.ninja.setVelocityY(-vel/2);
             else this.ninja.setVelocityY(-vel);
-
-            this.ninja.setVelocityY(-vel);
+            this.ninja.f=1;
         }
         else if(s.isDown){
             if(this.ninja.anims.getCurrentKey()!='ninja_down') this.ninja.play('ninja_down');
             else if(!this.ninja.anims.isPlaying) this.ninja.play('ninja_down');
             if(a.isDown || d.isDown) this.ninja.setVelocityY(vel/2);
             else this.ninja.setVelocityY(vel);
-
-            this.ninja.setVelocityY(vel);
+            this.ninja.f=2;
         }
         else{
-            if(this.ninja.anims.getCurrentKey()=='ninja_up'){
-                this.ninja.play('ninja_up');
-            }
-            if(this.ninja.anims.getCurrentKey()=='ninja_down'){
-                this.ninja.play('ninja_down');
-            }
+            if(this.ninja.anims.getCurrentKey()=='ninja_up') this.ninja.play('ninja_up');
+            if(this.ninja.anims.getCurrentKey()=='ninja_down') this.ninja.play('ninja_down');
             this.ninja.setVelocityY(0);
         }
 
@@ -295,8 +316,7 @@ function update(){
             else if(!this.ninja.anims.isPlaying) this.ninja.play('ninja_left');
             if(w.isDown || s.isDown) this.ninja.setVelocityX(-vel/2);
             else this.ninja.setVelocityX(-vel);
-
-            this.ninja.setVelocityX(-vel);
+            this.ninja.f=3;
         }
         else if(d.isDown){
             this.ninja.anims.resume();
@@ -304,23 +324,62 @@ function update(){
             else if(!this.ninja.anims.isPlaying) this.ninja.play('ninja_right');
             if(w.isDown || s.isDown) this.ninja.setVelocityX(vel/2);
             else this.ninja.setVelocityX(vel);
-
-            this.ninja.setVelocityX(vel);
+            this.ninja.f=4;
         }
         else{
-            if(this.ninja.anims.getCurrentKey()=='ninja_left'){
-                this.ninja.play('ninja_left');
-            }
-            if(this.ninja.anims.getCurrentKey()=='ninja_right'){
-                this.ninja.play('ninja_right');
-            }
+            if(this.ninja.anims.getCurrentKey()=='ninja_left') this.ninja.play('ninja_left');
+            if(this.ninja.anims.getCurrentKey()=='ninja_right') this.ninja.play('ninja_right');
             this.ninja.setVelocityX(0);
         }
+
+        // mouse
+        pointer = this.input.activePointer; // refresh coordinate
+        if(this.ninja.x<400) mousex=pointer.x-this.ninja.x; // distance between mouse & this.ninja
+        else if(this.ninja.x>(mapx-400)) mousex=pointer.x-(this.ninja.x-(mapx-800));
+        else mousex=pointer.x-400;
+        if(this.ninja.y<300) mousey=pointer.y-this.ninja.y; // distance between mouse & this.ninja
+        else if(this.ninja.y>(mapy-300)) mousey=pointer.y-(this.ninja.y-(mapy-600));
+        else  mousey=pointer.y-300;
+        angle = Math.atan(mousey/mousex); // angle between mouse & this.ninja
+        if(mousex<0) angle+=Math.PI;
+
+        // dash
+        if(space.isDown && dash>0){
+            if(this.time.now>dashtime){
+                var smoke=this.physics.add.sprite(this.ninja.x, this.ninja.y, 'ninja');
+                smoke.play('ninja_smoke');
+                smoke.killOnComplete = true;
+                //
+                this.ninja.x+=Math.cos(angle)*100;
+                this.ninja.y+=Math.sin(angle)*100;
+                dashtime=this.time.now+200;
+                dash--;
+                dashreg=this.time.now+10000; // only 2 dashes
+                this.ninja.dash=1;
+            }
+        }
+        if(this.time.now>dashreg){ // dash regen
+            if(dash<2){
+                dashreg=this.time.now+10000;
+                dash++;
+            }
+            else{
+                dashreg=this.time.now;
+            }
+        }
+
         var x = this.ninja.x;
         var y = this.ninja.y;
+        var f = this.ninja.f;
+        var dashed = this.ninja.dashed;
+        text4.setText([
+            this.ninja.f
+        ]);
+        //var d = angle;
 
         if (this.ninja.oldPosition && (x !== this.ninja.oldPosition.x || y !== this.ninja.oldPosition.y)) {
-            this.socket.emit('playerMovement', { x: this.ninja.x, y: this.ninja.y });
+            this.socket.emit('playerMovement', { x:this.ninja.x, y:this.ninja.y, f:this.ninja.f, dashed:this.ninja.dashed}); // send player info to server
+            this.ninja.dashed=0;
         }
 
         this.ninja.oldPosition = {
@@ -330,186 +389,153 @@ function update(){
         };
 
     }
-    
 
-    // if(one.isDown) options=1; // items
-    // if(two.isDown) options=2;
-    // if(three.isDown) options=3;
-    // if(four.isDown) options=4;
+   if(one.isDown) options=1; // items
 
-    // // mouse
-    // // pointer = this.input.activePointer; // refresh coordinate
-    // // if(this.ninja.x<400) mousex=pointer.x-this.ninja.x; // distance between mouse & this.ninja
-    // // else if(this.ninja.x>(mapx-400)) mousex=pointer.x-(this.ninja.x-(mapx-800));
-    // // else mousex=pointer.x-400;
-    // // if(this.ninja.y<300) mousey=pointer.y-this.ninja.y; // distance between mouse & this.ninja
-    // // else if(this.ninja.y>(mapy-300)) mousey=pointer.y-(this.ninja.y-(mapy-600));
-    // // else  mousey=pointer.y-300;
-    // // angle = Math.atan(mousey/mousex); // angle between mouse & this.ninja
-    // // if(mousex<0) angle+=Math.PI;
+    if(two.isDown) options=2;
+    if(three.isDown) options=3;
+    if(four.isDown) options=4;
 
-    // // dash
-    // if(space.isDown && dash>0){
-    //     if(this.time.now>dashtime){
-    //         var smoke=this.physics.add.sprite(this.ninja.x, this.ninja.y, 'ninja');
-    //         smoke.play('ninja_smoke');
-    //         smoke.killOnComplete = true;
-    //         //
-    //         this.ninja.x+=Math.cos(angle)*100;
-    //         this.ninja.y+=Math.sin(angle)*100;
-    //         dashtime=this.time.now+200;
-    //         dash--;
-    //         dashreg=this.time.now+10000; // only 2 dashes
-    //     }
-    // }
-    // if(this.time.now>dashreg){ // dash regen
-    //     if(dash<2){
-    //         dashreg=this.time.now+10000;
-    //         dash++;
-    //     }
-    //     else{
-    //         dashreg=this.time.now;
-    //     }
-    // }
 
-    // // use items
-    // if(pointer.leftButtonDown()){ // left click
-    //     if(options==1 && this.time.now>katatime && kata>0){
-    //         var slash=this.physics.add.sprite(this.ninja.x+Math.cos(angle)*32, this.ninja.y+Math.sin(angle)*32, 'slash');
-    //         slash.play('slash_anim');
-    //         slash.killOnComplete = true;
-    //         // if hit -50 hp
-    //         katatime=this.time.now+100;
-    //         kata--;
-    //         katareg=this.time.now+1000;
-    //     }
-    //     if(options==2 && this.time.now>shuritime && shuri>0){
-    //         var toss=this.physics.add.sprite(this.ninja.x+Math.cos(angle)*32, this.ninja.y+Math.sin(angle)*32, 'shuri');
-    //         toss.play('shuri_anim');
-    //         toss.setVelocityX(Math.cos(angle)*300);
-    //         toss.setVelocityY(Math.sin(angle)*300);
-    //         // if hit -10 hp
-    //         shuritime=this.time.now+100;
-    //         shuri--;
-    //         shurireg=this.time.now+1000;
-    //     }
-    // }
 
-    // //regen
-    // if(this.time.now>katareg){ // kata regen
-    //     if(kata<10){
-    //         katareg=this.time.now+1000;
-    //         kata++;
-    //     }
-    //     else{
-    //         katareg=this.time.now;
-    //     }
-    // }
-    // if(this.time.now>shurireg){ // shuri regen
-    //     if(shuri<10){
-    //         shurireg=this.time.now+1000;
-    //         shuri++;
-    //     }
-    //     else{
-    //         shurireg=this.time.now;
-    //     }
-    // }
+    // use items
+    if(pointer.leftButtonDown()){ // left click
+        if(options==1 && this.time.now>katatime && kata>0){
+
+            var slashx = this.ninja.x+Math.cos(angle)*32;
+            var slashy = this.ninja.y+Math.sin(angle)*32;
+            var slash = this.physics.add.sprite(slashx, slashy, 'slash');
+            slash.play('slash_anim');
+            slash.killOnComplete = true;
+            this.socket.emit('playerSlash', { x:slashx, y:slashy}); // slash location info
+
+            // if hit -50 hp
+            katatime=this.time.now+100;
+            kata--;
+            katareg=this.time.now+1000;
+        }
+
+        if(options==2 && this.time.now>shuritime && shuri>0){
+            var initX = this.ninja.x+Math.cos(angle)*32;
+            var initY = this.ninja.y+Math.sin(angle)*32;
+            
+            var toss=this.physics.add.sprite(initX, initY, 'shuri');
+            toss.play('shuri_anim');
+            
+            var shuri_now=;
+            var velX = Math.cos(angle)*300;
+            var velY = Math.sin(angle)*300;
+            toss.setVelocityX(velX);
+            toss.setVelocityY(velY);
+            this.socket.emit('shuriken', { initX:initX, initY:initY, velX:velX, velY:velY, now:now}); // slash location info
+            // if hit -10 hp
+            if()
+                this.toss.removeInteractive();
+            shuritime=this.time.now+100;
+            shuri--;
+            shurireg=this.time.now+1000;
+        }
+    }
+
+    //regen
+    if(this.time.now>katareg){ // kata regen
+        if(kata<10){
+            katareg=this.time.now+1000;
+            kata++;
+        }
+        else{
+            katareg=this.time.now;
+        }
+    }
+    if(this.time.now>shurireg){ // shuri regen
+        if(shuri<10){
+            shurireg=this.time.now+1000;
+            shuri++;
+        }
+        else{
+            shurireg=this.time.now;
+        }
+    }
 
     // // SPAWNING POINTS
     // // UPGRADE AREA: UPGRADE CHANGED TO OPTIONS 1,2,3,4
     // // UPGRADES: #SHURIKENS, SHURIKEN SPEED, REGEN SPEED, DAMAGE, EXPLOSION RADIUS
     // // limited views --> we need to either have fog of war or make the camera display a smaller area...
-    // otext='';
-    // if(options==1) otext='kata: infinite'; // melee
-    // if(options==2) otext='shuri: '+shuri+'/10'; // range
-    // if(options==3) otext='kibaku: '+kibaku+'/10'; // land mine
-    // if(options==4) otext='saisei: '+saisei+'/10'; // health regen
+    otext='';
+    if(options==1) otext='kata: infinite'; // melee
+    if(options==2) otext='shuri: '+shuri+'/10'; // range
+    if(options==3) otext='kibaku: '+kibaku+'/10'; // land mine
+    if(options==4) otext='saisei: '+saisei+'/10'; // health regen
 
-    // // text
-    // text1.setText([
-    //     'dash: '+dash+'/2', // blink
-    //     otext, // options
-    // ]);
-    // text2.setText([
-    //     'health: '+health, // health bar
-    //     'kills: '+kills, // #kills
-    //     'deaths: '+deaths // #kills
-    // ]);
-    // text3.setText([
-    //     'timer: '+Math.floor(((gg-this.time.now)/1000)/60)+':'+Math.floor(((gg-this.time.now)/1000)%60)
-    // ]);
-    // text4.setText([
-    //     'vers: '+535 // test
-    // ]);
+    // text
+    text1.setText([
+        'dash: '+dash+'/2', // blink
+        otext, // options
+    ]);
+    text2.setText([
+        'health: '+health, // health bar
+        'kills: '+kills, // #kills
+        'deaths: '+deaths // #kills
+    ]);
+    text3.setText([
+        'timer: '+Math.floor(((gg-this.time.now)/1000)/60)+':'+Math.floor(((gg-this.time.now)/1000)%60)
+    ]);
+    text4.setText([
+        'vers: '+535 // test
+    ]);
 }
 
-// //checks collision
-// function fx(player, wall){
-//     if(wall.y>player.y) player.y-=3;
-//     else player.y+=3;
+// create maze
+function maze(){
+    var maze=[
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,2,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,1,0,0,0,1,0,1,1,1,1,1,0,1,0,0,0,1,0,1,1,1,1,1,0,0,1,1,1,0,0,0,0,0,0,1,1,1,1,0,0,0,1,1,1,0,0,1,1,1,1,1,0,1,0,0,0,1,0,0],
+        [0,0,1,1,0,0,1,0,0,0,1,0,0,0,1,1,0,0,1,0,0,0,0,1,0,0,1,0,0,0,1,0,0,0,0,0,1,0,0,0,1,0,1,0,0,0,1,0,1,0,0,0,0,0,1,0,0,0,1,0,0],
+        [0,0,1,0,1,0,1,0,0,0,1,0,0,0,1,0,1,0,1,0,0,0,0,1,0,0,1,0,0,0,1,0,1,1,1,0,1,0,0,0,1,0,1,0,0,0,1,0,1,1,1,1,1,0,1,1,1,1,1,0,0],
+        [0,0,1,0,0,1,1,0,0,0,1,0,0,0,1,0,0,1,1,0,1,0,0,1,0,0,1,1,1,1,1,0,0,0,0,0,1,0,0,0,1,0,1,1,1,1,1,0,0,0,0,0,1,0,1,0,0,0,1,0,0],
+        [0,0,1,0,0,0,1,0,1,1,1,1,1,0,1,0,0,0,1,0,1,1,1,1,0,0,1,0,0,0,1,0,0,0,0,0,1,1,1,1,0,0,1,0,0,0,1,0,1,1,1,1,1,0,1,0,0,0,1,0,0],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    ];
+    for (var i=0; i<=34; i++){
+        for (var j=0; j<=60; j++){
+            if(maze[i][j]==1) wx.create((j*50)+100,(i*50)+100, 'wallx');
+            if(maze[i][j]==2) ; // rune
+        }
+    }
+}
 
-// }
-// function fy(player, wall){
-//     if(wall.x>player.x) player.x-=3;
-//     else player.x+=3;
-// }
-
-// //create maze
-// function maze(){
-//     var maze=[
-//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,2,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-//         [0,0,1,0,0,0,1,0,1,1,1,1,1,0,1,0,0,0,1,0,1,1,1,1,1,0,0,1,1,1,0,0,0,0,0,0,1,1,1,1,0,0,0,1,1,1,0,0,1,1,1,1,1,0,1,0,0,0,1,0,0],
-//         [0,0,1,1,0,0,1,0,0,0,1,0,0,0,1,1,0,0,1,0,0,0,0,1,0,0,1,0,0,0,1,0,0,0,0,0,1,0,0,0,1,0,1,0,0,0,1,0,1,0,0,0,0,0,1,0,0,0,1,0,0],
-//         [0,0,1,0,1,0,1,0,0,0,1,0,0,0,1,0,1,0,1,0,0,0,0,1,0,0,1,0,0,0,1,0,1,1,1,0,1,0,0,0,1,0,1,0,0,0,1,0,1,1,1,1,1,0,1,1,1,1,1,0,0],
-//         [0,0,1,0,0,1,1,0,0,0,1,0,0,0,1,0,0,1,1,0,1,0,0,1,0,0,1,1,1,1,1,0,0,0,0,0,1,0,0,0,1,0,1,1,1,1,1,0,0,0,0,0,1,0,1,0,0,0,1,0,0],
-//         [0,0,1,0,0,0,1,0,1,1,1,1,1,0,1,0,0,0,1,0,1,1,1,1,0,0,1,0,0,0,1,0,0,0,0,0,1,1,1,1,0,0,1,0,0,0,1,0,1,1,1,1,1,0,1,0,0,0,1,0,0],
-//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-//     ];
-
-//     for (var i=0; i<=34; i++){
-//         for (var j=0; j<=60; j++){
-//             if(maze[i][j]==1){
-//                 if(maze[i][j-1]==0 || maze[i][j+1]==0){
-//                     wally.create((j*50)+100,(i*50)+100, 'wally');
-//                 }
-//                 else{
-//                     wallx.create((j*50)+100,(i*50)+100, 'wallx');
-//                 }
-//             }
-//             if(maze[i][j]==2){
-//                 // rune
-//             }
-//         }
-//     }
-// }
-
-
-
+//checks collision
+function pb(player, wall){
+    if(wall.y>player.y) player.y-=0.1;
+    else player.y+=0.1;
+    if(wall.x>player.x) player.x-=0.1;
+    else player.x+=0.1;
+}
