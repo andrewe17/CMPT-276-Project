@@ -17,33 +17,6 @@
 	<form action="">
 		<input id="m" autocomplete="off" /><button>Send</button>
 	</form>
-
-<!-- <script>
-$(function () {
- var socket = io();
-
- //submit chat message
- $('form').submit(function(e){
-	 e.preventDefault(); // prevents page reloading
-	 socket.emit('chat message', $('#m').val());
-	 $('#m').val('');
-	 return false;
- });
-
- //append chat message
- socket.on('chat message', function(msg){
-		$('#messages').append($('<li>').text(msg));
-	});
-	//append online user
-	socket.on('is_online', function(username) {
-					 $('#messages').append($('<li>').html(username));
-			 });
-	 // ask username
-	 var username = prompt('Please tell me your name');
-	socket.emit('username', username);
-});
-
-</script> -->
 </body>
 </body>
 </html>
