@@ -171,7 +171,7 @@ function create(){
 
 
     // shuriken
-    this.socket.on('shurikenHit', function (shurikenInfo) {
+    this.socket.on('throw', function (shurikenInfo) {
         var toss = self.physics.add.sprite(shurikenInfo.initX, shurikenInfo.initY, 'shuri');
         toss.play('shuri_anim');
         toss.setVelocityX(shurikenInfo.velX);
@@ -388,8 +388,8 @@ function update(){
 
     }
 
-   if(one.isDown) options=1; // items
-
+    // items
+    if(one.isDown) options=1;
     if(two.isDown) options=2;
     if(three.isDown) options=3;
     if(four.isDown) options=4;
@@ -416,19 +416,14 @@ function update(){
         if(options==2 && this.time.now>shuritime && shuri>0){
             var initX = this.ninja.x+Math.cos(angle)*32;
             var initY = this.ninja.y+Math.sin(angle)*32;
-            
             var toss=this.physics.add.sprite(initX, initY, 'shuri');
-            toss.play('shuri_anim');
-            
-            var shuri_now=;
+            toss.play('shuri_anim');         
             var velX = Math.cos(angle)*300;
             var velY = Math.sin(angle)*300;
             toss.setVelocityX(velX);
             toss.setVelocityY(velY);
-            this.socket.emit('shuriken', { initX:initX, initY:initY, velX:velX, velY:velY, now:now}); // slash location info
+            this.socket.emit('shuriken', { initX:initX, initY:initY, velX:velX, velY:velY}); // slash location info
             // if hit -10 hp
-            if()
-                this.toss.removeInteractive();
             shuritime=this.time.now+100;
             shuri--;
             shurireg=this.time.now+1000;

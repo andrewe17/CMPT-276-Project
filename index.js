@@ -76,22 +76,27 @@ io.sockets.on('connection', function(socket){
     io.emit('disconnect', socket.id);
   });
 
+  // Broadcast Player Movement
   socket.on('playerMovement', function (movementData) {
     players[socket.id].x = movementData.x;
     players[socket.id].y = movementData.y;
     players[socket.id].f = movementData.f;
     players[socket.id].dashed = movementData.dashed;
-    // emit a message to all players about the player that moved
     socket.broadcast.emit('playerMoved', players[socket.id]);
   });
 
+  // broadcast katana
   socket.on('playerSlash', function (slashData) {
-    // emit a message to all players about the player that moved
     socket.broadcast.emit('playerSlashed', slashData);
   });
   
-  socket.on('shuriken', function (shurikenData) {
-    // emit a message to all players about the player that moved
+  // broadcast shuriken throw
+  socket.on('shuriken', function (throwData) {
+    socket.broadcast.emit('throw', throwData);
+  });
+
+  // broadcast shuriken throw
+  socket.on('dash_anim', function (shurikenData) {
     socket.broadcast.emit('shurikenHit', shurikenData);
   });
 
