@@ -5,7 +5,7 @@ function signin(){
   console.log("recieving data");
   $.ajax({
       method: 'POST',
-      url:'./signin',
+      url:'/signin',
       success: success
     });
 }
@@ -13,7 +13,7 @@ function signup(){
 
   $.ajax({
       method: 'POST',
-      url:'/signup',
+      url:'./signup',
       success: check
     });
 }
