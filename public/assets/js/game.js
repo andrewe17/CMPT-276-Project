@@ -78,7 +78,7 @@ function preload(){
     this.load.image('wally', 'assets/images/wally.png');
     this.load.image('twall', 'assets/images/Twall.png');
     this.load.image('slash', 'assets/images/slash.png');
-    this.load.image('shuriken', 'assets/images/shuriken.png');
+    // this.load.image('shuriken', 'assets/images/shuriken.png');
     this.load.image('van', 'assets/images/van.jpg');
     this.load.image('ninja', 'assets/images/ninja.png');
     this.load.image('slash', 'assets/images/slash.png');
@@ -189,7 +189,8 @@ function create(){
     });
     // receiving shuriken toss
     this.socket.on('shurikenToss', function (shurikenInfo) {
-        var toss = self.physics.add.sprite(shurikenInfo.initX, shurikenInfo.initY, 'shuri');
+        var toss = ss.create(shurikenInfo.initX, shurikenInfo.initY, 'shuri');
+        //var toss = self.physics.add.sprite(shurikenInfo.initX, shurikenInfo.initY, 'shuri');
         toss.play('shuri_anim');
         toss.setVelocityX(shurikenInfo.velX);
         toss.setVelocityY(shurikenInfo.velY);
@@ -205,7 +206,6 @@ function create(){
             self.ninja.healthText.setText(playerInfo.health);
         }
         else{
-
             self.otherPlayers.getChildren().forEach(function (otherPlayer) {
                 if (playerInfo.playerId === otherPlayer.playerId) {
                     console.log('otherplayer');
@@ -214,7 +214,6 @@ function create(){
                 }
             });
         }
-
     });
 
     //submit chat message
@@ -259,6 +258,7 @@ function create(){
     dash=0;
     dashtime=this.time.now;
     dashreg=this.time.now;
+
     // animations
     this.anims.create({
         key: 'ninja_up',
@@ -302,11 +302,16 @@ function create(){
         frameRate: 16,
         repeat: -1
     });
-    // shuris
-    ss = this.physics.add.group();
+
+    // collisions
+    ss = this.physics.add.group(); // shuris
     this.physics.add.overlap(this.otherPlayers, ss, function(player, ss){
         shurihit(self, player, ss);
     });
+    this.physics.add.collider(wx, ss, function(wx, ss){ // wall and shuri
+        collider_shuri_wall(wx, ss);
+    });
+
 
     // weapons
     options=1;
@@ -366,7 +371,7 @@ function create(){
             cloud_particles.createEmitter({
                 x:{min:0, max: mapx},
                 y:{min:0, max: mapy},
-                lifespan:20000,
+                lifespan:10000,
                 speedX: {min:0, max:10},
                 speedY: {min:0, max:0},
                 scale: {start:10, end: 0},
@@ -386,6 +391,7 @@ function addPlayer(self, playerInfo) {
     self.cameras.main.startFollow(self.ninja, true, 0.05, 0.05, 0.05, 0.05);
     self.ninja.healthText = self.add.text(playerInfo.x - 12, playerInfo.y - 30, playerInfo.health, {fontFamily:'"Roboto Condensed"', fill: '#ffffff'});
     self.physics.add.collider(self.ninja, wx, pb);
+    self.physics.add.collider(self.ninja, ss, collider_shuri_wall);
     self.physics.add.overlap(self.ninja, waterLayer, slowdown);
     self.ninja.setSize(15,10).setOffset(8,20);
 }
@@ -843,6 +849,7 @@ function pb(player, wall){
     if(wall.x>player.x) player.x-=0.1;
     else player.x+=0.1;
 }
+
 var reduced = false;
 function slowdown(player, wall){
     if(!reduced){
@@ -852,14 +859,12 @@ function slowdown(player, wall){
 }
 
 
-// shuriken hits target
+// collisions
 function shurihit(self, otherPlayer, ss){
-    //ss.setVelocityX(0);
-    //ss.setVelocityY(0);
-    //
     ss.destroy();
-    //otherPlayer.health -=25;
-    //console.log(otherPlayer.health);
- //   self.otherPlayers[otherPlayer.playerId].healthText.setText(otherPlayer.health);
     self.socket.emit('shuri_hit', {id:otherPlayer.playerId});
+}
+function collider_shuri_wall(wx, ss){
+    ss.destroy();
+    //self.socket.emit('collider_shuri_wall', {id:otherPlayer.playerId});
 }
