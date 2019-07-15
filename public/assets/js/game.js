@@ -588,7 +588,7 @@ function update(){
             var slashy = this.ninja.y+Math.sin(angle)*0;
             var slash = this.physics.add.sprite(slashx, slashy, 'slash');
             slash.play('kata_anim');
-            slash.killOnComplete = true;
+            //slash.killOnComplete = true;
             this.socket.emit('playerSlash', { x:slashx, y:slashy}); // slash location info
             // if hit -50 hp
             katatime = this.time.now+300;
