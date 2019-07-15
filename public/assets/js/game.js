@@ -586,7 +586,7 @@ function update(){
             // if hit -50 hp
             katatime = this.time.now+100;
             kata--;
-            katareg = this.time.now+100;
+            katareg = this.time.now+500;
         }
 
         if(options==2 && this.time.now>shuritime && shuri>0){
