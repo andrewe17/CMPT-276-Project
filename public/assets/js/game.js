@@ -102,7 +102,7 @@ function preload(){
     this.load.spritesheet('ninja_left', 'assets/images/ninja_left.png', {frameWidth: 32, frameHeight: 32});
     this.load.spritesheet('ninja_right', 'assets/images/ninja_right.png', {frameWidth: 32, frameHeight: 32});
     this.load.spritesheet('ninja_smoke', 'assets/images/ninja_smoke.png', {frameWidth: 32, frameHeight: 32});
-    this.load.spritesheet('slash_anim', 'assets/images/slash_anim.png', {frameWidth: 16, frameHeight: 16});
+    this.load.spritesheet('slash_anim', 'assets/images/kata_anim.png', {frameWidth: 48, frameHeight: 27});
     this.load.spritesheet('shuri_anim', 'assets/images/shuri_anim.png', {frameWidth: 13, frameHeight: 13});
     
     this.load.audio('katana',  ['assets/audio/Sound-katana.mp3'] );
@@ -345,7 +345,7 @@ function create(){
         key: 'slash_anim',
         frames: this.anims.generateFrameNumbers('slash_anim'),
         frameRate: 16,
-        repeat: 1
+        repeat: 0
     });
     this.anims.create({
         key: 'shuri_anim',
