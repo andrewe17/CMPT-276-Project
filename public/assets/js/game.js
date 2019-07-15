@@ -215,7 +215,7 @@ function create(){
     this.socket.on('shurikenKill', function (playerInfo){
         if(playerInfo.playerId === self.socket.id){
             console.log('increase kills');
-            kills++;
+            kills=playerInfo.kills;
         }
     });
 
