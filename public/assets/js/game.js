@@ -28,6 +28,16 @@ var gg;
 var cursor;
 var w, a, s, d, space;
 var one, two, three, four;
+//audio
+var m, n;
+var flash;
+var katana;
+var shuriThrow;
+var hit;
+var music;
+var mute_sound=0;
+var mute_music=0;
+var rng;
 // mouse
 var pointer;
 var mousex;
@@ -95,13 +105,50 @@ function preload(){
     this.load.spritesheet('slash_anim', 'assets/images/slash_anim.png', {frameWidth: 16, frameHeight: 16});
     this.load.spritesheet('shuri_anim', 'assets/images/shuri_anim.png', {frameWidth: 13, frameHeight: 13});
     
-    this.load.audio('swing',  ['assets/SwordSwing.mp3'] );
+    this.load.audio('katana',  ['assets/audio/Sound-katana.mp3'] );
+    this.load.audio('flash',  ['assets/audio/Sound-dash.mp3'] );
+    this.load.audio('hit',  ['assets/audio/Sound-hit.mp3'] );
+    this.load.audio('shuriThrow',  ['assets/audio/Sound-throw.mp3'] );
+    this.load.audio('rain',  ['assets/audio/Background-rain.mp3'] );
+    this.load.audio('snow',  ['assets/audio/Background-snow.mp3'] );
+    this.load.audio('thunder',  ['assets/audio/Background-thunder.mp3'] );
+    this.load.audio('ancients',  ['assets/audio/Music-Song of the Ancients.mp3'] );
+    this.load.audio('loneliness',  ['assets/audio/Music-Loneliness.mp3'] );
+    this.load.audio('strike',  ['assets/audio/Music-Strong and Strike.mp3'] );
+    this.load.audio('wretched',  ['assets/audio/Music-Wretched Weaponry.mp3'] );
 }
 
 
 
 
 function create(){
+
+    // effects audio
+    katana = this.sound.add('katana');
+    flash = this.sound.add('flash');
+    hit = this.sound.add('hit');
+    shuriThrow = this.sound.add('shuriThrow');
+    // music audio
+    rng = Math.floor((Math.random() * 4) + 1);
+    if(rng==1){
+        music = this.sound.add('ancients');
+    }
+    else if(rng==2){
+        music = this.sound.add('loneliness');
+    }
+    else if(rng==3){
+        music = this.sound.add('wretched');
+    }
+    else if(rng==4){
+        music = this.sound.add('strike');
+    }
+    // unlock sound
+    if (this.sound.locked)
+        this.sound.unlock();
+    music.play({
+        volume: .1,
+        loop: true
+    });
     // camera
     this.cameras.main.setBounds(0, 0, mapx, mapy);
     this.physics.world.setBounds(0, 0, mapx, mapy);
@@ -253,8 +300,8 @@ function create(){
     two = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TWO);
     three = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.THREE);
     four = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.FOUR);
-    m = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.m);
-    n = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.n);
+    m = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M);
+    n = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.N);
     // mouse
     pointer = this.input.activePointer; // mouse location relative to screen
 
@@ -328,10 +375,6 @@ function create(){
     kibaku=0;
     saisei=0;
     // probably better if ninjas have to search for items!!
-
-    // audio
-    mute_sound=0;
-    mute_music=0;
 
     // misc
     health=100;
@@ -416,14 +459,6 @@ function addOtherPlayers(self, playerInfo) {
 
 
 function update(){
-   // mute audio
-    this.input.keyboard.on('keydown-M', function () {
-        this.sound.stopAll();
-    }, this);
-
-    // background audio dependent on weather
-
-
     if(this.ninja){
         this.ninja.healthText.x = this.ninja.x - 12;
         this.ninja.healthText.y = this.ninja.y - 30;
@@ -531,12 +566,6 @@ function update(){
         };
 
     }
-    
-    //audio
-    if(m.isDown && mute_music==1) mute_music=0;
-    else mute_music=1;
-    if(n.isDown && mute_sound==1) mute_sound=0;
-    else mute_sound=1;
 
     // items
     if(one.isDown) options=1; 
@@ -547,12 +576,7 @@ function update(){
     // use items
     if(pointer.leftButtonDown()){ // left click
         if(options==1 && this.time.now>katatime && kata>0){
-            // katana audio
-            if(mute_sound==1){
-                var swing = this.sound.add('swing');
-                swing.play();
-            }
-
+            katana.play();
             var slashx = this.ninja.x+Math.cos(angle)*32;
             var slashy = this.ninja.y+Math.sin(angle)*32;
             var slash = this.physics.add.sprite(slashx, slashy, 'slash');
@@ -604,7 +628,26 @@ function update(){
             shurireg=this.time.now;
         }
     }
+    // mute audio
+    if(m.isDown && mute_music==0) mute_music=1;
+    else if(m.isDown && mute_music==1) mute_music=0;
+    if(mute_music==1) music.setMute(true);
+    else music.setMute(false);
 
+    if(n.isDown && mute_sound==0) mute_sound=1;
+    else if(n.isDown && mute_sound==1) mute_sound=0;
+    if(mute_sound==1){
+        katana.setMute(true);
+        flash.setMute(true);
+        hit.setMute(true);
+        shuriThrow.setMute(true);
+    }
+    else{
+        katana.setMute(false);
+        flash.setMute(false);
+        hit.setMute(false);
+        shuriThrow.setMute(false);
+    }
     // // SPAWNING POINTS
     // // UPGRADE AREA: UPGRADE CHANGED TO OPTIONS 1,2,3,4
     // // UPGRADES: #SHURIKENS, SHURIKEN SPEED, REGEN SPEED, DAMAGE, EXPLOSION RADIUS
