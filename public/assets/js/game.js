@@ -367,8 +367,8 @@ function create(){
     this.physics.add.overlap(this.otherPlayers, ss, function(player, ss){
         shurihit(self, player, ss);
     });
-    this.physics.add.overlap(this.otherPlayers, kk, function(player, kk){
-        katahit(self, player, kk);
+    this.physics.add.overlap(this.otherPlayers, kk, function(otherPlayers, kk){
+        katahit(self, otherPlayers, kk);
     });
     this.physics.add.collider(wx, ss, function(wx, ss){ // wall and shuri
         shuri_destroy(wx, ss);
@@ -588,12 +588,12 @@ function update(){
     // use items
     if(pointer.leftButtonDown()){ // left click
         if(options==1 && this.time.now>katatime && kata>0){
-            katana.play();
+            katana.play(); // sound
             var slashx = this.ninja.x+Math.cos(angle)*0;
             var slashy = this.ninja.y+Math.sin(angle)*0;
             var slash = kk.create(slashx, slashy, 'slash');
             slash.play('kata_anim');
-            //slash.killOnComplete = true;
+            slash.killOnComplete = true;
             this.socket.emit('playerSlash', { x:slashx, y:slashy}); // slash location info
             katatime = this.time.now+300;
             kata--;
@@ -897,6 +897,15 @@ function slowdown(player, wall){
 }
 
 // collisions
+function katahit(self, otherPlayer, kk){
+    kk.destroy();
+    if(otherPlayer.health<=50){
+        kills+=1;
+        console.log(self.socket.id);
+        self.socket.emit('shuri_kill', {id:self.socket.id});
+    }
+    self.socket.emit('kata_hit', {id:otherPlayer.playerId});
+}
 function shurihit(self, otherPlayer, ss){
     ss.destroy();
     if(otherPlayer.health<=25){
@@ -905,22 +914,6 @@ function shurihit(self, otherPlayer, ss){
         self.socket.emit('shuri_kill', {id:self.socket.id});
     }
     self.socket.emit('shuri_hit', {id:otherPlayer.playerId});
-}
-function katahit(self, otherPlayer, kk){
-    kk.destroy();
-    self.socket.emit('shuri_hit', {id:otherPlayer.playerId});
-    if(otherPlayer.health>50){
-        self.socket.emit('shuri_hit', {id:otherPlayer.playerId});
-    }
-    else if(otherPlayer.health>25){
-        self.socket.emit('shuri_hit', {id:otherPlayer.playerId});
-        self.socket.emit('shuri_kill', {id:self.socket.id});
-        kills+=1;
-    }
-    else{
-        self.socket.emit('shuri_kill', {id:self.socket.id});
-        kills+=1;
-    }
 }
 function shuri_destroy(wx, ss){
     ss.destroy();
