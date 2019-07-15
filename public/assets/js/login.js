@@ -20,15 +20,15 @@ function signup(){
 function success(json){
   console.log("testing");
   console.log(json);
-  if (json == 2) {
+  if (json.rowCount <= 0) {
     document.getElementById("Loginfail").style.display = "";
   }
 }
 function check(json){
-  if (json == 1) {
+  if (json.rowCount > 0) {
     document.getElementById("alert").style.display = "";
   }
-  else if (json == 0){
+  else {
     document.getElementById("id01").style.display = "none";
     document.getElementById("Success").style.display = "";
   }
