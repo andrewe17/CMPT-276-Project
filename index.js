@@ -168,15 +168,13 @@ app.post('/signin', async (req, res) => {//this updates the form when the form f
     const result = await client.query(que,
     value);
     // res.send(result.rowCount);
-    const temp = 2;
     if (result.rowCount > 0){//I noticed that if the queue returns true the rowCount is larger than 0
-      temp = 0;
-      res.send(temp);
+      res.send(result);
       res.redirect('/game.html');
       client.release();
     }
     else {
-      res.send(temp);
+      res.send(result);
       client.release();
     }
   } catch (err) {
@@ -194,17 +192,15 @@ app.post('/signup', async (req, res) => {//this updates the form when the form f
     const result = await client.query(que,
     value);
     // res.send(result.rowCount);
-    const temp = 1;
     if (result.rowCount > 0){//I noticed that if the queue returns true the rowCount is larger than 0
-      res.send(temp);
+      res.send(result);
       client.release();
     }
     else {
+      res.send(result);
       const value =[Math.floor(Math.random() * (100)),req.body.userup,req.body.psw,req.body.emailup]//randomly generated ID
       const result = await client.query('insert into login (id,username,password,email) values ($1,$2,$3,$4)',
       value);
-      temp = 0;
-      res.send(temp);
       client.release();
     }
 
