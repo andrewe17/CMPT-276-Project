@@ -584,7 +584,7 @@ function update(){
             slash.killOnComplete = true;
             this.socket.emit('playerSlash', { x:slashx, y:slashy}); // slash location info
             // if hit -50 hp
-            katatime = this.time.now+1000;
+            katatime = this.time.now+100;
             kata--;
             katareg = this.time.now+100;
         }
@@ -605,7 +605,7 @@ function update(){
             // if hit -10 hp
             shuritime=this.time.now+100;
             shuri--;
-            shurireg=this.time.now+100;
+            shurireg=this.time.now+1000;
         }
     }
 
