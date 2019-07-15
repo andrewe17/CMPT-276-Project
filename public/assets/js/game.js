@@ -593,7 +593,7 @@ function update(){
             var slashy = this.ninja.y+Math.sin(angle)*0;
             var slash = kk.create(slashx, slashy, 'slash');
             slash.play('kata_anim');
-            //slash.killOnComplete = true;
+            slash.killOnComplete = true;
             this.socket.emit('playerSlash', { x:slashx, y:slashy}); // slash location info
             katatime = this.time.now+300;
             kata--;
