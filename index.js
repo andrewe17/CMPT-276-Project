@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 const express = require('express')
 const path = require('path')
 
@@ -73,3 +74,199 @@ app.get('/db', async (req, res) => {//seting the database
 
 
 app.listen(PORT, () => console.log(`Listening on ${ PORT }`))
+=======
+const express = require('express')
+const path = require('path')
+
+const PORT = process.env.PORT || 5000
+const app = express();
+const { Pool } = require('pg');
+
+var http = require('http').createServer(app);
+var io = require('socket.io')(http);
+//var cors = require('cors');
+var players = {};
+
+// var pool = new Pool({
+//   user: 'postgres',
+//   password: 'root',
+//   host: 'localhost',
+//   database: 'postgres'
+// });
+
+var pool = new Pool({
+  connectionString : process.env.DATABASE_URL//connecting the database
+})
+
+// const { Pool } = require('pg');
+//    var pool = new Pool({
+//    user: 'jchan01010',
+//    password: 'jchanpass123',
+//    host: 'localhost',
+//    database: 'postgres'
+//  });
+
+
+app.use(express.static(path.join(__dirname, 'public')));//joining the files public and current folder
+app.use(express.json());
+app.use(express.urlencoded({extended:false}));
+
+//app.use('/', cors());
+
+app.set('views', path.join(__dirname, 'views'));// joining the files views and current folder
+app.set('view engine', 'ejs');//using ejs
+
+//app.get('/', (req, res) => res.render('pages/index'))
+app.get('/', function(req, res){
+  res.sendFile(__dirname + '/index.html');
+});
+
+app.get('/players', function(req, res){
+  res.send(players);
+});
+
+io.sockets.on('connection', function(socket){
+  // playercount++;
+  console.log('A user connected');
+
+  // create a new player and add it to our players object
+  players[socket.id] = {
+    x: Math.floor(Math.random() * 700) + 50,
+    y: Math.floor(Math.random() * 500) + 50,
+    playerId: socket.id,
+    f: 0,
+    dashed:0,
+    health:100,
+  };
+  // send the players object to the new player
+  socket.emit('currentPlayers', players);
+  // update all other players of the new player
+  socket.broadcast.emit('newPlayer', players[socket.id]);
+
+  // user connect (chat)
+  socket.on('username', function(username){
+    socket.username = username;
+    io.emit('is_online', '🔵 <i>' + socket.username + ' has connected.</i>');
+  });
+
+  // when a player disconnects, remove them from our players object
+  socket.on('disconnect', function(){ //on reload or exit
+    console.log('A user disconnected');
+    // remove this player from our players object
+    delete players[socket.id];
+    // emit a message to all players to remove this player
+    io.emit('disconnect', socket.id);
+  });
+
+  socket.on('playerMovement', function (movementData) {
+    players[socket.id].x = movementData.x;
+    players[socket.id].y = movementData.y;
+    players[socket.id].f = movementData.f;
+    players[socket.id].dashed = movementData.dashed;
+    socket.broadcast.emit('playerMoved', players[socket.id]);
+  });
+
+  // Broadcast Katana
+  socket.on('playerSlash', function (slashData) {
+    socket.broadcast.emit('playerSlashed', slashData);
+  });
+  // Broadcast Shuriken
+  socket.on('shuriken', function (shurikenData) {
+    socket.broadcast.emit('shurikenToss', shurikenData);
+  });
+  // Broadcast Smoke
+  socket.on('smoke', function (smokeData) {
+    socket.broadcast.emit('smoke_ani', smokeData);
+  });
+  // Broadcast shuriken hit
+  socket.on('shuri_hit', function (otherPlayer) {
+    players[otherPlayer.id].health = players[otherPlayer.id].health-25;
+    //console.log(player.id);
+    socket.broadcast.emit('shurikenHit', players[otherPlayer.id]);
+    socket.emit('shurikenHit', players[otherPlayer.id]);
+  });
+
+  //show chat messages
+  socket.on('chat message', function(msg){
+    console.log('message: ' + msg);
+    io.emit('chat message',socket.username + ': ' + msg);
+  });
+});
+
+app.use(express.static(path.join(__dirname, 'node_modules')))
+
+app.post('/signin', async (req, res) => {//this updates the form when the form from login is submited
+  try {
+    const que = 'SELECT username, password FROM login WHERE EXISTS (SELECT username, password FROM login WHERE login.username = $1 AND login.password = $2);'
+    const value =[req.body.user,req.body.password]
+    const client = await pool.connect()
+    const result = await client.query(que,
+    value);
+    // res.send(result.rowCount);
+    const temp = 2;
+    if (result.rowCount > 0){//I noticed that if the queue returns true the rowCount is larger than 0
+      temp = 0;
+      res.send(temp);
+      res.redirect('/game.html');
+    }
+    else {
+       res.send(temp);
+    }
+  } catch (err) {
+      res.send("Error " + err);
+  }
+})
+
+
+app.post('/signup', async (req, res) => {//this updates the form when the form from login is submited
+  try {
+    const que = 'SELECT username, password FROM login WHERE EXISTS (SELECT username FROM login WHERE login.username = $1);'
+    const value =[req.body.user,req.body.password]
+    const client = await pool.connect()
+    const result = await client.query(que,
+    value);
+    const temp = 1;
+    // res.send(result.rowCount);
+    if (result.rowCount > 0){//I noticed that if the queue returns true the rowCount is larger than 0
+      temp = 1;
+      res.send(temp);
+    }
+    else {
+      value =[Math.floor(Math.random() * (100)),req.body.userup,req.body.psw,req.body.emailup]//randomly generated ID
+      result = await client.query('insert into login (id,username,password,email) values ($1,$2,$3,$4)',
+      value);
+      temp = 0;
+      res.send(temp);
+    }
+
+    client.release();
+  } catch (err) {
+    res.send("Error " + err);
+  }
+})
+
+app.post('/ADMIN', async (req, res) => {//this updates the form when the form from login is submited
+  try {
+    const que = 'SELECT username, password FROM login WHERE EXISTS (SELECT username, password FROM login WHERE login.username = $1 AND login.password = $2);'
+    const value =[req.body.user,req.body.password]
+    const client = await pool.connect()
+    const result = await client.query(que,
+    value);
+    // res.send(result.rowCount);
+    const temp = 2;
+    if (result.rowCount > 0){//I noticed that if the queue returns true the rowCount is larger than 0
+      temp = 0;
+      res.send(temp);
+      res.redirect('/game.html');
+    }
+    else {
+       res.send(temp);
+    }
+  } catch (err) {
+      res.send("Error " + err);
+  }
+})
+http.listen(PORT, () => console.log(`Listening on ${ PORT }`))
+
+module.exports = app;
+>>>>>>> Stashed changes

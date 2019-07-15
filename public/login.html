@@ -7,6 +7,17 @@
     <script type = "text/javascript"src="login.js"></script>
   </head>
   <body>
+
+    <div id= "Success" class="Success">
+      <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+      <strong>Success!</strong> you have successfully created a new login.
+    </div>
+
+    <div id= "Loginfail "class="Loginfail">
+      <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+      <strong>Error</strong> you have either the wrong username or password.
+    </div>
+
     <form class="" method="post" action="/signin">
       <h1>Sign In</h1>
       <input type="text" id="user" name="user" placeholder="User Name" required />
@@ -21,7 +32,19 @@
     <!-- Button to open the modal -->
     <button onclick="document.getElementById('id01').style.display='block'">Sign Up</button>
 
+    <!-- admin login button -->
+    <form class="" method="post" action="/ADMIN">
+      <button  type="submit" id="ADMIN">Admin Login</button>
+    </form>
+
     <div id="id01" class="modal">
+
+      <!-- prompt for repeated user -->
+      <div id= "alert" class="alert">
+        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+        <strong>Error</strong> Username already used.
+      </div>
+
       <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
       <form class="modal-content" method="post" action="/signup">
         <div class="container">
@@ -37,12 +60,6 @@
 
           <label for="psw-repeat"><b>Repeat Password</b></label>
           <input type="password" placeholder="Repeat Password" name="psw-repeat" required>
-
-          <label>
-            <input type="checkbox" checked="checked" name="remember" style="margin-bottom:15px"> Remember me
-          </label>
-
-          <p>By creating an account you agree to our <a href="#" style="color:dodgerblue">Terms & Privacy</a>.</p>
 
           <div class="clearfix">
             <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
