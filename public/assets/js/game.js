@@ -605,14 +605,14 @@ function update(){
             // if hit -10 hp
             shuritime=this.time.now+100;
             shuri--;
-            shurireg=this.time.now+1000;
+            shurireg=this.time.now+100;
         }
     }
 
     //regen
     if(this.time.now>katareg){ // kata regen
         if(kata<10){
-            katareg=this.time.now+1000;
+            katareg=this.time.now+100;
             kata++;
         }
         else{
