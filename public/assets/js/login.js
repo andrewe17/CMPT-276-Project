@@ -12,6 +12,8 @@ function signup(){
     });
 }
 function success(json){
+  console.log("testing");
+  console.log(json);
   if (json == 2) {
     document.getElementById("Loginfail").style.display = "";
   }

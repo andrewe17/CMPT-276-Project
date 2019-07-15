@@ -173,11 +173,12 @@ app.post('/signin', async (req, res) => {//this updates the form when the form f
       temp = 0;
       res.send(temp);
       res.redirect('/game.html');
+      client.release();
     }
     else {
       res.send(temp);
+      client.release();
     }
-    client.release();
   } catch (err) {
       res.send("Error " + err);
   }
@@ -196,6 +197,7 @@ app.post('/signup', async (req, res) => {//this updates the form when the form f
     const temp = 1;
     if (result.rowCount > 0){//I noticed that if the queue returns true the rowCount is larger than 0
       res.send(temp);
+      client.release();
     }
     else {
       const value =[Math.floor(Math.random() * (100)),req.body.userup,req.body.psw,req.body.emailup]//randomly generated ID
@@ -203,9 +205,10 @@ app.post('/signup', async (req, res) => {//this updates the form when the form f
       value);
       temp = 0;
       res.send(temp);
+      client.release();
     }
 
-    client.release();
+
   } catch (err) {
     res.send("Error " + err);
   }
