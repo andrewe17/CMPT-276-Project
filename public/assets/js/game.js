@@ -86,6 +86,7 @@ function preload(){
     this.load.image('rain', 'assets/images/rain.png');
     this.load.image('snow', 'assets/images/snow.png');
     this.load.image('cloud', 'assets/images/cloud.png');
+    
     this.load.spritesheet('ninja_up', 'assets/images/ninja_up.png', {frameWidth: 32, frameHeight: 32});
     this.load.spritesheet('ninja_down', 'assets/images/ninja_down.png', {frameWidth: 32, frameHeight: 32});
     this.load.spritesheet('ninja_left', 'assets/images/ninja_left.png', {frameWidth: 32, frameHeight: 32});
@@ -93,6 +94,7 @@ function preload(){
     this.load.spritesheet('ninja_smoke', 'assets/images/ninja_smoke.png', {frameWidth: 32, frameHeight: 32});
     this.load.spritesheet('slash_anim', 'assets/images/slash_anim.png', {frameWidth: 16, frameHeight: 16});
     this.load.spritesheet('shuri_anim', 'assets/images/shuri_anim.png', {frameWidth: 13, frameHeight: 13});
+    
     this.load.audio('swing',  ['assets/SwordSwing.mp3'] );
 }
 
@@ -113,17 +115,6 @@ function create(){
 
     waterLayer = this.physics.add.staticGroup();
     maze();
-
-    // audio example: https://phaser.io/examples/v3/view/audio/web-audio/play-sound-on-keypress
-    var swing = this.sound.add('swing');
-
-    this.input.keyboard.on('keydown-SPACE', function () {
-        this.sound.stopAll();
-    }, this);
-    // for audio to play in the background, delete input function leaving "<name>.play();" inside create function
-    this.input.keyboard.on('keydown-Z', function () {
-        swing.play();
-    });
 
     var self = this;
     this.socket = io();
@@ -240,8 +231,8 @@ function create(){
     // global time
     gg=this.time.now+(1000*60*10);
 
-    // // keyboard
-     cursor = this.input.keyboard.createCursorKeys();
+    // keyboard
+    cursor = this.input.keyboard.createCursorKeys();
     w = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
     a = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
     s = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
@@ -251,7 +242,8 @@ function create(){
     two = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TWO);
     three = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.THREE);
     four = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.FOUR);
-
+    m = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.m);
+    n = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.n);
     // mouse
     pointer = this.input.activePointer; // mouse location relative to screen
 
@@ -320,6 +312,10 @@ function create(){
     saisei=0;
     // probably better if ninjas have to search for items!!
 
+    // audio
+    mute_sound=0;
+    mute_music=0;
+
     // misc
     health=100;
     kills=0;
@@ -373,6 +369,9 @@ function create(){
                 quantity:4,
             });
         }
+        else if(current_weather=='Thunderstorm'){
+            //
+        }
         else{
             // do nothing
         }
@@ -399,6 +398,14 @@ function addOtherPlayers(self, playerInfo) {
 
 
 function update(){
+   // mute audio
+    this.input.keyboard.on('keydown-M', function () {
+        this.sound.stopAll();
+    }, this);
+
+    // background audio dependent on weather
+
+
     if(this.ninja){
         this.ninja.healthText.x = this.ninja.x - 12;
         this.ninja.healthText.y = this.ninja.y - 30;
@@ -506,8 +513,15 @@ function update(){
         };
 
     }
+    
+    //audio
+    if(m.isDown && mute_music==1) mute_music=0;
+    else mute_music=1;
+    if(n.isDown && mute_sound==1) mute_sound=0;
+    else mute_sound=1;
 
-    if(one.isDown) options=1; // items
+    // items
+    if(one.isDown) options=1; 
     if(two.isDown) options=2;
     if(three.isDown) options=3;
     if(four.isDown) options=4;
@@ -515,6 +529,11 @@ function update(){
     // use items
     if(pointer.leftButtonDown()){ // left click
         if(options==1 && this.time.now>katatime && kata>0){
+            // katana audio
+            if(mute_sound==1){
+                var swing = this.sound.add('swing');
+                swing.play();
+            }
 
             var slashx = this.ninja.x+Math.cos(angle)*32;
             var slashy = this.ninja.y+Math.sin(angle)*32;
@@ -591,9 +610,10 @@ function update(){
     text3.setText([
         'Timer: '+Math.floor(((gg-this.time.now)/1000)/60)+':'+Math.floor(((gg-this.time.now)/1000)%60)
     ]);
-    text4.setText([
-        'Vers: '+535 // test
-    ]);
+    // // Stephen's version testing
+    // text4.setText([
+    //     'Vers: '+535 // test
+    // ]);  
 
 
 }
