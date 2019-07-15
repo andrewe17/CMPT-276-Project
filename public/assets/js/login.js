@@ -1,6 +1,8 @@
 
 function signin(){
+  console.log("submiting form");
   document.getElementById("signin").submit();
+  console.log("recieving data");
   $.ajax({
       method: 'POST',
       url:'./signin',
