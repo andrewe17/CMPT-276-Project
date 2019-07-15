@@ -3,7 +3,7 @@ function signin(){
   document.getElementById("signin").submit();
   $.ajax({
       method: 'POST',
-      url:'/signin',
+      url:'./signin',
       success: success
     });
 }
