@@ -1,13 +1,15 @@
 
 function signin(){
   $.ajax({
-      url:'./signin',
+      method: 'POST',
+      url:'/signin',
       success: success
     });
 }
 function signup(){
   $.ajax({
-      url:'./signup',
+      method: 'POST',
+      url:'/signup',
       success: check
     });
 }

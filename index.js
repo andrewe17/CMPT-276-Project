@@ -160,7 +160,7 @@ io.sockets.on('connection', function(socket){
 
 app.use(express.static(path.join(__dirname, 'node_modules')))
 
-app.get('/signin', async (req, res) => {//this updates the form when the form from login is submited
+app.post('/signin', async (req, res) => {//this updates the form when the form from login is submited
   try {
     const que = 'SELECT username, password FROM login WHERE EXISTS (SELECT username, password FROM login WHERE login.username = $1 AND login.password = $2);'
     const value =[req.body.user,req.body.password]
@@ -185,7 +185,7 @@ app.get('/signin', async (req, res) => {//this updates the form when the form fr
 })
 
 
-app.get('/signup', async (req, res) => {//this updates the form when the form from login is submited
+app.post('/signup', async (req, res) => {//this updates the form when the form from login is submited
   try {
 
     const que = 'SELECT username, password FROM login WHERE EXISTS (SELECT username, password FROM login WHERE login.username = $1 AND login.password = $2);'
