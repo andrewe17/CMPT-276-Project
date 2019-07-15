@@ -104,6 +104,7 @@ function preload(){
     this.load.spritesheet('ninja_smoke', 'assets/images/ninja_smoke.png', {frameWidth: 32, frameHeight: 32});
     this.load.spritesheet('slash_anim', 'assets/images/slash_anim.png', {frameWidth: 16, frameHeight: 16});
     this.load.spritesheet('shuri_anim', 'assets/images/shuri_anim.png', {frameWidth: 13, frameHeight: 13});
+    this.load.spritesheet('kata_anim', 'assets/images/kata_anim.png', {frameWidth: 48, frameHeight: 27});
     
     this.load.audio('katana',  ['assets/audio/Sound-katana.mp3'] );
     this.load.audio('flash',  ['assets/audio/Sound-dash.mp3'] );
@@ -215,7 +216,8 @@ function create(){
     // receiving katana slash
     this.socket.on('playerSlashed', function (slashInfo) {
         var slash=self.physics.add.sprite(slashInfo.x, slashInfo.y, 'slash');
-        slash.play('slash_anim');
+        //slash.play('slash_anim');
+        slash.play('kata_anim');
         slash.killOnComplete = true;
     });
 
@@ -344,6 +346,12 @@ function create(){
     this.anims.create({
         key: 'slash_anim',
         frames: this.anims.generateFrameNumbers('slash_anim'),
+        frameRate: 16,
+        repeat: 1
+    });
+    this.anims.create({
+        key: 'kata_anim',
+        frames: this.anims.generateFrameNumbers('kata_anim'),
         frameRate: 16,
         repeat: 1
     });
@@ -577,10 +585,11 @@ function update(){
     if(pointer.leftButtonDown()){ // left click
         if(options==1 && this.time.now>katatime && kata>0){
             katana.play();
-            var slashx = this.ninja.x+Math.cos(angle)*32;
-            var slashy = this.ninja.y+Math.sin(angle)*32;
-            var slash = this.physics.add.sprite(slashx, slashy, 'slash');
-            slash.play('slash_anim');
+            //var slashx = this.ninja.x+Math.cos(angle)*32;
+            //var slashy = this.ninja.y+Math.sin(angle)*32;
+            var slash = this.physics.add.sprite(this.ninja.x, this.ninja.y, 'slash');
+            //slash.play('slash_anim');
+            slash.play('kata_anim');
             slash.killOnComplete = true;
             this.socket.emit('playerSlash', { x:slashx, y:slashy}); // slash location info
             // if hit -50 hp
