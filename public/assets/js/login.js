@@ -1,5 +1,6 @@
 
 function signin(){
+  document.getElementById("signin").submit();
   $.ajax({
       method: 'POST',
       url:'/signin',
@@ -7,6 +8,7 @@ function signin(){
     });
 }
 function signup(){
+
   $.ajax({
       method: 'POST',
       url:'/signup',
