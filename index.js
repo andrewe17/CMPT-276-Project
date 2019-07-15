@@ -68,11 +68,11 @@ app.get('/', function(req, res){
 app.get('/players', function(req, res){
   res.send(players);
 });
-
+var weather;
 io.sockets.on('connection', function(socket){
   // weather api
-  var test= weather_data.weather[0].main;
-  io.emit('weather', test);
+  weather= weather_data.weather[0].main;
+  io.emit('weather', weather);
   // playercount++;
   console.log('A user connected');
   // create a new player and add it to our players object
@@ -83,7 +83,8 @@ io.sockets.on('connection', function(socket){
     f: 0,
     dashed:0,
     health:100,
-    //weather = weather_data.weather[0].main
+    kills:0,
+    deaths:0,
   };
   // send the players object to the new player
   socket.emit('currentPlayers', players);
@@ -125,10 +126,25 @@ io.sockets.on('connection', function(socket){
   socket.on('smoke', function (smokeData) {
     socket.broadcast.emit('smoke_ani', smokeData);
   });
+
+  socket.on('shuri_kill', function (ninja) {
+    players[ninja.id].kills+=1;
+    socket.broadcast.emit('shurikenKill', players[ninja.id]);
+    socket.emit('shurikenKill', players[ninja.id]);
+  });
+
   // Broadcast shuriken hit
   socket.on('shuri_hit', function (otherPlayer) {
-    players[otherPlayer.id].health = players[otherPlayer.id].health-25;
+    players[otherPlayer.id].health -= 25;
     //console.log(player.id);
+    if(players[otherPlayer.id].health<=0){
+      players[otherPlayer.id].deaths+=1;
+      players[otherPlayer.id].health=100;
+      players[otherPlayer.id].x=100;
+      players[otherPlayer.id].y=100;
+      socket.broadcast.emit('playerMoved', players[otherPlayer.id]);
+      socket.emit('playerMoved', players[otherPlayer.id]);
+    }
     socket.broadcast.emit('shurikenHit', players[otherPlayer.id]);
     socket.emit('shurikenHit', players[otherPlayer.id]);
   });

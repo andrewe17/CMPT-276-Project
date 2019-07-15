@@ -193,7 +193,12 @@ function create(){
         //console.log(self.socket.id);
         if(playerInfo.playerId === self.socket.id){
             console.log('selfplayer');
+            self.ninja.deaths = playerInfo.deaths;
             self.ninja.health = playerInfo.health;
+            self.ninja.x = playerInfo.x;
+            self.ninja.y = playerInfo.y;
+            health = playerInfo.health;
+            deaths = playerInfo.deaths;
             self.ninja.healthText.setText(playerInfo.health);
         }
         else{
@@ -204,6 +209,13 @@ function create(){
                     otherPlayer.healthText.setText(playerInfo.health);
                 }
             });
+        }
+    });
+    // update kill counter
+    this.socket.on('shurikenKill', function (playerInfo){
+        if(playerInfo.playerId === self.socket.id){
+            console.log('increase kills');
+            kills++;
         }
     });
 
@@ -301,7 +313,7 @@ function create(){
         shurihit(self, player, ss);
     });
     this.physics.add.collider(wx, ss, function(wx, ss){ // wall and shuri
-        collider_shuri_wall(wx, ss);
+        shuri_destroy(wx, ss);
     });
 
 
@@ -390,7 +402,7 @@ function addPlayer(self, playerInfo) {
     self.cameras.main.startFollow(self.ninja, true, 0.05, 0.05, 0.05, 0.05);
     self.ninja.healthText = self.add.text(playerInfo.x - 12, playerInfo.y - 30, playerInfo.health, {fontFamily:'"Roboto Condensed"', fill: '#ffffff'});
     self.physics.add.collider(self.ninja, wx, pb);
-    self.physics.add.collider(self.ninja, ss, collider_shuri_wall);
+    self.physics.add.collider(self.ninja, ss, shuri_destroy);
     self.physics.add.overlap(self.ninja, waterLayer, slowdown);
     self.ninja.setSize(15,10).setOffset(8,20);
 }
@@ -878,13 +890,16 @@ function slowdown(player, wall){
     }
 }
 
-
 // collisions
 function shurihit(self, otherPlayer, ss){
     ss.destroy();
+    if(otherPlayer.health<=25){
+        kills+=1;
+        console.log(self.socket.id);
+        self.socket.emit('shuri_kill', {id:self.socket.id});
+    }
     self.socket.emit('shuri_hit', {id:otherPlayer.playerId});
 }
-function collider_shuri_wall(wx, ss){
+function shuri_destroy(wx, ss){
     ss.destroy();
-    //self.socket.emit('collider_shuri_wall', {id:otherPlayer.playerId});
 }
