@@ -1,11 +1,16 @@
 
 function signin(){
-  console.log("submiting form");
-  document.getElementById("signin").submit();
+  var name = document.getElementById('id').value;
+  var pass = document.getElementById('id').value;
   console.log("recieving data");
   $.ajax({
       method: 'POST',
-      url:'/signin',
+      url:'./signin',
+      data:
+      {
+        username:name,
+        password:pass
+      }
       success: success
     });
 }

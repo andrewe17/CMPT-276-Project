@@ -180,8 +180,7 @@ app.post('/signin', async (req, res) => {//this updates the form when the form f
     const que = 'SELECT username, password FROM login WHERE EXISTS (SELECT username, password FROM login WHERE login.username = $1 AND login.password = $2);'
     const value =[req.body.user,req.body.password]
     const client = await pool.connect()
-    const result = await client.query(que,
-    value);
+    const result = await client.query(que, value);
     // res.send(result.rowCount);
     if (result.rowCount > 0){//I noticed that if the queue returns true the rowCount is larger than 0
       res.send(result);
@@ -204,8 +203,7 @@ app.post('/signup', async (req, res) => {//this updates the form when the form f
     const que = 'SELECT username, password FROM login WHERE EXISTS (SELECT username, password FROM login WHERE login.username = $1 AND login.password = $2);'
     const value =[req.body.user,req.body.password]
     const client = await pool.connect()
-    const result = await client.query(que,
-    value);
+    const result = await client.query(que, value);
     // res.send(result.rowCount);
     if (result.rowCount > 0){//I noticed that if the queue returns true the rowCount is larger than 0
       res.send(result);
