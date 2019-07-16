@@ -68,12 +68,11 @@ app.get('/', function(req, res){
 app.get('/players', function(req, res){
   res.send(players);
 });
-
+var weather;
 io.sockets.on('connection', function(socket){
   // weather api
-  var test= weather_data.weather[0].main;
-  io.emit('weather', test);
-  console.log('Weather: ' + test);
+  weather= weather_data.weather[0].main;
+  io.emit('weather', weather);
   // playercount++;
   console.log('A user connected');
   // create a new player and add it to our players object
@@ -84,7 +83,8 @@ io.sockets.on('connection', function(socket){
     f: 0,
     dashed:0,
     health:100,
-    //weather = weather_data.weather[0].main
+    kills:0,
+    deaths:0,
   };
   // send the players object to the new player
   socket.emit('currentPlayers', players);
@@ -126,11 +126,40 @@ io.sockets.on('connection', function(socket){
   socket.on('smoke', function (smokeData) {
     socket.broadcast.emit('smoke_ani', smokeData);
   });
+
+  socket.on('shuri_kill', function (ninja) {
+    players[ninja.id].kills+=1;
+    socket.broadcast.emit('shurikenKill', players[ninja.id]);
+    socket.emit('shurikenKill', players[ninja.id]);
+  });
+
   // Broadcast shuriken hit
   socket.on('shuri_hit', function (otherPlayer) {
-    players[otherPlayer.id].health = players[otherPlayer.id].health-25;
-    //console.log('Weather: 'test);
+    players[otherPlayer.id].health -= 25;
     //console.log(player.id);
+    if(players[otherPlayer.id].health<=0){
+      players[otherPlayer.id].deaths+=1;
+      players[otherPlayer.id].x=100;
+      players[otherPlayer.id].y=100;
+      players[otherPlayer.id].health=100;
+      socket.broadcast.emit('playerMoved', players[otherPlayer.id]);
+      socket.emit('playerMoved', players[otherPlayer.id]);
+    }
+    socket.broadcast.emit('shurikenHit', players[otherPlayer.id]);
+    socket.emit('shurikenHit', players[otherPlayer.id]);
+  });
+
+  socket.on('kata_hit', function (otherPlayer) {
+    players[otherPlayer.id].health -= 50;
+    //console.log(player.id);
+    if(players[otherPlayer.id].health<=0){
+      players[otherPlayer.id].deaths+=1;
+      players[otherPlayer.id].x=100;
+      players[otherPlayer.id].y=100;
+      players[otherPlayer.id].health=100;
+      socket.broadcast.emit('playerMoved', players[otherPlayer.id]);
+      socket.emit('playerMoved', players[otherPlayer.id]);
+    }
     socket.broadcast.emit('shurikenHit', players[otherPlayer.id]);
     socket.emit('shurikenHit', players[otherPlayer.id]);
   });
@@ -154,12 +183,14 @@ app.post('/signin', async (req, res) => {//this updates the form when the form f
     const result = await client.query(que,
     value);
     // res.send(result.rowCount);
-
     if (result.rowCount > 0){//I noticed that if the queue returns true the rowCount is larger than 0
+      res.send(result);
       res.redirect('/game.html');
+      client.release();
     }
     else {
-       res.redirect('/wrong.html');
+      res.send(result);
+      client.release();
     }
   } catch (err) {
       res.send("Error " + err);
@@ -169,12 +200,26 @@ app.post('/signin', async (req, res) => {//this updates the form when the form f
 
 app.post('/signup', async (req, res) => {//this updates the form when the form from login is submited
   try {
+
+    const que = 'SELECT username, password FROM login WHERE EXISTS (SELECT username, password FROM login WHERE login.username = $1 AND login.password = $2);'
+    const value =[req.body.user,req.body.password]
     const client = await pool.connect()
-    const value =[Math.floor(Math.random() * (100)),req.body.userup,req.body.psw,req.body.emailup]//randomly generated ID
-    const result = await client.query('insert into login (id,username,password,email) values ($1,$2,$3,$4)',
+    const result = await client.query(que,
     value);
-    res.redirect('/login.html');
-    client.release();
+    // res.send(result.rowCount);
+    if (result.rowCount > 0){//I noticed that if the queue returns true the rowCount is larger than 0
+      res.send(result);
+      client.release();
+    }
+    else {
+      res.send(result);
+      const value =[Math.floor(Math.random() * (100)),req.body.userup,req.body.psw,req.body.emailup]//randomly generated ID
+      const result = await client.query('insert into login (id,username,password,email) values ($1,$2,$3,$4)',
+      value);
+      client.release();
+    }
+
+
   } catch (err) {
     res.send("Error " + err);
   }

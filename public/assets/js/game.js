@@ -28,6 +28,16 @@ var gg;
 var cursor;
 var w, a, s, d, space;
 var one, two, three, four;
+//audio
+var m, n;
+var flash;
+var katana;
+var shuriThrow;
+var hit;
+var music;
+var mute_sound=0;
+var mute_music=0;
+var rng;
 // mouse
 var pointer;
 var mousex;
@@ -157,7 +167,7 @@ function preload(){
     this.load.image('wally', 'assets/images/wally.png');
     this.load.image('twall', 'assets/images/Twall.png');
     this.load.image('slash', 'assets/images/slash.png');
-    this.load.image('shuriken', 'assets/images/shuriken.png');
+    // this.load.image('shuriken', 'assets/images/shuriken.png');
     this.load.image('van', 'assets/images/van.jpg');
     this.load.image('ninja', 'assets/images/ninja.png');
     this.load.image('slash', 'assets/images/slash.png');
@@ -165,20 +175,60 @@ function preload(){
     this.load.image('rain', 'assets/images/rain.png');
     this.load.image('snow', 'assets/images/snow.png');
     this.load.image('cloud', 'assets/images/cloud.png');
+    
     this.load.spritesheet('ninja_up', 'assets/images/ninja_up.png', {frameWidth: 32, frameHeight: 32});
     this.load.spritesheet('ninja_down', 'assets/images/ninja_down.png', {frameWidth: 32, frameHeight: 32});
     this.load.spritesheet('ninja_left', 'assets/images/ninja_left.png', {frameWidth: 32, frameHeight: 32});
     
     this.load.spritesheet('ninja_smoke', 'assets/images/ninja_smoke.png', {frameWidth: 32, frameHeight: 32});
     this.load.spritesheet('slash_anim', 'assets/images/slash_anim.png', {frameWidth: 16, frameHeight: 16});
+    this.load.spritesheet('kata_anim', 'assets/images/kata_anim.png', {frameWidth: 46, frameHeight: 46});
     this.load.spritesheet('shuri_anim', 'assets/images/shuri_anim.png', {frameWidth: 13, frameHeight: 13});
-    this.load.audio('swing',  ['assets/SwordSwing.mp3'] );
+    
+    this.load.audio('katana',  ['assets/audio/Sound-katana.mp3'] );
+    this.load.audio('flash',  ['assets/audio/Sound-dash.mp3'] );
+    this.load.audio('hit',  ['assets/audio/Sound-hit.mp3'] );
+    this.load.audio('shuriThrow',  ['assets/audio/Sound-throw.mp3'] );
+    this.load.audio('rain',  ['assets/audio/Background-rain.mp3'] );
+    this.load.audio('snow',  ['assets/audio/Background-snow.mp3'] );
+    this.load.audio('thunder',  ['assets/audio/Background-thunder.mp3'] );
+    this.load.audio('ancients',  ['assets/audio/Music-Song of the Ancients.mp3'] );
+    this.load.audio('loneliness',  ['assets/audio/Music-Loneliness.mp3'] );
+    this.load.audio('strike',  ['assets/audio/Music-Strong and Strike.mp3'] );
+    this.load.audio('wretched',  ['assets/audio/Music-Wretched Weaponry.mp3'] );
 }
 
 
 
 
 function create(){
+
+    // effects audio
+    katana = this.sound.add('katana');
+    flash = this.sound.add('flash');
+    hit = this.sound.add('hit');
+    shuriThrow = this.sound.add('shuriThrow');
+    // music audio
+    rng = Math.floor((Math.random() * 4) + 1);
+    if(rng==1){
+        music = this.sound.add('ancients');
+    }
+    else if(rng==2){
+        music = this.sound.add('loneliness');
+    }
+    else if(rng==3){
+        music = this.sound.add('wretched');
+    }
+    else if(rng==4){
+        music = this.sound.add('strike');
+    }
+    // unlock sound
+    if (this.sound.locked)
+        this.sound.unlock();
+    music.play({
+        volume: .1,
+        loop: true
+    });
     // camera
     this.cameras.main.setBounds(0, 0, mapx, mapy);
     this.physics.world.setBounds(0, 0, mapx, mapy);
@@ -192,17 +242,6 @@ function create(){
 
     waterLayer = this.physics.add.staticGroup();
     maze();
-
-    // audio example: https://phaser.io/examples/v3/view/audio/web-audio/play-sound-on-keypress
-    var swing = this.sound.add('swing');
-
-    this.input.keyboard.on('keydown-SPACE', function () {
-        this.sound.stopAll();
-    }, this);
-    // for audio to play in the background, delete input function leaving "<name>.play();" inside create function
-    this.input.keyboard.on('keydown-Z', function () {
-        swing.play();
-    });
 
     var self = this;
     this.socket = io();
@@ -256,7 +295,7 @@ function create(){
     // receiving katana slash
     this.socket.on('playerSlashed', function (slashInfo) {
         var slash=self.physics.add.sprite(slashInfo.x, slashInfo.y, 'slash');
-        slash.play('slash_anim');
+        slash.play('kata_anim');
         slash.killOnComplete = true;
     });
 
@@ -268,7 +307,8 @@ function create(){
     });
     // receiving shuriken toss
     this.socket.on('shurikenToss', function (shurikenInfo) {
-        var toss = self.physics.add.sprite(shurikenInfo.initX, shurikenInfo.initY, 'shuri');
+        var toss = ss.create(shurikenInfo.initX, shurikenInfo.initY, 'shuri');
+        //var toss = self.physics.add.sprite(shurikenInfo.initX, shurikenInfo.initY, 'shuri');
         toss.play('shuri_anim');
         toss.setVelocityX(shurikenInfo.velX);
         toss.setVelocityY(shurikenInfo.velY);
@@ -280,11 +320,15 @@ function create(){
         //console.log(self.socket.id);
         if(playerInfo.playerId === self.socket.id){
             console.log('selfplayer');
+            self.ninja.deaths = playerInfo.deaths;
             self.ninja.health = playerInfo.health;
+            self.ninja.x = playerInfo.x;
+            self.ninja.y = playerInfo.y;
+            health = playerInfo.health;
+            deaths = playerInfo.deaths;
             self.ninja.healthText.setText(playerInfo.health);
         }
         else{
-
             self.otherPlayers.getChildren().forEach(function (otherPlayer) {
                 if (playerInfo.playerId === otherPlayer.playerId) {
                     console.log('otherplayer');
@@ -293,7 +337,13 @@ function create(){
                 }
             });
         }
-
+    });
+    // update kill counter
+    this.socket.on('shurikenKill', function (playerInfo){
+        if(playerInfo.playerId === self.socket.id){
+            console.log('increase kills');
+            kills=playerInfo.kills;
+        }
     });
 
     //submit chat message
@@ -319,8 +369,8 @@ function create(){
     // global time
     gg=this.time.now+(1000*60*10);
 
-    // // keyboard
-     cursor = this.input.keyboard.createCursorKeys();
+    // keyboard
+    cursor = this.input.keyboard.createCursorKeys();
     w = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
     a = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
     s = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
@@ -330,7 +380,8 @@ function create(){
     two = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TWO);
     three = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.THREE);
     four = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.FOUR);
-
+    m = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M);
+    n = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.N);
     // mouse
     pointer = this.input.activePointer; // mouse location relative to screen
 
@@ -338,6 +389,7 @@ function create(){
     dash=0;
     dashtime=this.time.now;
     dashreg=this.time.now;
+
     // animations
     this.anims.create({
         key: 'ninja_up',
@@ -372,8 +424,14 @@ function create(){
     this.anims.create({
         key: 'slash_anim',
         frames: this.anims.generateFrameNumbers('slash_anim'),
-        frameRate: 16,
+        frameRate: 320,
         repeat: 1
+    });
+    this.anims.create({
+        key: 'kata_anim',
+        frames: this.anims.generateFrameNumbers('kata_anim'),
+        frameRate: 64,
+        repeat: 0
     });
     this.anims.create({
         key: 'shuri_anim',
@@ -381,11 +439,21 @@ function create(){
         frameRate: 16,
         repeat: -1
     });
-    // shuris
-    ss = this.physics.add.group();
+
+    // collisions
+    ss = this.physics.add.group(); // shurikens
+    kk = this.physics.add.group(); // katana
     this.physics.add.overlap(this.otherPlayers, ss, function(player, ss){
         shurihit(self, player, ss);
     });
+    this.physics.add.overlap(this.otherPlayers, kk, function(otherPlayers, kk){
+        katahit(self, otherPlayers, kk);
+    });
+    this.physics.add.collider(wx, ss, function(wx, ss){ // wall and shuri
+        shuri_destroy(wx, ss);
+    });
+
+
 
     // weapons
     options=1;
@@ -445,12 +513,15 @@ function create(){
             cloud_particles.createEmitter({
                 x:{min:0, max: mapx},
                 y:{min:0, max: mapy},
-                lifespan:20000,
+                lifespan:10000,
                 speedX: {min:0, max:10},
                 speedY: {min:0, max:0},
                 scale: {start:10, end: 0},
                 quantity:4,
             });
+        }
+        else if(current_weather=='Thunderstorm'){
+            //
         }
         else{
             // do nothing
@@ -465,6 +536,7 @@ function addPlayer(self, playerInfo) {
     self.cameras.main.startFollow(self.ninja, true, 0.05, 0.05, 0.05, 0.05);
     self.ninja.healthText = self.add.text(playerInfo.x - 12, playerInfo.y - 30, playerInfo.health, {fontFamily:'"Roboto Condensed"', fill: '#ffffff'});
     self.physics.add.collider(self.ninja, wx, pb);
+    self.physics.add.collider(self.ninja, ss, shuri_destroy);
     self.physics.add.overlap(self.ninja, waterLayer, slowdown);
     self.ninja.setSize(15,10).setOffset(8,20);
 }
@@ -586,7 +658,8 @@ function update(){
 
     }
 
-    if(one.isDown) options=1; // items
+    // items
+    if(one.isDown) options=1; 
     if(two.isDown) options=2;
     if(three.isDown) options=3;
     if(four.isDown) options=4;
@@ -594,17 +667,16 @@ function update(){
     // use items
     if(pointer.leftButtonDown()){ // left click
         if(options==1 && this.time.now>katatime && kata>0){
-
-            var slashx = this.ninja.x+Math.cos(angle)*32;
-            var slashy = this.ninja.y+Math.sin(angle)*32;
-            var slash = this.physics.add.sprite(slashx, slashy, 'slash');
-            slash.play('slash_anim');
+            katana.play(); // sound
+            var slashx = this.ninja.x+Math.cos(angle)*0;
+            var slashy = this.ninja.y+Math.sin(angle)*0;
+            var slash = kk.create(slashx, slashy, 'slash');
+            slash.play('kata_anim');
             slash.killOnComplete = true;
             this.socket.emit('playerSlash', { x:slashx, y:slashy}); // slash location info
-            // if hit -50 hp
-            katatime = this.time.now+100;
+            katatime = this.time.now+300;
             kata--;
-            katareg = this.time.now+1000;
+            katareg = this.time.now+500;
         }
 
         if(options==2 && this.time.now>shuritime && shuri>0){
@@ -613,7 +685,6 @@ function update(){
 
             //shuris.add.group();
             var toss = ss.create(initX, initY, 'shuri');
-
             toss.play('shuri_anim');
             var velX = Math.cos(angle)*300;
             var velY = Math.sin(angle)*300;
@@ -621,7 +692,7 @@ function update(){
             toss.setVelocityY(velY);
             this.socket.emit('shuriken', { initX:initX, initY:initY, velX:velX, velY:velY}); // slash location info
             // if hit -10 hp
-            shuritime=this.time.now+100;
+            shuritime=this.time.now+200;
             shuri--;
             shurireg=this.time.now+1000;
         }
@@ -629,8 +700,8 @@ function update(){
 
     //regen
     if(this.time.now>katareg){ // kata regen
-        if(kata<10){
-            katareg=this.time.now+1000;
+        if(kata<5){
+            katareg=this.time.now+500;
             kata++;
         }
         else{
@@ -646,7 +717,26 @@ function update(){
             shurireg=this.time.now;
         }
     }
+    // mute audio
+    if(m.isDown && mute_music==0) mute_music=1;
+    else if(m.isDown && mute_music==1) mute_music=0;
+    if(mute_music==1) music.setMute(true);
+    else music.setMute(false);
 
+    if(n.isDown && mute_sound==0) mute_sound=1;
+    else if(n.isDown && mute_sound==1) mute_sound=0;
+    if(mute_sound==1){
+        katana.setMute(true);
+        flash.setMute(true);
+        hit.setMute(true);
+        shuriThrow.setMute(true);
+    }
+    else{
+        katana.setMute(false);
+        flash.setMute(false);
+        hit.setMute(false);
+        shuriThrow.setMute(false);
+    }
     // // SPAWNING POINTS
     // // UPGRADE AREA: UPGRADE CHANGED TO OPTIONS 1,2,3,4
     // // UPGRADES: #SHURIKENS, SHURIKEN SPEED, REGEN SPEED, DAMAGE, EXPLOSION RADIUS
@@ -670,59 +760,13 @@ function update(){
     text3.setText([
         'Timer: '+Math.floor(((gg-this.time.now)/1000)/60)+':'+Math.floor(((gg-this.time.now)/1000)%60)
     ]);
-    text4.setText([
-        'Vers: '+535 // test
-    ]);
+    // // Stephen's version testing
+    // text4.setText([
+    //     'Vers: '+535 // test
+    // ]);  
 
 
 }
-
-// // create maze
-// function maze(){
-//     var maze=[
-//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-//         [0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-//         [0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-//         [0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-//         [0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-//         [0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,2,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-//         [0,0,1,0,0,0,1,0,1,1,1,1,1,0,1,0,0,0,1,0,1,1,1,1,1,0,0,1,1,1,0,0,0,0,0,0,1,1,1,1,0,0,0,1,1,1,0,0,1,1,1,1,1,0,1,0,0,0,1,0,0],
-//         [0,0,1,1,0,0,1,0,0,0,1,0,0,0,1,1,0,0,1,0,0,0,0,1,0,0,1,0,0,0,1,0,0,0,0,0,1,0,0,0,1,0,1,0,0,0,1,0,1,0,0,0,0,0,1,0,0,0,1,0,0],
-//         [0,0,1,0,1,0,1,0,0,0,1,0,0,0,1,0,1,0,1,0,0,0,0,1,0,0,1,0,0,0,1,0,1,1,1,0,1,0,0,0,1,0,1,0,0,0,1,0,1,1,1,1,1,0,1,1,1,1,1,0,0],
-//         [0,0,1,0,0,1,1,0,0,0,1,0,0,0,1,0,0,1,1,0,1,0,0,1,0,0,1,1,1,1,1,0,0,0,0,0,1,0,0,0,1,0,1,1,1,1,1,0,0,0,0,0,1,0,1,0,0,0,1,0,0],
-//         [0,0,1,0,0,0,1,0,1,1,1,1,1,0,1,0,0,0,1,0,1,1,1,1,0,0,1,0,0,0,1,0,0,0,0,0,1,1,1,1,0,0,1,0,0,0,1,0,1,1,1,1,1,0,1,0,0,0,1,0,0],
-//         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-//     ];
-//     for (var i=0; i<=34; i++){
-//         for (var j=0; j<=60; j++){
-//             if(maze[i][j]==1) wx.create((j*50)+100,(i*50)+100, 'wallx');
-//             if(maze[i][j]==2) ; // rune
-//         }
-//     }
-// }
 
 // create maze
 function maze(){
@@ -922,6 +966,7 @@ function pb(player, wall){
     if(wall.x>player.x) player.x-=0.1;
     else player.x+=0.1;
 }
+
 var reduced = false;
 function slowdown(player, wall){
     if(!reduced){
@@ -930,15 +975,25 @@ function slowdown(player, wall){
     }
 }
 
-
-// shuriken hits target
+// collisions
+function katahit(self, otherPlayer, kk){
+    kk.destroy();
+    if(otherPlayer.health<=50){
+        kills+=1;
+        console.log(self.socket.id);
+        self.socket.emit('shuri_kill', {id:self.socket.id});
+    }
+    self.socket.emit('kata_hit', {id:otherPlayer.playerId});
+}
 function shurihit(self, otherPlayer, ss){
-    //ss.setVelocityX(0);
-    //ss.setVelocityY(0);
-    //
     ss.destroy();
-    //otherPlayer.health -=25;
-    //console.log(otherPlayer.health);
- //   self.otherPlayers[otherPlayer.playerId].healthText.setText(otherPlayer.health);
+    if(otherPlayer.health<=25){
+        kills+=1;
+        console.log(self.socket.id);
+        self.socket.emit('shuri_kill', {id:self.socket.id});
+    }
     self.socket.emit('shuri_hit', {id:otherPlayer.playerId});
+}
+function shuri_destroy(wx, ss){
+    ss.destroy();
 }
