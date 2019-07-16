@@ -285,9 +285,9 @@ function create(){
             if (playerInfo.playerId === otherPlayer.playerId) {
                 console.log(playerInfo.dashed);
                 if(playerInfo.dashed==1){
-                    var smoke=self.physics.add.sprite(playerInfo.x, playerInfo.y, 'ninja');
+                    smoke=self.physics.add.sprite(playerInfo.x, playerInfo.y, 'ninja');
+                    
                     smoke.anims.play('ninja_smoke');
-                    smoke.killOnComplete = true;
                 }
                 otherPlayer.setPosition(playerInfo.x, playerInfo.y);
                 otherPlayer.healthText.x = playerInfo.x - 12;
@@ -307,7 +307,8 @@ function create(){
         katana.play();
         var slash=self.physics.add.sprite(slashInfo.x, slashInfo.y, 'slash');
         slash.play('kata_anim');
-        slash.killOnComplete = true;
+        slash.rotation = slashInfo.r; // slash angle
+        slash.on('animationcomplete', ()=>{slash.destroy();});
     });
 
      // receiving dash
@@ -315,7 +316,7 @@ function create(){
         flash.play();
         var smoke=self.physics.add.sprite(smokeInfo.x, smokeInfo.y, 'ninja');
         smoke.play('ninja_smoke');
-        smoke.killOnComplete = true;
+        smoke.on('animationcomplete', ()=>{smoke.destroy();});
     });
     // receiving shuriken toss
     this.socket.on('shurikenToss', function (shurikenInfo) {
@@ -682,7 +683,7 @@ function update(){
                 flash.play();
                 var smoke=this.physics.add.sprite(this.ninja.x, this.ninja.y, 'ninja');
                 smoke.play('ninja_smoke');
-                smoke.killOnComplete = true;
+                smoke.on('animationcomplete', ()=>{smoke.destroy();});
 
                 this.socket.emit('smoke', { x:this.ninja.x, y:this.ninja.y}); // dash location info
 
@@ -735,16 +736,17 @@ function update(){
     // use items
     if(pointer.leftButtonDown()){ // left click
         if(options==1 && this.time.now>katatime && kata>0){
-            // katana.play(); // sound
-            // var slashx = this.ninja.x+Math.cos(angle)*0;
-            // var slashy = this.ninja.y+Math.sin(angle)*0;
-            // var slash = kk.create(slashx, slashy, 'slash');
-            // slash.play('kata_anim');
-            // slash.killOnComplete = true;
-            // this.socket.emit('playerSlash', { x:slashx, y:slashy}); // slash location info
-            // katatime = this.time.now+300;
-            // kata--;
-            // katareg = this.time.now+500;
+            katana.play(); // sound
+            var slashx = this.ninja.x+Math.cos(angle)*0;
+            var slashy = this.ninja.y+Math.sin(angle)*0;
+            var slash = kk.create(slashx, slashy, 'slash');
+            slash.rotation = angle; // slash angle
+            slash.play('kata_anim');
+            slash.on('animationcomplete', ()=>{slash.destroy();});
+            this.socket.emit('playerSlash', {x:slashx, y:slashy, r:angle}); // slash location info
+            katatime = this.time.now+300;
+            kata--;
+            katareg = this.time.now+500;
         }
 
         if(options==2 && this.time.now>shuritime && shuri>0){
