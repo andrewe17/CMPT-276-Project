@@ -160,11 +160,7 @@ function preload(){
     });
 
     this.load.image('wall', 'assets/images/wall.png');
-    this.load.image('wallx', 'assets/images/wallx.png');
-    this.load.image('wally', 'assets/images/wally.png');
     this.load.image('twall', 'assets/images/Twall.png');
-    this.load.image('slash', 'assets/images/slash.png');
-    // this.load.image('shuriken', 'assets/images/shuriken.png');
     this.load.image('van', 'assets/images/van.jpg');
     this.load.image('ninja', 'assets/images/ninja.png');
     this.load.image('slash', 'assets/images/slash.png');
@@ -685,16 +681,16 @@ function update(){
     // use items
     if(pointer.leftButtonDown()){ // left click
         if(options==1 && this.time.now>katatime && kata>0){
-            katana.play(); // sound
-            var slashx = this.ninja.x+Math.cos(angle)*0;
-            var slashy = this.ninja.y+Math.sin(angle)*0;
-            var slash = kk.create(slashx, slashy, 'slash');
-            slash.play('kata_anim');
-            slash.killOnComplete = true;
-            this.socket.emit('playerSlash', { x:slashx, y:slashy}); // slash location info
-            katatime = this.time.now+300;
-            kata--;
-            katareg = this.time.now+500;
+            // katana.play(); // sound
+            // var slashx = this.ninja.x+Math.cos(angle)*0;
+            // var slashy = this.ninja.y+Math.sin(angle)*0;
+            // var slash = kk.create(slashx, slashy, 'slash');
+            // slash.play('kata_anim');
+            // slash.killOnComplete = true;
+            // this.socket.emit('playerSlash', { x:slashx, y:slashy}); // slash location info
+            // katatime = this.time.now+300;
+            // kata--;
+            // katareg = this.time.now+500;
         }
 
         if(options==2 && this.time.now>shuritime && shuri>0){
