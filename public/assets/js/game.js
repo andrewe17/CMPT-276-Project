@@ -178,6 +178,7 @@ function preload(){
     this.load.audio('rain',  ['assets/audio/Background-rain.mp3'] );
     this.load.audio('snow',  ['assets/audio/Background-snow.mp3'] );
     this.load.audio('thunder',  ['assets/audio/Background-thunder.mp3'] );
+    this.load.audio('silence',  ['assets/audio/Background-silence.mp3'] );
     this.load.audio('ancients',  ['assets/audio/Music-Song of the Ancients.mp3'] );
     this.load.audio('loneliness',  ['assets/audio/Music-Loneliness.mp3'] );
     this.load.audio('strike',  ['assets/audio/Music-Strong and Strike.mp3'] );
@@ -217,9 +218,14 @@ function create(){
     else if(rng==4){
         music = this.sound.add('strike');
     }
+    bg = this.sound.add('silence');
     // unlock sound
     if (this.sound.locked)
         this.sound.unlock();
+    bg.play({
+        volume: .1,
+        loop: true
+    });
     music.play({
         volume: .1,
         loop: true
@@ -528,6 +534,11 @@ function create(){
             });
         }
         else if(current_weather=='Clouds'){
+            bg = self.sound.add('snow');
+            bg.play({
+                volume: .1,
+                loop: true
+            });
             cloud_particles.createEmitter({
                 x:{min:0, max: mapx},
                 y:{min:0, max: mapy},
@@ -564,7 +575,11 @@ function create(){
             });
         }
         else{
-            // do nothing
+            bg = self.sound.add('silence');
+            bg.play({
+                volume: .1,
+                loop: true
+            });
         }
     });
 }
@@ -775,6 +790,11 @@ function update(){
     else if(m.isDown && mute_music==1) mute_music=0;
     if(mute_music==1) music.setMute(true);
     else music.setMute(false);
+
+    if(b.isDown && mute_bg==0) mute_bg=1;
+    else if(b.isDown && mute_bg==1) mute_bg=0;
+    if(mute_bg==1) bg.setMute(true);
+    else bg.setMute(false);
 
     if(n.isDown && mute_sound==0) mute_sound=1;
     else if(n.isDown && mute_sound==1) mute_sound=0;
