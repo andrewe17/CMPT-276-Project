@@ -77,8 +77,8 @@ io.sockets.on('connection', function(socket){
   console.log('A user connected');
   // create a new player and add it to our players object
   players[socket.id] = {
-    x: Math.floor(Math.random())*2400;,
-    y: Math.floor(Math.random())*2400;,
+    x: Math.floor(Math.random()*2400),
+    y: Math.floor(Math.random()*2400),
     playerId: socket.id,
     f: 0,
     dashed:0,
@@ -140,8 +140,8 @@ io.sockets.on('connection', function(socket){
     //console.log(player.id);
     if(players[otherPlayer.id].health<=0){
       players[otherPlayer.id].deaths+=1;
-      players[otherPlayer.id].x=Math.floor(Math.random())*2400;
-      players[otherPlayer.id].y=Math.floor(Math.random())*2400;;
+      players[otherPlayer.id].x=Math.floor(Math.random()*2400);
+      players[otherPlayer.id].y=Math.floor(Math.random()*2400);
       players[otherPlayer.id].health=100;
       socket.broadcast.emit('playerMoved', players[otherPlayer.id]);
       socket.emit('playerMoved', players[otherPlayer.id]);
@@ -155,8 +155,8 @@ io.sockets.on('connection', function(socket){
     //console.log(player.id);
     if(players[otherPlayer.id].health<=0){
       players[otherPlayer.id].deaths+=1;
-      players[otherPlayer.id].x=Math.floor(Math.random())*2400;;
-      players[otherPlayer.id].y=Math.floor(Math.random())*2400;;
+      players[otherPlayer.id].x=Math.floor(Math.random()*2400);
+      players[otherPlayer.id].y=Math.floor(Math.random()*2400);
       players[otherPlayer.id].health=100;
       socket.broadcast.emit('playerMoved', players[otherPlayer.id]);
       socket.emit('playerMoved', players[otherPlayer.id]);
