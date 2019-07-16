@@ -314,8 +314,10 @@ function create(){
      // receiving dash
     this.socket.on('smoke_ani', function (smokeInfo) {
         flash.play();
-        var smoke=self.physics.add.sprite(smokeInfo.x, smokeInfo.y, 'ninja');
+        var smoke=dd.create(smokeInfo.x, smokeInfo.y, 'ninja');
         smoke.play('ninja_smoke');
+        smoke.setVelocityX(smokeInfo.velx);
+        smoke.setVelocityY(smokeInfo.vely);
         smoke.on('animationcomplete', ()=>{smoke.destroy();});
     });
     // receiving shuriken toss
@@ -330,6 +332,7 @@ function create(){
 
     // receiving shuriken hit
     this.socket.on('shurikenHit', function (playerInfo){
+        hit.play(); // sound
         //console.log(playerInfo.playerId);
         //console.log(self.socket.id);
         if(playerInfo.playerId === self.socket.id){
@@ -433,7 +436,7 @@ function create(){
     this.anims.create({
         key: 'ninja_smoke',
         frames: this.anims.generateFrameNumbers('ninja_smoke'),
-        frameRate: 16,
+        frameRate: 700,
         repeat: 1
     });
     this.anims.create({
@@ -458,16 +461,19 @@ function create(){
     // collisions
     ss = this.physics.add.group(); // shurikens
     kk = this.physics.add.group(); // katana
+    dd = this.physics.add.group(); // dash
     this.physics.add.overlap(this.otherPlayers, ss, function(player, ss){
         shurihit(self, player, ss);
     });
-    this.physics.add.overlap(this.otherPlayers, kk, function(otherPlayers, kk){
-        katahit(self, otherPlayers, kk);
+    this.physics.add.overlap(this.otherPlayers, kk, function(player, kk){
+        katahit(self, player, kk);
+    });
+    this.physics.add.overlap(this.otherPlayers, dd, function(player, dd){
+        dashhit(self, player, dd);
     });
     this.physics.add.collider(wx, ss, function(wx, ss){ // wall and shuri
         shuri_destroy(wx, ss);
     });
-
 
 
     // weapons
@@ -681,23 +687,26 @@ function update(){
         if(space.isDown && dash>0){
             if(this.time.now>dashtime){
                 flash.play();
-                var smoke=this.physics.add.sprite(this.ninja.x, this.ninja.y, 'ninja');
+                var smoke=dd.create(this.ninja.x, this.ninja.y, 'ninja');
                 smoke.play('ninja_smoke');
                 smoke.on('animationcomplete', ()=>{smoke.destroy();});
-
-                this.socket.emit('smoke', { x:this.ninja.x, y:this.ninja.y}); // dash location info
-
+                var dashX = Math.cos(angle)*650;
+                var dashY = Math.sin(angle)*650;
+                smoke.setVelocityX(dashX);
+                smoke.setVelocityY(dashY);
+                this.socket.emit('smoke', { x:this.ninja.x, y:this.ninja.y, velx:dashX, vely: dashY}); // dash animation location info
+                
                 this.ninja.x+=Math.cos(angle)*100;
                 this.ninja.y+=Math.sin(angle)*100;
                 dashtime=this.time.now+200;
                 dash--;
-                dashreg=this.time.now+10000; // only 2 dashes
+                dashreg=this.time.now+1000; // only 2 dashes
                 this.ninja.dash=1;
             }
         }
         if(this.time.now>dashreg){ // dash regen
             if(dash<2){
-                dashreg=this.time.now+10000;
+                dashreg=this.time.now+1000; //orignially 10000
                 dash++;
             }
             else{
@@ -1062,13 +1071,24 @@ function katahit(self, otherPlayer, kk){
 }
 function shurihit(self, otherPlayer, ss){
     ss.destroy();
-    if(otherPlayer.health<=25){
+    if(otherPlayer.health<=10){
         kills+=1;
         console.log(self.socket.id);
         self.socket.emit('shuri_kill', {id:self.socket.id});
     }
     self.socket.emit('shuri_hit', {id:otherPlayer.playerId});
 }
+
+function dashhit(self, otherPlayer, dd){
+    dd.destroy();
+    if(otherPlayer.health<=25){
+        kills+=1;
+        console.log(self.socket.id);
+        self.socket.emit('shuri_kill', {id:self.socket.id});
+    }
+    self.socket.emit('dash_hit', {id:otherPlayer.playerId});
+}
+
 function shuri_destroy(wx, ss){
     ss.destroy();
 }
