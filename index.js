@@ -140,8 +140,8 @@ io.sockets.on('connection', function(socket){
     //console.log(player.id);
     if(players[otherPlayer.id].health<=0){
       players[otherPlayer.id].deaths+=1;
-      players[otherPlayer.id].x=100;
-      players[otherPlayer.id].y=100;
+      players[otherPlayer.id].x=2400*Math.random();
+      players[otherPlayer.id].y=2400*Math.random();
       players[otherPlayer.id].health=100;
       socket.broadcast.emit('playerMoved', players[otherPlayer.id]);
       socket.emit('playerMoved', players[otherPlayer.id]);
