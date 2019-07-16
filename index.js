@@ -138,6 +138,8 @@ io.sockets.on('connection', function(socket){
   socket.on('shuri_hit', function (otherPlayer) {
     players[otherPlayer.id].health = players[otherPlayer.id].health - 10;
     //console.log(player.id);
+    socket.broadcast.emit('shurikenHit', players[otherPlayer.id]);
+    socket.emit('shurikenHit', players[otherPlayer.id]);
     if(players[otherPlayer.id].health<=0){
       players[otherPlayer.id].deaths+=1;
       players[otherPlayer.id].x=2400*Math.random();
@@ -145,10 +147,8 @@ io.sockets.on('connection', function(socket){
       players[otherPlayer.id].health=100;
       socket.broadcast.emit('playerMoved', players[otherPlayer.id]);
       socket.emit('playerMoved', players[otherPlayer.id]);
-    }else{
-      socket.broadcast.emit('shurikenHit', players[otherPlayer.id]);
-      socket.emit('shurikenHit', players[otherPlayer.id]);
     }
+    
   });
 
   socket.on('kata_hit', function (otherPlayer) {
