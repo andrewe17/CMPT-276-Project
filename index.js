@@ -194,7 +194,7 @@ app.post('/signin', async (req, res) => {//this updates the form when the form f
 })
 
 
-app.get('/signup', async (req, res) => {//this updates the form when the form from login is submited
+app.post('/signup', async (req, res) => {//this updates the form when the form from login is submited
   try {
 
     const que = 'SELECT username, password FROM login WHERE EXISTS (SELECT username, password FROM login WHERE login.username = $1 AND login.password = $2);'
