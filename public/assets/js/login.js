@@ -9,7 +9,7 @@ function signup(){
     });
 }
 function success(){
-document.getElementById("Loginfail").style.display = "";
+document.getElementById("Loginfail").style.display = "block";
 }
 function check(json){
   console.log(jason);
