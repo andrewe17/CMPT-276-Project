@@ -128,7 +128,7 @@ function preload(){
     assetText.setOrigin(0.5, 0.5);
     
     this.load.on('progress', function (value) {
-        percentText.setText(parseInt(value * 99) + '卍');
+        percentText.setText(parseInt(value * 99) + '%');
         progressBar.clear();
         progressBar.fillStyle(0xffffff, 1);
         progressBar.fillRect(250, 300  + offset, 300 * value, 30);
@@ -553,9 +553,9 @@ function addPlayer(self, playerInfo) {
 }
 
 function addOtherPlayers(self, playerInfo) {
-    const otherPlayer = self.physics.add.sprite(playerInfo.x - 12 , playerInfo.y - 20, 'ninja');
+    const otherPlayer = self.physics.add.sprite(playerInfo.x, playerInfo.y, 'ninja');
     otherPlayer.playerId = playerInfo.playerId;
-    otherPlayer.healthText = self.add.text(playerInfo.x, playerInfo.y, healthToText(playerInfo.health), {fontFamily:'"Arial"', fontSize: '3px', fill: '#ff0000'});
+    otherPlayer.healthText = self.add.text(playerInfo.x - 12 , playerInfo.y - 20, healthToText(playerInfo.health), {fontFamily:'"Arial"', fontSize: '3px', fill: '#ff0000'});
     self.otherPlayers.add(otherPlayer);
 }
 
