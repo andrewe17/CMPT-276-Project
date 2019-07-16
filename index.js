@@ -208,23 +208,25 @@ app.post('/signin', async (req, res) => {//this updates the form when the form f
 })
 
 
-app.get('/signup', async (req, res) => {//this updates the form when the form from login is submited
+app.post('/signup', async (req, res) => {//this updates the form when the form from login is submited
   try {
 
     const que = 'SELECT username, password FROM login WHERE EXISTS (SELECT username, password FROM login WHERE login.username = $1 AND login.password = $2);'
     const value =[req.body.user,req.body.password]
     const client = await pool.connect()
-    const result = await client.query(que,
+    const results = await client.query(que,
     value);
-    // res.send(result.rowCount);
-    if (result.rowCount > 0){//I noticed that if the queue returns true the rowCount is larger than 0
-      res.send(result);
+    // res.send(results.rowCount);
+    if (results.rowCount > 0){//I noticed that if the queue returns true the rowCount is larger than 0
+      var myres = {'results': 1};
+      res.render('pages/signup',myres);
       client.release();
     }
     else {
-      res.send(result);
+      var myres = {'results': 0,'rows':results.rowCount};
+      res.render('pages/login',myres);
       const value =[Math.floor(Math.random() * (100)),req.body.userup,req.body.psw,req.body.emailup]//randomly generated ID
-      const result = await client.query('insert into login (id,username,password,email) values ($1,$2,$3,$4)',
+      const results = await client.query('insert into login (id,username,password,email) values ($1,$2,$3,$4)',
       value);
       client.release();
     }
@@ -234,6 +236,23 @@ app.get('/signup', async (req, res) => {//this updates the form when the form fr
     res.send("Error " + err);
   }
 })
+
+app.get('/login', function(req, res){
+  var results = {'results':1};
+  res.render('pages/login',results);
+
+});
+
+// app.get('/signup', function(req, res){
+//   var result = {'rowcount':0};
+//   res.render('pages/signup',result);
+// });
+
+app.get('/signup', function(req, res){
+    var results = {'results':0};
+    res.render('pages/signup',results);
+});
+
 
 //app.listen(PORT, () => console.log(`Listening on ${ PORT }`))
 http.listen(PORT, () => console.log(`Listening on ${ PORT }`))

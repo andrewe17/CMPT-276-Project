@@ -73,7 +73,6 @@ hr {
   }
 }
 .alert {
-  display: none;
   padding: 20px;
   background-color: #f44336;
   color: white;

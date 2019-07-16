@@ -1,0 +1,46 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Login</title>
+    <link rel="stylesheet" href="./assets/stylesheets/login.css">
+    <link rel="stylesheet" href="./assets/stylesheets/main.css">
+    <script type = "text/javascript"src="./assets/js/login.js"></script>
+    <script src="./assets/js/jquery.min.js"></script>
+  </head>
+  <body>
+    <div>
+        <% if(results > 0) { %>
+          <div class="alert">
+          <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+          <strong>Error</strong> Username already used.
+          </div>
+        <% } %>
+
+      <!-- prompt for repeated user -->
+      
+
+      <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
+      <form class="modal-content" method="post" action="/signup">
+        <div class="container">
+          <h1>Sign Up</h1>
+          <p>Please fill in this form to create an account.</p>
+          <hr>
+          <label for="email"><b>Email</b></label>
+          <input type="text" placeholder="Enter User" id = "userup" name="userup" required>
+          <input type="text" placeholder="Enter Email"id = "emailup" name="emailup" required>
+
+          <label for="psw"><b>Password</b></label>
+          <input type="password" placeholder="Enter Password" id = "psw" name="psw" required>
+
+          <label for="psw-repeat"><b>Repeat Password</b></label>
+          <input type="password" placeholder="Repeat Password" name="psw-repeat" required>
+
+          <div class="clearfix">
+            <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
+            <button type="submit" class="signupbtn">Sign Up</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>
