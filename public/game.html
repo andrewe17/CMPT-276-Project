@@ -3,13 +3,22 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Ninja-Dash</title>
-	    <link rel="stylesheet" href="assets/stylesheets/chat.css">
+	<link rel="stylesheet" href="assets/stylesheets/chat.css">
+	<style media='screen' type='text/css'>
+	@font-face {
+		font-family: ninjafont;
+		src: url('assets/njnaruto.ttf');
+		font-weight:400;
+		font-weight:normal;
+	}
+	</style>
 	<!-- The following two lines are for Phaser game engine -->
 	<script src="//cdn.jsdelivr.net/npm/phaser@3.18.1/dist/phaser.js"></script>
 	<script src="//cdn.jsdelivr.net/npm/phaser@3.18.1/dist/phaser.min.js"></script>
 
 </head>
 <body>
+	<div style="font-family:ninjafont; position:absolute; left:-1000px; visibility:hidden;">.</div>
 	<script src="/socket.io/socket.io.js"></script>
 	<script src="assets/js/game.js"></script>
 	<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
@@ -18,6 +27,6 @@
 		<input id="m" autocomplete="off" /><button>Send</button>
 	</form>
 </body>
-<div style="font-family:ninjafont; position:absolute; left:-1000px; visibility:hidden;">.</div>
+
 </body>
 </html>
