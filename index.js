@@ -216,6 +216,7 @@ app.post('/signup', async (req, res) => {//this updates the form when the form f
     const client = await pool.connect()
     const results = await client.query(que,
     value);
+    var count = results.rowCount;
     // res.send(results.rowCount);
     if (results.rowCount > 0){//I noticed that if the queue returns true the rowCount is larger than 0
       var myres = {'results': 1};
@@ -223,7 +224,7 @@ app.post('/signup', async (req, res) => {//this updates the form when the form f
       client.release();
     }
     else {
-      var myres = {'results': 0,'rows':results.rowCount};
+      var myres = {'results': 0,'rows': count};
       res.render('pages/login',myres);
       const value =[Math.floor(Math.random() * (100)),req.body.userup,req.body.psw,req.body.emailup]//randomly generated ID
       const results = await client.query('insert into login (id,username,password,email) values ($1,$2,$3,$4)',
