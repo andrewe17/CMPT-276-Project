@@ -329,8 +329,8 @@ function create(){
             console.log('selfplayer');
             self.ninja.deaths = playerInfo.deaths;
             self.ninja.health = playerInfo.health;
-            //self.ninja.x = playerInfo.x;
-            //self.ninja.y = playerInfo.y;
+            self.ninja.x = playerInfo.x;
+            self.ninja.y = playerInfo.y;
             health = playerInfo.health;
             deaths = playerInfo.deaths;
             self.ninja.healthText.setText(healthToText(playerInfo.health));
