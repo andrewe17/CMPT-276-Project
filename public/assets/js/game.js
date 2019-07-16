@@ -5,7 +5,7 @@ var config={
     physics: {
         default: 'arcade',
         arcade: {
-            debug: true,
+            //debug: true,
             gravity: { y: 0 }
 
         }
@@ -178,6 +178,7 @@ function preload(){
     this.load.audio('rain',  ['assets/audio/Background-rain.mp3'] );
     this.load.audio('snow',  ['assets/audio/Background-snow.mp3'] );
     this.load.audio('thunder',  ['assets/audio/Background-thunder.mp3'] );
+    this.load.audio('silence',  ['assets/audio/Background-silence.mp3'] );
     this.load.audio('ancients',  ['assets/audio/Music-Song of the Ancients.mp3'] );
     this.load.audio('loneliness',  ['assets/audio/Music-Loneliness.mp3'] );
     this.load.audio('strike',  ['assets/audio/Music-Strong and Strike.mp3'] );
@@ -217,9 +218,14 @@ function create(){
     else if(rng==4){
         music = this.sound.add('strike');
     }
+    bg = this.sound.add('silence');
     // unlock sound
     if (this.sound.locked)
         this.sound.unlock();
+    bg.play({
+        volume: .1,
+        loop: true
+    });
     music.play({
         volume: .1,
         loop: true
@@ -279,9 +285,9 @@ function create(){
             if (playerInfo.playerId === otherPlayer.playerId) {
                 console.log(playerInfo.dashed);
                 if(playerInfo.dashed==1){
-                    var smoke=self.physics.add.sprite(playerInfo.x, playerInfo.y, 'ninja');
+                    smoke=self.physics.add.sprite(playerInfo.x, playerInfo.y, 'ninja');
+                    
                     smoke.anims.play('ninja_smoke');
-                    smoke.killOnComplete = true;
                 }
                 otherPlayer.setPosition(playerInfo.x, playerInfo.y);
                 otherPlayer.healthText.x = playerInfo.x - 12;
@@ -301,15 +307,18 @@ function create(){
         katana.play();
         var slash=self.physics.add.sprite(slashInfo.x, slashInfo.y, 'slash');
         slash.play('kata_anim');
-        slash.killOnComplete = true;
+        slash.rotation = slashInfo.r; // slash angle
+        slash.on('animationcomplete', ()=>{slash.destroy();});
     });
 
      // receiving dash
     this.socket.on('smoke_ani', function (smokeInfo) {
         flash.play();
-        var smoke=self.physics.add.sprite(smokeInfo.x, smokeInfo.y, 'ninja');
+        var smoke=dd.create(smokeInfo.x, smokeInfo.y, 'ninja');
         smoke.play('ninja_smoke');
-        smoke.killOnComplete = true;
+        smoke.setVelocityX(smokeInfo.velx);
+        smoke.setVelocityY(smokeInfo.vely);
+        smoke.on('animationcomplete', ()=>{smoke.destroy();});
     });
     // receiving shuriken toss
     this.socket.on('shurikenToss', function (shurikenInfo) {
@@ -323,6 +332,7 @@ function create(){
 
     // receiving shuriken hit
     this.socket.on('shurikenHit', function (playerInfo){
+        hit.play(); // sound
         //console.log(playerInfo.playerId);
         //console.log(self.socket.id);
         if(playerInfo.playerId === self.socket.id){
@@ -426,7 +436,7 @@ function create(){
     this.anims.create({
         key: 'ninja_smoke',
         frames: this.anims.generateFrameNumbers('ninja_smoke'),
-        frameRate: 16,
+        frameRate: 700,
         repeat: 1
     });
     this.anims.create({
@@ -451,16 +461,19 @@ function create(){
     // collisions
     ss = this.physics.add.group(); // shurikens
     kk = this.physics.add.group(); // katana
+    dd = this.physics.add.group(); // dash
     this.physics.add.overlap(this.otherPlayers, ss, function(player, ss){
         shurihit(self, player, ss);
     });
-    this.physics.add.overlap(this.otherPlayers, kk, function(otherPlayers, kk){
-        katahit(self, otherPlayers, kk);
+    this.physics.add.overlap(this.otherPlayers, kk, function(player, kk){
+        katahit(self, player, kk);
+    });
+    this.physics.add.overlap(this.otherPlayers, dd, function(player, dd){
+        dashhit(self, player, dd);
     });
     this.physics.add.collider(wx, ss, function(wx, ss){ // wall and shuri
         shuri_destroy(wx, ss);
     });
-
 
 
     // weapons
@@ -528,6 +541,11 @@ function create(){
             });
         }
         else if(current_weather=='Clouds'){
+            bg = self.sound.add('snow');
+            bg.play({
+                volume: .1,
+                loop: true
+            });
             cloud_particles.createEmitter({
                 x:{min:0, max: mapx},
                 y:{min:0, max: mapy},
@@ -564,7 +582,11 @@ function create(){
             });
         }
         else{
-            // do nothing
+            bg = self.sound.add('silence');
+            bg.play({
+                volume: .1,
+                loop: true
+            });
         }
     });
 }
@@ -665,23 +687,26 @@ function update(){
         if(space.isDown && dash>0){
             if(this.time.now>dashtime){
                 flash.play();
-                var smoke=this.physics.add.sprite(this.ninja.x, this.ninja.y, 'ninja');
+                var smoke=dd.create(this.ninja.x, this.ninja.y, 'ninja');
                 smoke.play('ninja_smoke');
-                smoke.killOnComplete = true;
-
-                this.socket.emit('smoke', { x:this.ninja.x, y:this.ninja.y}); // dash location info
-
+                smoke.on('animationcomplete', ()=>{smoke.destroy();});
+                var dashX = Math.cos(angle)*650;
+                var dashY = Math.sin(angle)*650;
+                smoke.setVelocityX(dashX);
+                smoke.setVelocityY(dashY);
+                this.socket.emit('smoke', { x:this.ninja.x, y:this.ninja.y, velx:dashX, vely: dashY}); // dash animation location info
+                
                 this.ninja.x+=Math.cos(angle)*100;
                 this.ninja.y+=Math.sin(angle)*100;
                 dashtime=this.time.now+200;
                 dash--;
-                dashreg=this.time.now+10000; // only 2 dashes
+                dashreg=this.time.now+1000; // only 2 dashes
                 this.ninja.dash=1;
             }
         }
         if(this.time.now>dashreg){ // dash regen
             if(dash<2){
-                dashreg=this.time.now+10000;
+                dashreg=this.time.now+1000; //orignially 10000
                 dash++;
             }
             else{
@@ -720,16 +745,17 @@ function update(){
     // use items
     if(pointer.leftButtonDown()){ // left click
         if(options==1 && this.time.now>katatime && kata>0){
-            // katana.play(); // sound
-            // var slashx = this.ninja.x+Math.cos(angle)*0;
-            // var slashy = this.ninja.y+Math.sin(angle)*0;
-            // var slash = kk.create(slashx, slashy, 'slash');
-            // slash.play('kata_anim');
-            // slash.killOnComplete = true;
-            // this.socket.emit('playerSlash', { x:slashx, y:slashy}); // slash location info
-            // katatime = this.time.now+300;
-            // kata--;
-            // katareg = this.time.now+500;
+            katana.play(); // sound
+            var slashx = this.ninja.x+Math.cos(angle)*0;
+            var slashy = this.ninja.y+Math.sin(angle)*0;
+            var slash = kk.create(slashx, slashy, 'slash');
+            slash.rotation = angle; // slash angle
+            slash.play('kata_anim');
+            slash.on('animationcomplete', ()=>{slash.destroy();});
+            this.socket.emit('playerSlash', {x:slashx, y:slashy, r:angle}); // slash location info
+            katatime = this.time.now+300;
+            kata--;
+            katareg = this.time.now+500;
         }
 
         if(options==2 && this.time.now>shuritime && shuri>0){
@@ -775,6 +801,11 @@ function update(){
     else if(m.isDown && mute_music==1) mute_music=0;
     if(mute_music==1) music.setMute(true);
     else music.setMute(false);
+
+    if(b.isDown && mute_bg==0) mute_bg=1;
+    else if(b.isDown && mute_bg==1) mute_bg=0;
+    if(mute_bg==1) bg.setMute(true);
+    else bg.setMute(false);
 
     if(n.isDown && mute_sound==0) mute_sound=1;
     else if(n.isDown && mute_sound==1) mute_sound=0;
@@ -1040,13 +1071,24 @@ function katahit(self, otherPlayer, kk){
 }
 function shurihit(self, otherPlayer, ss){
     ss.destroy();
-    if(otherPlayer.health<=25){
+    if(otherPlayer.health<=10){
         kills+=1;
         console.log(self.socket.id);
         self.socket.emit('shuri_kill', {id:self.socket.id});
     }
     self.socket.emit('shuri_hit', {id:otherPlayer.playerId});
 }
+
+function dashhit(self, otherPlayer, dd){
+    dd.destroy();
+    if(otherPlayer.health<=25){
+        kills+=1;
+        console.log(self.socket.id);
+        self.socket.emit('shuri_kill', {id:self.socket.id});
+    }
+    self.socket.emit('dash_hit', {id:otherPlayer.playerId});
+}
+
 function shuri_destroy(wx, ss){
     ss.destroy();
 }

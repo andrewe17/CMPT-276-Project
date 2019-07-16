@@ -77,8 +77,8 @@ io.sockets.on('connection', function(socket){
   console.log('A user connected');
   // create a new player and add it to our players object
   players[socket.id] = {
-    x: 2400*Math.random(),
-    y: 2400*Math.random(),
+    x: Math.floor(Math.random()*2400),
+    y: Math.floor(Math.random()*2400),
     playerId: socket.id,
     f: 0,
     dashed:0,
@@ -140,8 +140,8 @@ io.sockets.on('connection', function(socket){
     //console.log(player.id);
     if(players[otherPlayer.id].health<=0){
       players[otherPlayer.id].deaths+=1;
-      players[otherPlayer.id].x=100;
-      players[otherPlayer.id].y=100;
+      players[otherPlayer.id].x=Math.floor(Math.random()*2400);
+      players[otherPlayer.id].y=Math.floor(Math.random()*2400);
       players[otherPlayer.id].health=100;
       socket.broadcast.emit('playerMoved', players[otherPlayer.id]);
       socket.emit('playerMoved', players[otherPlayer.id]);
@@ -155,8 +155,8 @@ io.sockets.on('connection', function(socket){
     //console.log(player.id);
     if(players[otherPlayer.id].health<=0){
       players[otherPlayer.id].deaths+=1;
-      players[otherPlayer.id].x=100;
-      players[otherPlayer.id].y=100;
+      players[otherPlayer.id].x=Math.floor(Math.random()*2400);
+      players[otherPlayer.id].y=Math.floor(Math.random()*2400);
       players[otherPlayer.id].health=100;
       socket.broadcast.emit('playerMoved', players[otherPlayer.id]);
       socket.emit('playerMoved', players[otherPlayer.id]);
@@ -185,12 +185,7 @@ app.post('/signin', async (req, res) => {//this updates the form when the form f
     value);
     // res.send(result.rowCount);
     if (result.rowCount > 0){//I noticed that if the queue returns true the rowCount is larger than 0
-      res.send(result);
       res.redirect('/game.html');
-      client.release();
-    }
-    else {
-      res.send(result);
       client.release();
     }
   } catch (err) {
@@ -199,7 +194,7 @@ app.post('/signin', async (req, res) => {//this updates the form when the form f
 })
 
 
-app.post('/signup', async (req, res) => {//this updates the form when the form from login is submited
+app.get('/signup', async (req, res) => {//this updates the form when the form from login is submited
   try {
 
     const que = 'SELECT username, password FROM login WHERE EXISTS (SELECT username, password FROM login WHERE login.username = $1 AND login.password = $2);'
