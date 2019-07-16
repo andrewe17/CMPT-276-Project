@@ -90,8 +90,6 @@ function preload(){
     var width = this.cameras.main.width;
     var height = this.cameras.main.height;
 
-    this.load.spritesheet('ninja_right', 'assets/images/ninja_right.png', {frameWidth: 32, frameHeight: 32});
-
     var logoText = this.make.text({
         x: width / 2,
         y: height / 2 - 150 ,
@@ -190,7 +188,7 @@ function preload(){
     this.load.spritesheet('ninja_up', 'assets/images/ninja_up.png', {frameWidth: 32, frameHeight: 32});
     this.load.spritesheet('ninja_down', 'assets/images/ninja_down.png', {frameWidth: 32, frameHeight: 32});
     this.load.spritesheet('ninja_left', 'assets/images/ninja_left.png', {frameWidth: 32, frameHeight: 32});
-    
+    this.load.spritesheet('ninja_right', 'assets/images/ninja_right.png', {frameWidth: 32, frameHeight: 32});
     this.load.spritesheet('ninja_smoke', 'assets/images/ninja_smoke.png', {frameWidth: 32, frameHeight: 32});
     this.load.spritesheet('slash_anim', 'assets/images/slash_anim.png', {frameWidth: 16, frameHeight: 16});
     this.load.spritesheet('kata_anim', 'assets/images/kata_anim.png', {frameWidth: 46, frameHeight: 46});
@@ -691,6 +689,8 @@ function update(){
             var slashx = this.ninja.x+Math.cos(angle)*0;
             var slashy = this.ninja.y+Math.sin(angle)*0;
             var slash = kk.create(slashx, slashy, 'slash');
+            slash.play('kata_anim');
+            slash.killOnComplete = true;
             this.socket.emit('playerSlash', { x:slashx, y:slashy}); // slash location info
             katatime = this.time.now+300;
             kata--;
