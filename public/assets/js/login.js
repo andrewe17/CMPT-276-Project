@@ -1,16 +1,11 @@
 
 function signin(){
-  var name = document.getElementById('id').value;
-  var pass = document.getElementById('id').value;
+  console.log("submiting form");
+  document.getElementById("signin").submit();
   console.log("recieving data");
   $.ajax({
       method: 'POST',
-      url:'./signin',
-      data:
-      {
-        username:name,
-        password:pass
-      }
+      url:'/signin',
       success: success
     });
 }
@@ -18,22 +13,22 @@ function signup(){
 
   $.ajax({
       method: 'POST',
-      url:'/signup',
+      url:'./signup',
       success: check
     });
 }
 function success(json){
   console.log("testing");
   console.log(json);
-  if (json == 2) {
+  if (json.rowCount <= 0) {
     document.getElementById("Loginfail").style.display = "";
   }
 }
 function check(json){
-  if (json == 1) {
+  if (json.rowCount > 0) {
     document.getElementById("alert").style.display = "";
   }
-  else if (json == 0){
+  else {
     document.getElementById("id01").style.display = "none";
     document.getElementById("Success").style.display = "";
   }
