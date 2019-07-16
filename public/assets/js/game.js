@@ -579,9 +579,8 @@ function update(){
             katana.play();
             var slashx = this.ninja.x+Math.cos(angle)*32;
             var slashy = this.ninja.y+Math.sin(angle)*32;
-            var slash = this.physics.add.sprite(slashx, slashy, 'slash');
+            var slash = this.add.sprite(slashx, slashy, 'slash');
             slash.play('slash_anim');
-            slash.killOnComplete = true;
             this.socket.emit('playerSlash', { x:slashx, y:slashy}); // slash location info
             // if hit -50 hp
             katatime = this.time.now+100;
