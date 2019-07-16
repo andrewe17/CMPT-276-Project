@@ -269,6 +269,15 @@ function create(){
         });
     });
 
+    this.socket.on('deletePlayer', function (playerId) {
+        self.otherPlayers.getChildren().forEach(function (otherPlayer) {
+            if (playerId === otherPlayer.playerId) {
+                otherPlayer.healthText.destroy();
+                otherPlayer.destroy();
+            }
+        });
+    });
+
     this.socket.on('playerMoved', function (playerInfo) {
         self.otherPlayers.getChildren().forEach(function (otherPlayer) {
             if (playerInfo.playerId === otherPlayer.playerId) {

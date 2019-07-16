@@ -101,6 +101,7 @@ io.sockets.on('connection', function(socket){
   socket.on('disconnect', function(){ //on reload or exit
     console.log('A user disconnected');
     // remove this player from our players object
+    socket.broadcast.emit('deletePlayer', socket.id);
     delete players[socket.id];
     // emit a message to all players to remove this player
     io.emit('disconnect', socket.id);
@@ -135,7 +136,7 @@ io.sockets.on('connection', function(socket){
 
   // Broadcast shuriken hit
   socket.on('shuri_hit', function (otherPlayer) {
-    players[otherPlayer.id].health -= 25;
+    players[otherPlayer.id].health = players[otherPlayer.id].health - 25;
     //console.log(player.id);
     if(players[otherPlayer.id].health<=0){
       players[otherPlayer.id].deaths+=1;
@@ -150,7 +151,7 @@ io.sockets.on('connection', function(socket){
   });
 
   socket.on('kata_hit', function (otherPlayer) {
-    players[otherPlayer.id].health -= 50;
+    players[otherPlayer.id].health = players[otherPlayer.id].health - 50;
     //console.log(player.id);
     if(players[otherPlayer.id].health<=0){
       players[otherPlayer.id].deaths+=1;
