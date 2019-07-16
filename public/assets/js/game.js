@@ -29,14 +29,16 @@ var cursor;
 var w, a, s, d, space;
 var one, two, three, four;
 //audio
-var m, n;
+var m, n, b;
 var flash;
 var katana;
 var shuriThrow;
 var hit;
 var music;
+var bg;
 var mute_sound=0;
 var mute_music=0;
+var mute_bg=0;
 var rng;
 // mouse
 var pointer;
@@ -296,6 +298,7 @@ function create(){
     });
     // receiving katana slash
     this.socket.on('playerSlashed', function (slashInfo) {
+        katana.play();
         var slash=self.physics.add.sprite(slashInfo.x, slashInfo.y, 'slash');
         slash.play('kata_anim');
         slash.killOnComplete = true;
@@ -303,12 +306,14 @@ function create(){
 
      // receiving dash
     this.socket.on('smoke_ani', function (smokeInfo) {
+        flash.play();
         var smoke=self.physics.add.sprite(smokeInfo.x, smokeInfo.y, 'ninja');
         smoke.play('ninja_smoke');
         smoke.killOnComplete = true;
     });
     // receiving shuriken toss
     this.socket.on('shurikenToss', function (shurikenInfo) {
+        shuriThrow.play();
         var toss = ss.create(shurikenInfo.initX, shurikenInfo.initY, 'shuri');
         //var toss = self.physics.add.sprite(shurikenInfo.initX, shurikenInfo.initY, 'shuri');
         toss.play('shuri_anim');
@@ -384,6 +389,7 @@ function create(){
     four = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.FOUR);
     m = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M);
     n = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.N);
+    b = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.B);
     // mouse
     pointer = this.input.activePointer; // mouse location relative to screen
 
@@ -490,6 +496,11 @@ function create(){
         // Thunderstorm, Drizzle, Rain, Snow, Clear, Clouds
         // Mist, Smoke, Haze, Dust, Fog, Sand, Dust, Ash, Squall, Tornado
         if(current_weather=='Drizzle' || current_weather=='Rain'){
+            bg = self.sound.add('rain');
+            bg.play({
+                volume: .1,
+                loop: true
+            });
             rain_particles.createEmitter({
                 x:{min:0, max: mapx},
                 y:{min:0, max: mapy},
@@ -501,6 +512,11 @@ function create(){
             });
         }
         else if(current_weather=='Snow'){
+            bg = self.sound.add('snow');
+            bg.play({
+                volume: .1,
+                loop: true
+            });
             snow_particles.createEmitter({
                 x:{min:0, max: mapx},
                 y:{min:0, max: mapy},
@@ -523,7 +539,29 @@ function create(){
             });
         }
         else if(current_weather=='Thunderstorm'){
-            //
+            bg = self.sound.add('thunder');
+            bg.play({
+                volume: .1,
+                loop: true
+            });
+            cloud_particles.createEmitter({
+                x:{min:0, max: mapx},
+                y:{min:0, max: mapy},
+                lifespan:10000,
+                speedX: {min:0, max:10},
+                speedY: {min:0, max:0},
+                scale: {start:10, end: 0},
+                quantity:4,
+            });
+            rain_particles.createEmitter({
+                x:{min:0, max: mapx},
+                y:{min:0, max: mapy},
+                lifespan:4000,
+                speedX: {min:0, max:-100},
+                speedY: {min:400, max:800},
+                scale: {start:0.5, end: 0},
+                quantity:12,
+            });
         }
         else{
             // do nothing
@@ -626,6 +664,7 @@ function update(){
         // dash
         if(space.isDown && dash>0){
             if(this.time.now>dashtime){
+                flash.play();
                 var smoke=this.physics.add.sprite(this.ninja.x, this.ninja.y, 'ninja');
                 smoke.play('ninja_smoke');
                 smoke.killOnComplete = true;
@@ -696,7 +735,7 @@ function update(){
         if(options==2 && this.time.now>shuritime && shuri>0){
             var initX = this.ninja.x+Math.cos(angle)*32;
             var initY = this.ninja.y+Math.sin(angle)*32;
-
+            shuriThrow.play(); // sound
             //shuris.add.group();
             var toss = ss.create(initX, initY, 'shuri');
             toss.play('shuri_anim');
