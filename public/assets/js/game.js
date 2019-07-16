@@ -165,6 +165,7 @@ function preload(){
     this.load.image('twall', 'assets/images/Twall.png');
     this.load.image('van', 'assets/images/van.jpg');
     this.load.image('ninja', 'assets/images/ninja.png');
+    this.load.image('dashobject', 'assets/images/ninja.png');
     this.load.image('slash', 'assets/images/slash.png');
     this.load.image('shuri', 'assets/images/shuri.png');
     this.load.image('rain', 'assets/images/rain.png');
@@ -178,7 +179,7 @@ function preload(){
     this.load.audio('rain',  ['assets/audio/Background-rain.mp3'] );
     this.load.audio('snow',  ['assets/audio/Background-snow.mp3'] );
     this.load.audio('thunder',  ['assets/audio/Background-thunder.mp3'] );
-    this.load.audio('silence',  ['assets/audio/Background-silence.mp3'] );
+    //this.load.audio('silence',  ['assets/audio/Background-silence.mp3'] );
     this.load.audio('ancients',  ['assets/audio/Music-Song of the Ancients.mp3'] );
     this.load.audio('loneliness',  ['assets/audio/Music-Loneliness.mp3'] );
     this.load.audio('strike',  ['assets/audio/Music-Strong and Strike.mp3'] );
@@ -218,7 +219,7 @@ function create(){
     else if(rng==4){
         music = this.sound.add('strike');
     }
-    bg = this.sound.add('silence');
+    bg = this.sound.add('thunder');
     // unlock sound
     if (this.sound.locked)
         this.sound.unlock();
@@ -314,7 +315,8 @@ function create(){
      // receiving dash
     this.socket.on('smoke_ani', function (smokeInfo) {
         flash.play();
-        var smoke=dd.create(smokeInfo.x, smokeInfo.y, 'ninja');
+        var smoke=dd.create(smokeInfo.x, smokeInfo.y, 'dashobject');
+        smoke.rotation = smokeInfo.r;
         smoke.play('ninja_smoke');
         smoke.setVelocityX(smokeInfo.velx);
         smoke.setVelocityY(smokeInfo.vely);
@@ -582,7 +584,7 @@ function create(){
             });
         }
         else{
-            bg = self.sound.add('silence');
+            bg = self.sound.add('thunder');
             bg.play({
                 volume: .1,
                 loop: true
@@ -687,14 +689,15 @@ function update(){
         if(space.isDown && dash>0){
             if(this.time.now>dashtime){
                 flash.play();
-                var smoke=dd.create(this.ninja.x, this.ninja.y, 'ninja');
+                var smoke=dd.create(this.ninja.x, this.ninja.y, 'dashobject');
+                smoke.rotation = angle;
                 smoke.play('ninja_smoke');
                 smoke.on('animationcomplete', ()=>{smoke.destroy();});
                 var dashX = Math.cos(angle)*650;
                 var dashY = Math.sin(angle)*650;
                 smoke.setVelocityX(dashX);
                 smoke.setVelocityY(dashY);
-                this.socket.emit('smoke', { x:this.ninja.x, y:this.ninja.y, velx:dashX, vely: dashY}); // dash animation location info
+                this.socket.emit('smoke', { x:this.ninja.x, y:this.ninja.y, velx:dashX, vely: dashY, r:angle}); // dash animation location info
                 
                 this.ninja.x+=Math.cos(angle)*100;
                 this.ninja.y+=Math.sin(angle)*100;
@@ -1061,7 +1064,7 @@ function slowdown(player, wall){
 
 // collisions
 function katahit(self, otherPlayer, kk){
-    kk.destroy();
+    //kk.destroy();
     if(otherPlayer.health<=50){
         kills+=1;
         console.log(self.socket.id);
@@ -1080,7 +1083,7 @@ function shurihit(self, otherPlayer, ss){
 }
 
 function dashhit(self, otherPlayer, dd){
-    dd.destroy();
+    //dd.destroy();
     if(otherPlayer.health<=25){
         kills+=1;
         console.log(self.socket.id);

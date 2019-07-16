@@ -149,9 +149,23 @@ io.sockets.on('connection', function(socket){
     socket.broadcast.emit('shurikenHit', players[otherPlayer.id]);
     socket.emit('shurikenHit', players[otherPlayer.id]);
   });
+  socket.on('dash_hit', function (otherPlayer) {
+    players[otherPlayer.id].health = players[otherPlayer.id].health - 5;
+    //console.log(player.id);
+    if(players[otherPlayer.id].health<=0){
+      players[otherPlayer.id].deaths+=1;
+      players[otherPlayer.id].x=Math.floor(Math.random()*2400);
+      players[otherPlayer.id].y=Math.floor(Math.random()*2400);
+      players[otherPlayer.id].health=100;
+      socket.broadcast.emit('playerMoved', players[otherPlayer.id]);
+      socket.emit('playerMoved', players[otherPlayer.id]);
+    }
+    socket.broadcast.emit('shurikenHit', players[otherPlayer.id]);
+    socket.emit('shurikenHit', players[otherPlayer.id]);
+  });
 
   socket.on('kata_hit', function (otherPlayer) {
-    players[otherPlayer.id].health = players[otherPlayer.id].health - 50;
+    players[otherPlayer.id].health = players[otherPlayer.id].health - 100;
     //console.log(player.id);
     if(players[otherPlayer.id].health<=0){
       players[otherPlayer.id].deaths+=1;
