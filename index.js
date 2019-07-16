@@ -139,24 +139,9 @@ io.sockets.on('connection', function(socket){
     //console.log(player.id);
     if(players[otherPlayer.id].health<=0){
       players[otherPlayer.id].deaths+=1;
+      players[otherPlayer.id].health=100;
       players[otherPlayer.id].x=100;
       players[otherPlayer.id].y=100;
-      players[otherPlayer.id].health=100;
-      socket.broadcast.emit('playerMoved', players[otherPlayer.id]);
-      socket.emit('playerMoved', players[otherPlayer.id]);
-    }
-    socket.broadcast.emit('shurikenHit', players[otherPlayer.id]);
-    socket.emit('shurikenHit', players[otherPlayer.id]);
-  });
-
-  socket.on('kata_hit', function (otherPlayer) {
-    players[otherPlayer.id].health -= 50;
-    //console.log(player.id);
-    if(players[otherPlayer.id].health<=0){
-      players[otherPlayer.id].deaths+=1;
-      players[otherPlayer.id].x=100;
-      players[otherPlayer.id].y=100;
-      players[otherPlayer.id].health=100;
       socket.broadcast.emit('playerMoved', players[otherPlayer.id]);
       socket.emit('playerMoved', players[otherPlayer.id]);
     }
@@ -182,13 +167,15 @@ app.post('/signin', async (req, res) => {//this updates the form when the form f
     const client = await pool.connect()
     const result = await client.query(que, value);
     // res.send(result.rowCount);
+    const temp = 2;
     if (result.rowCount > 0){//I noticed that if the queue returns true the rowCount is larger than 0
-      res.send(result);
+      temp = 0;
+      res.send(temp);
       res.redirect('/game.html');
       client.release();
     }
     else {
-      res.send(result);
+      res.send(temp);
       client.release();
     }
   } catch (err) {
@@ -205,15 +192,17 @@ app.post('/signup', async (req, res) => {//this updates the form when the form f
     const client = await pool.connect()
     const result = await client.query(que, value);
     // res.send(result.rowCount);
+    const temp = 1;
     if (result.rowCount > 0){//I noticed that if the queue returns true the rowCount is larger than 0
-      res.send(result);
+      res.send(temp);
       client.release();
     }
     else {
-      res.send(result);
       const value =[Math.floor(Math.random() * (100)),req.body.userup,req.body.psw,req.body.emailup]//randomly generated ID
       const result = await client.query('insert into login (id,username,password,email) values ($1,$2,$3,$4)',
       value);
+      temp = 0;
+      res.send(temp);
       client.release();
     }
 

@@ -79,88 +79,10 @@ var text1, text2, text3, text4; // textbox
 var mousex;
 var mousey;
 var angle;
+var healthText;
 
-function preload(){   
-    var offset = 30;
-    var progressBar = this.add.graphics();
-    var progressBox = this.add.graphics();
-    progressBox.fillStyle(0xFF2222, 0.8);
-    progressBox.fillRect(240, 290 + offset, 320, 50);
-    
-    var width = this.cameras.main.width;
-    var height = this.cameras.main.height;
-
-    this.load.spritesheet('ninja_right', 'assets/images/ninja_right.png', {frameWidth: 32, frameHeight: 32});
-
-    var logoText = this.make.text({
-        x: width / 2,
-        y: height / 2 - 150 ,
-        text: 'ninja-dash',
-        style: {
-            font: '80px ninjafont',
-            fill: '#1d68ff'
-        }
-    });
-
-    logoText.setOrigin(0.5,0.5);
-    
-    var percentText = this.make.text({
-        x: width / 2,
-        y: height / 2 + 15  + offset,
-        text: '0%',
-        style: {
-            font: '18px Courier',
-            fill: '#ffffff'
-        }
-    });
-    percentText.setOrigin(0.5, 0.5);
-    
-    var assetText = this.make.text({
-        x: width / 2,
-        y: height / 2 + 70  + offset,
-        text: '',
-        style: {
-            font: '18px Courier',
-            fill: '#ffffff'
-        }
-    });
-
-    assetText.setOrigin(0.5, 0.5);
-    
-    this.load.on('progress', function (value) {
-        percentText.setText(parseInt(value * 99) + '%');
-        progressBar.clear();
-        progressBar.fillStyle(0xffffff, 1);
-        progressBar.fillRect(250, 300  + offset, 300 * value, 30);
-    });
-    // var proloadSelf = this;
-    // var loading;
-    // var loadingAnime;
-    this.load.on('fileprogress', function (file) {
-        console.log(file);
-        // if(file.key === 'ninja_right'){
-        //     loadingAnime = {
-        //         key: 'load',
-        //         frames: proloadSelf.anims.generateFrameNumbers('ninja_right',{start: 0, end: 2}),
-        //         frameRate: 16,
-        //         repeat: -1
-        //     };
-        //     proloadSelf.anims.create(loadingAnime);
-        //     loading = proloadSelf.add.sprite(width/2, height/2, 'ninja_right');
-        //     loading.anims.play('load');
-        // }
-        assetText.setText('Loading ' + file.type + ':  ' + file.key );
-    });
-
-    this.load.on('complete', function () {
-        assetText.setText('Complete!');
-        progressBar.destroy();
-        progressBox.destroy();
-        percentText.destroy();
-        assetText.destroy();
-        //loading.destroy();
-    });
-
+function preload(){
+    //this.load.image('van', 'assets/images/van.jpg'); // delete this
     this.load.image('wall', 'assets/images/wall.png');
     this.load.image('wallx', 'assets/images/wallx.png');
     this.load.image('wally', 'assets/images/wally.png');
@@ -174,7 +96,15 @@ function preload(){
     this.load.image('rain', 'assets/images/rain.png');
     this.load.image('snow', 'assets/images/snow.png');
     this.load.image('cloud', 'assets/images/cloud.png');
-
+    
+    this.load.spritesheet('ninja_up', 'assets/images/ninja_up.png', {frameWidth: 32, frameHeight: 32});
+    this.load.spritesheet('ninja_down', 'assets/images/ninja_down.png', {frameWidth: 32, frameHeight: 32});
+    this.load.spritesheet('ninja_left', 'assets/images/ninja_left.png', {frameWidth: 32, frameHeight: 32});
+    this.load.spritesheet('ninja_right', 'assets/images/ninja_right.png', {frameWidth: 32, frameHeight: 32});
+    this.load.spritesheet('ninja_smoke', 'assets/images/ninja_smoke.png', {frameWidth: 32, frameHeight: 32});
+    this.load.spritesheet('slash_anim', 'assets/images/kata_anim.png', {frameWidth: 48, frameHeight: 27});
+    this.load.spritesheet('shuri_anim', 'assets/images/shuri_anim.png', {frameWidth: 13, frameHeight: 13});
+    
     this.load.audio('katana',  ['assets/audio/Sound-katana.mp3'] );
     this.load.audio('flash',  ['assets/audio/Sound-dash.mp3'] );
     this.load.audio('hit',  ['assets/audio/Sound-hit.mp3'] );
@@ -186,15 +116,6 @@ function preload(){
     this.load.audio('loneliness',  ['assets/audio/Music-Loneliness.mp3'] );
     this.load.audio('strike',  ['assets/audio/Music-Strong and Strike.mp3'] );
     this.load.audio('wretched',  ['assets/audio/Music-Wretched Weaponry.mp3'] );
-    
-    this.load.spritesheet('ninja_up', 'assets/images/ninja_up.png', {frameWidth: 32, frameHeight: 32});
-    this.load.spritesheet('ninja_down', 'assets/images/ninja_down.png', {frameWidth: 32, frameHeight: 32});
-    this.load.spritesheet('ninja_left', 'assets/images/ninja_left.png', {frameWidth: 32, frameHeight: 32});
-    
-    this.load.spritesheet('ninja_smoke', 'assets/images/ninja_smoke.png', {frameWidth: 32, frameHeight: 32});
-    this.load.spritesheet('slash_anim', 'assets/images/slash_anim.png', {frameWidth: 16, frameHeight: 16});
-    this.load.spritesheet('kata_anim', 'assets/images/kata_anim.png', {frameWidth: 46, frameHeight: 46});
-    this.load.spritesheet('shuri_anim', 'assets/images/shuri_anim.png', {frameWidth: 13, frameHeight: 13});
 }
 
 
@@ -280,8 +201,8 @@ function create(){
                 }
                 otherPlayer.setPosition(playerInfo.x, playerInfo.y);
                 otherPlayer.healthText.x = playerInfo.x - 12;
-                otherPlayer.healthText.y = playerInfo.y - 20;
-                otherPlayer.healthText.setText(healthToText(playerInfo.health));
+                otherPlayer.healthText.y = playerInfo.y - 30;
+                otherPlayer.healthText.setText(playerInfo.health);
 
                 // animation handling of otherplayers
                 if(playerInfo.f==1) otherPlayer.anims.play('ninja_up');
@@ -294,7 +215,7 @@ function create(){
     // receiving katana slash
     this.socket.on('playerSlashed', function (slashInfo) {
         var slash=self.physics.add.sprite(slashInfo.x, slashInfo.y, 'slash');
-        slash.play('kata_anim');
+        slash.play('slash_anim');
         slash.killOnComplete = true;
     });
 
@@ -325,14 +246,14 @@ function create(){
             self.ninja.y = playerInfo.y;
             health = playerInfo.health;
             deaths = playerInfo.deaths;
-            self.ninja.healthText.setText(healthToText(playerInfo.health));
+            self.ninja.healthText.setText(playerInfo.health);
         }
         else{
             self.otherPlayers.getChildren().forEach(function (otherPlayer) {
                 if (playerInfo.playerId === otherPlayer.playerId) {
                     console.log('otherplayer');
                     otherPlayer.health = playerInfo.health;
-                    otherPlayer.healthText.setText(healthToText(playerInfo.health));
+                    otherPlayer.healthText.setText(playerInfo.health);
                 }
             });
         }
@@ -362,8 +283,8 @@ function create(){
         $('#messages').append($('<li>').html(username));
     });
     // ask username
-    //var username = prompt('Please tell me your name');
-    this.socket.emit('username', 'player' + Math.floor(Math.random() * 99));
+    var username = prompt('Please tell me your name');
+    this.socket.emit('username', username);
 
     // global time
     gg=this.time.now+(1000*60*10);
@@ -423,13 +344,7 @@ function create(){
     this.anims.create({
         key: 'slash_anim',
         frames: this.anims.generateFrameNumbers('slash_anim'),
-        frameRate: 320,
-        repeat: 1
-    });
-    this.anims.create({
-        key: 'kata_anim',
-        frames: this.anims.generateFrameNumbers('kata_anim'),
-        frameRate: 64,
+        frameRate: 16,
         repeat: 0
     });
     this.anims.create({
@@ -440,18 +355,13 @@ function create(){
     });
 
     // collisions
-    ss = this.physics.add.group(); // shurikens
-    kk = this.physics.add.group(); // katana
+    ss = this.physics.add.group(); // shuris
     this.physics.add.overlap(this.otherPlayers, ss, function(player, ss){
         shurihit(self, player, ss);
-    });
-    this.physics.add.overlap(this.otherPlayers, kk, function(otherPlayers, kk){
-        katahit(self, otherPlayers, kk);
     });
     this.physics.add.collider(wx, ss, function(wx, ss){ // wall and shuri
         shuri_destroy(wx, ss);
     });
-
 
 
     // weapons
@@ -527,25 +437,13 @@ function create(){
         }
     });
 }
-function healthToText(health){
-    var percentage = health / 10;
-    var ii;
-    var textHealth ='';
-    for( ii = 1 ; ii <= percentage ; ii++){
-        textHealth += '█';
-    }
-    for( jj = 0 ; jj <= 10 - ii ; jj++){
-        textHealth += '░';
-    }
-    return textHealth;
-}
 
 function addPlayer(self, playerInfo) {
     self.ninja = self.physics.add.sprite(playerInfo.x, playerInfo.y, 'ninja');
     self.ninja.setCollideWorldBounds(true);
     self.ninja.setVelocity(0, 0);
     self.cameras.main.startFollow(self.ninja, true, 0.05, 0.05, 0.05, 0.05);
-    self.ninja.healthText = self.add.text(playerInfo.x - 12, playerInfo.y - 20, healthToText(playerInfo.health), {fontFamily:'"Arial"', fontSize: '3pt', fill: '#00ff00'});
+    self.ninja.healthText = self.add.text(playerInfo.x - 12, playerInfo.y - 30, playerInfo.health, {fontFamily:'"Roboto Condensed"', fill: '#ffffff'});
     self.physics.add.collider(self.ninja, wx, pb);
     self.physics.add.collider(self.ninja, ss, shuri_destroy);
     self.physics.add.overlap(self.ninja, waterLayer, slowdown);
@@ -555,7 +453,7 @@ function addPlayer(self, playerInfo) {
 function addOtherPlayers(self, playerInfo) {
     const otherPlayer = self.physics.add.sprite(playerInfo.x, playerInfo.y, 'ninja');
     otherPlayer.playerId = playerInfo.playerId;
-    otherPlayer.healthText = self.add.text(playerInfo.x - 12 , playerInfo.y - 20, healthToText(playerInfo.health), {fontFamily:'"Arial"', fontSize: '3pt', fill: '#ff0000'});
+    otherPlayer.healthText = self.add.text(playerInfo.x - 12, playerInfo.y - 30, playerInfo.health, {fontFamily:'"Roboto Condensed"', fill: '#ffffff'});
     self.otherPlayers.add(otherPlayer);
 }
 
@@ -563,20 +461,20 @@ function addOtherPlayers(self, playerInfo) {
 function update(){
     if(this.ninja){
         this.ninja.healthText.x = this.ninja.x - 12;
-        this.ninja.healthText.y = this.ninja.y - 20;
+        this.ninja.healthText.y = this.ninja.y - 30;
 
         // keyboard
         if(w.isDown){
             if(this.ninja.anims.getCurrentKey()!='ninja_up') this.ninja.play('ninja_up');
             else if(!this.ninja.anims.isPlaying) this.ninja.play('ninja_up');
-            if(a.isDown || d.isDown) this.ninja.setVelocityY(-vel/1.4);
+            if(a.isDown || d.isDown) this.ninja.setVelocityY(-vel/2);
             else this.ninja.setVelocityY(-vel);
             this.ninja.f=1;
         }
         else if(s.isDown){
             if(this.ninja.anims.getCurrentKey()!='ninja_down') this.ninja.play('ninja_down');
             else if(!this.ninja.anims.isPlaying) this.ninja.play('ninja_down');
-            if(a.isDown || d.isDown) this.ninja.setVelocityY(vel/1.4);
+            if(a.isDown || d.isDown) this.ninja.setVelocityY(vel/2);
             else this.ninja.setVelocityY(vel);
             this.ninja.f=2;
         }
@@ -589,7 +487,7 @@ function update(){
         if(a.isDown){
             if(this.ninja.anims.getCurrentKey()!='ninja_left') this.ninja.play('ninja_left');
             else if(!this.ninja.anims.isPlaying) this.ninja.play('ninja_left');
-            if(w.isDown || s.isDown) this.ninja.setVelocityX(-vel/1.4);
+            if(w.isDown || s.isDown) this.ninja.setVelocityX(-vel/2);
             else this.ninja.setVelocityX(-vel);
             this.ninja.f=3;
         }
@@ -597,7 +495,7 @@ function update(){
             this.ninja.anims.resume();
             if(this.ninja.anims.getCurrentKey()!='ninja_right') this.ninja.play('ninja_right');
             else if(!this.ninja.anims.isPlaying) this.ninja.play('ninja_right');
-            if(w.isDown || s.isDown) this.ninja.setVelocityX(vel/1.4);
+            if(w.isDown || s.isDown) this.ninja.setVelocityX(vel/2);
             else this.ninja.setVelocityX(vel);
             this.ninja.f=4;
         }
@@ -678,14 +576,14 @@ function update(){
     // use items
     if(pointer.leftButtonDown()){ // left click
         if(options==1 && this.time.now>katatime && kata>0){
-            katana.play(); // sound
-            var slashx = this.ninja.x+Math.cos(angle)*0;
-            var slashy = this.ninja.y+Math.sin(angle)*0;
-            var slash = kk.create(slashx, slashy, 'slash');
-            slash.play('kata_anim');
-            slash.killOnComplete = true;
+            katana.play();
+            var slashx = this.ninja.x+Math.cos(angle)*32;
+            var slashy = this.ninja.y+Math.sin(angle)*32;
+            var slash = this.add.sprite(slashx, slashy, 'slash');
+            slash.play('slash_anim');
             this.socket.emit('playerSlash', { x:slashx, y:slashy}); // slash location info
-            katatime = this.time.now+300;
+            // if hit -50 hp
+            katatime = this.time.now+100;
             kata--;
             katareg = this.time.now+500;
         }
@@ -696,6 +594,7 @@ function update(){
 
             //shuris.add.group();
             var toss = ss.create(initX, initY, 'shuri');
+
             toss.play('shuri_anim');
             var velX = Math.cos(angle)*300;
             var velY = Math.sin(angle)*300;
@@ -711,7 +610,7 @@ function update(){
 
     //regen
     if(this.time.now>katareg){ // kata regen
-        if(kata<5){
+        if(kata<10){
             katareg=this.time.now+500;
             kata++;
         }
@@ -987,15 +886,6 @@ function slowdown(player, wall){
 }
 
 // collisions
-function katahit(self, otherPlayer, kk){
-    kk.destroy();
-    if(otherPlayer.health<=50){
-        kills+=1;
-        console.log(self.socket.id);
-        self.socket.emit('shuri_kill', {id:self.socket.id});
-    }
-    self.socket.emit('kata_hit', {id:otherPlayer.playerId});
-}
 function shurihit(self, otherPlayer, ss){
     ss.destroy();
     if(otherPlayer.health<=25){

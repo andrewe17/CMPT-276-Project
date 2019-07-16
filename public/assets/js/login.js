@@ -18,22 +18,22 @@ function signup(){
 
   $.ajax({
       method: 'POST',
-      url:'./signup',
+      url:'/signup',
       success: check
     });
 }
 function success(json){
   console.log("testing");
   console.log(json);
-  if (json.rowCount <= 0) {
+  if (json == 2) {
     document.getElementById("Loginfail").style.display = "";
   }
 }
 function check(json){
-  if (json.rowCount > 0) {
+  if (json == 1) {
     document.getElementById("alert").style.display = "";
   }
-  else {
+  else if (json == 0){
     document.getElementById("id01").style.display = "none";
     document.getElementById("Success").style.display = "";
   }
