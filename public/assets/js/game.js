@@ -79,13 +79,12 @@ var text1, text2, text3, text4; // textbox
 var mousex;
 var mousey;
 var angle;
-var healthText;
 
 function preload(){   
     var offset = 30;
     var progressBar = this.add.graphics();
     var progressBox = this.add.graphics();
-    progressBox.fillStyle(0x222222, 0.8);
+    progressBox.fillStyle(0xFF2222, 0.8);
     progressBox.fillRect(240, 290 + offset, 320, 50);
     
     var width = this.cameras.main.width;
@@ -99,7 +98,7 @@ function preload(){
         text: 'ninja-dash',
         style: {
             font: '80px ninjafont',
-            fill: '#ffffff'
+            fill: '#1d68ff'
         }
     });
 
@@ -110,7 +109,7 @@ function preload(){
         y: height / 2 + 15  + offset,
         text: '0%',
         style: {
-            font: '18px ninjafont',
+            font: '18px Courier',
             fill: '#ffffff'
         }
     });
@@ -121,7 +120,7 @@ function preload(){
         y: height / 2 + 70  + offset,
         text: '',
         style: {
-            font: '18px ninjafont',
+            font: '18px Courier',
             fill: '#ffffff'
         }
     });
@@ -129,8 +128,7 @@ function preload(){
     assetText.setOrigin(0.5, 0.5);
     
     this.load.on('progress', function (value) {
-        
-        percentText.setText(parseInt(value * 100) + '%');
+        percentText.setText(parseInt(value * 99) + '卍');
         progressBar.clear();
         progressBar.fillStyle(0xffffff, 1);
         progressBar.fillRect(250, 300  + offset, 300 * value, 30);
@@ -139,7 +137,7 @@ function preload(){
     // var loading;
     // var loadingAnime;
     this.load.on('fileprogress', function (file) {
-        //console.log(file);
+        console.log(file);
         // if(file.key === 'ninja_right'){
         //     loadingAnime = {
         //         key: 'load',
@@ -151,10 +149,11 @@ function preload(){
         //     loading = proloadSelf.add.sprite(width/2, height/2, 'ninja_right');
         //     loading.anims.play('load');
         // }
-        assetText.setText('Loading asset: ' + file.key);
+        assetText.setText('Loading ' + file.type + ':  ' + file.key );
     });
 
     this.load.on('complete', function () {
+        assetText.setText('Complete!');
         progressBar.destroy();
         progressBox.destroy();
         percentText.destroy();
@@ -175,16 +174,7 @@ function preload(){
     this.load.image('rain', 'assets/images/rain.png');
     this.load.image('snow', 'assets/images/snow.png');
     this.load.image('cloud', 'assets/images/cloud.png');
-    
-    this.load.spritesheet('ninja_up', 'assets/images/ninja_up.png', {frameWidth: 32, frameHeight: 32});
-    this.load.spritesheet('ninja_down', 'assets/images/ninja_down.png', {frameWidth: 32, frameHeight: 32});
-    this.load.spritesheet('ninja_left', 'assets/images/ninja_left.png', {frameWidth: 32, frameHeight: 32});
-    
-    this.load.spritesheet('ninja_smoke', 'assets/images/ninja_smoke.png', {frameWidth: 32, frameHeight: 32});
-    this.load.spritesheet('slash_anim', 'assets/images/slash_anim.png', {frameWidth: 16, frameHeight: 16});
-    this.load.spritesheet('kata_anim', 'assets/images/kata_anim.png', {frameWidth: 46, frameHeight: 46});
-    this.load.spritesheet('shuri_anim', 'assets/images/shuri_anim.png', {frameWidth: 13, frameHeight: 13});
-    
+
     this.load.audio('katana',  ['assets/audio/Sound-katana.mp3'] );
     this.load.audio('flash',  ['assets/audio/Sound-dash.mp3'] );
     this.load.audio('hit',  ['assets/audio/Sound-hit.mp3'] );
@@ -196,6 +186,15 @@ function preload(){
     this.load.audio('loneliness',  ['assets/audio/Music-Loneliness.mp3'] );
     this.load.audio('strike',  ['assets/audio/Music-Strong and Strike.mp3'] );
     this.load.audio('wretched',  ['assets/audio/Music-Wretched Weaponry.mp3'] );
+    
+    this.load.spritesheet('ninja_up', 'assets/images/ninja_up.png', {frameWidth: 32, frameHeight: 32});
+    this.load.spritesheet('ninja_down', 'assets/images/ninja_down.png', {frameWidth: 32, frameHeight: 32});
+    this.load.spritesheet('ninja_left', 'assets/images/ninja_left.png', {frameWidth: 32, frameHeight: 32});
+    
+    this.load.spritesheet('ninja_smoke', 'assets/images/ninja_smoke.png', {frameWidth: 32, frameHeight: 32});
+    this.load.spritesheet('slash_anim', 'assets/images/slash_anim.png', {frameWidth: 16, frameHeight: 16});
+    this.load.spritesheet('kata_anim', 'assets/images/kata_anim.png', {frameWidth: 46, frameHeight: 46});
+    this.load.spritesheet('shuri_anim', 'assets/images/shuri_anim.png', {frameWidth: 13, frameHeight: 13});
 }
 
 
@@ -281,8 +280,8 @@ function create(){
                 }
                 otherPlayer.setPosition(playerInfo.x, playerInfo.y);
                 otherPlayer.healthText.x = playerInfo.x - 12;
-                otherPlayer.healthText.y = playerInfo.y - 30;
-                otherPlayer.healthText.setText(playerInfo.health);
+                otherPlayer.healthText.y = playerInfo.y - 20;
+                otherPlayer.healthText.setText(healthToText(playerInfo.health));
 
                 // animation handling of otherplayers
                 if(playerInfo.f==1) otherPlayer.anims.play('ninja_up');
@@ -326,14 +325,14 @@ function create(){
             self.ninja.y = playerInfo.y;
             health = playerInfo.health;
             deaths = playerInfo.deaths;
-            self.ninja.healthText.setText(playerInfo.health);
+            self.ninja.healthText.setText(healthToText(playerInfo.health));
         }
         else{
             self.otherPlayers.getChildren().forEach(function (otherPlayer) {
                 if (playerInfo.playerId === otherPlayer.playerId) {
                     console.log('otherplayer');
                     otherPlayer.health = playerInfo.health;
-                    otherPlayer.healthText.setText(playerInfo.health);
+                    otherPlayer.healthText.setText(healthToText(playerInfo.health));
                 }
             });
         }
@@ -363,8 +362,8 @@ function create(){
         $('#messages').append($('<li>').html(username));
     });
     // ask username
-    var username = prompt('Please tell me your name');
-    this.socket.emit('username', username);
+    //var username = prompt('Please tell me your name');
+    this.socket.emit('username', 'player' + Math.floor(Math.random() * 99));
 
     // global time
     gg=this.time.now+(1000*60*10);
@@ -528,13 +527,25 @@ function create(){
         }
     });
 }
+function healthToText(health){
+    var percentage = health / 10;
+    var ii;
+    var textHealth ='';
+    for( ii = 1 ; ii <= percentage ; ii++){
+        textHealth += '█';
+    }
+    for( jj = 0 ; jj <= 10 - ii ; jj++){
+        textHealth += '░';
+    }
+    return textHealth;
+}
 
 function addPlayer(self, playerInfo) {
     self.ninja = self.physics.add.sprite(playerInfo.x, playerInfo.y, 'ninja');
     self.ninja.setCollideWorldBounds(true);
     self.ninja.setVelocity(0, 0);
     self.cameras.main.startFollow(self.ninja, true, 0.05, 0.05, 0.05, 0.05);
-    self.ninja.healthText = self.add.text(playerInfo.x - 12, playerInfo.y - 30, playerInfo.health, {fontFamily:'"Roboto Condensed"', fill: '#ffffff'});
+    self.ninja.healthText = self.add.text(playerInfo.x - 12, playerInfo.y - 20, healthToText(playerInfo.health), {fontFamily:'"Times New Roman"', fontSize: '3px', fill: '#00ff00'});
     self.physics.add.collider(self.ninja, wx, pb);
     self.physics.add.collider(self.ninja, ss, shuri_destroy);
     self.physics.add.overlap(self.ninja, waterLayer, slowdown);
@@ -542,9 +553,9 @@ function addPlayer(self, playerInfo) {
 }
 
 function addOtherPlayers(self, playerInfo) {
-    const otherPlayer = self.physics.add.sprite(playerInfo.x, playerInfo.y, 'ninja');
+    const otherPlayer = self.physics.add.sprite(playerInfo.x - 12 , playerInfo.y - 20, 'ninja');
     otherPlayer.playerId = playerInfo.playerId;
-    otherPlayer.healthText = self.add.text(playerInfo.x - 12, playerInfo.y - 30, playerInfo.health, {fontFamily:'"Roboto Condensed"', fill: '#ffffff'});
+    otherPlayer.healthText = self.add.text(playerInfo.x, playerInfo.y, healthToText(playerInfo.health), {fontFamily:'"Times New Roman"', fontSize: '3px', fill: '#ff0000'});
     self.otherPlayers.add(otherPlayer);
 }
 
@@ -552,7 +563,7 @@ function addOtherPlayers(self, playerInfo) {
 function update(){
     if(this.ninja){
         this.ninja.healthText.x = this.ninja.x - 12;
-        this.ninja.healthText.y = this.ninja.y - 30;
+        this.ninja.healthText.y = this.ninja.y - 20;
 
         // keyboard
         if(w.isDown){
