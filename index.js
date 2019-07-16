@@ -77,8 +77,8 @@ io.sockets.on('connection', function(socket){
   console.log('A user connected');
   // create a new player and add it to our players object
   players[socket.id] = {
-    x: Math.floor(Math.random() * 700) + 50,
-    y: Math.floor(Math.random() * 500) + 50,
+    x: 2400*Math.random(),
+    y: 2400*Math.random(),
     playerId: socket.id,
     f: 0,
     dashed:0,
