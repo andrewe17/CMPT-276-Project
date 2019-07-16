@@ -185,12 +185,7 @@ app.post('/signin', async (req, res) => {//this updates the form when the form f
     value);
     // res.send(result.rowCount);
     if (result.rowCount > 0){//I noticed that if the queue returns true the rowCount is larger than 0
-      res.send(result);
       res.redirect('/game.html');
-      client.release();
-    }
-    else {
-      res.send(result);
       client.release();
     }
   } catch (err) {
@@ -199,7 +194,7 @@ app.post('/signin', async (req, res) => {//this updates the form when the form f
 })
 
 
-app.post('/signup', async (req, res) => {//this updates the form when the form from login is submited
+app.get('/signup', async (req, res) => {//this updates the form when the form from login is submited
   try {
 
     const que = 'SELECT username, password FROM login WHERE EXISTS (SELECT username, password FROM login WHERE login.username = $1 AND login.password = $2);'
