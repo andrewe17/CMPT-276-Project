@@ -545,7 +545,7 @@ function addPlayer(self, playerInfo) {
     self.ninja.setCollideWorldBounds(true);
     self.ninja.setVelocity(0, 0);
     self.cameras.main.startFollow(self.ninja, true, 0.05, 0.05, 0.05, 0.05);
-    self.ninja.healthText = self.add.text(playerInfo.x - 12, playerInfo.y - 20, healthToText(playerInfo.health), {fontFamily:'"Arial"', fontSize: '3px', fill: '#00ff00'});
+    self.ninja.healthText = self.add.text(playerInfo.x - 12, playerInfo.y - 20, healthToText(playerInfo.health), {fontFamily:'"Arial"', fontSize: '3pt', fill: '#00ff00'});
     self.physics.add.collider(self.ninja, wx, pb);
     self.physics.add.collider(self.ninja, ss, shuri_destroy);
     self.physics.add.overlap(self.ninja, waterLayer, slowdown);
@@ -555,7 +555,7 @@ function addPlayer(self, playerInfo) {
 function addOtherPlayers(self, playerInfo) {
     const otherPlayer = self.physics.add.sprite(playerInfo.x, playerInfo.y, 'ninja');
     otherPlayer.playerId = playerInfo.playerId;
-    otherPlayer.healthText = self.add.text(playerInfo.x - 12 , playerInfo.y - 20, healthToText(playerInfo.health), {fontFamily:'"Arial"', fontSize: '3px', fill: '#ff0000'});
+    otherPlayer.healthText = self.add.text(playerInfo.x - 12 , playerInfo.y - 20, healthToText(playerInfo.health), {fontFamily:'"Arial"', fontSize: '3pt', fill: '#ff0000'});
     self.otherPlayers.add(otherPlayer);
 }
 
