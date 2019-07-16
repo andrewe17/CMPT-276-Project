@@ -73,6 +73,7 @@ io.sockets.on('connection', function(socket){
   // weather api
   var test= weather_data.weather[0].main;
   io.emit('weather', test);
+  console.log('Weather: ' + test);
   // playercount++;
   console.log('A user connected');
   // create a new player and add it to our players object
@@ -128,6 +129,7 @@ io.sockets.on('connection', function(socket){
   // Broadcast shuriken hit
   socket.on('shuri_hit', function (otherPlayer) {
     players[otherPlayer.id].health = players[otherPlayer.id].health-25;
+    //console.log('Weather: 'test);
     //console.log(player.id);
     socket.broadcast.emit('shurikenHit', players[otherPlayer.id]);
     socket.emit('shurikenHit', players[otherPlayer.id]);

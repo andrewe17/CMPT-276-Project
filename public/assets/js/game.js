@@ -71,8 +71,87 @@ var mousey;
 var angle;
 var healthText;
 
-function preload(){
-    //this.load.image('van', 'assets/images/van.jpg'); // delete this
+function preload(){   
+    var offset = 30;
+    var progressBar = this.add.graphics();
+    var progressBox = this.add.graphics();
+    progressBox.fillStyle(0x222222, 0.8);
+    progressBox.fillRect(240, 290 + offset, 320, 50);
+    
+    var width = this.cameras.main.width;
+    var height = this.cameras.main.height;
+
+    this.load.spritesheet('ninja_right', 'assets/images/ninja_right.png', {frameWidth: 32, frameHeight: 32});
+
+    var logoText = this.make.text({
+        x: width / 2,
+        y: height / 2 - 150 ,
+        text: 'ninja-dash',
+        style: {
+            font: '80px ninjafont',
+            fill: '#ffffff'
+        }
+    });
+
+    logoText.setOrigin(0.5,0.5);
+    
+    var percentText = this.make.text({
+        x: width / 2,
+        y: height / 2 + 15  + offset,
+        text: '0%',
+        style: {
+            font: '18px ninjafont',
+            fill: '#ffffff'
+        }
+    });
+    percentText.setOrigin(0.5, 0.5);
+    
+    var assetText = this.make.text({
+        x: width / 2,
+        y: height / 2 + 70  + offset,
+        text: '',
+        style: {
+            font: '18px ninjafont',
+            fill: '#ffffff'
+        }
+    });
+
+    assetText.setOrigin(0.5, 0.5);
+    
+    this.load.on('progress', function (value) {
+        
+        percentText.setText(parseInt(value * 100) + '%');
+        progressBar.clear();
+        progressBar.fillStyle(0xffffff, 1);
+        progressBar.fillRect(250, 300  + offset, 300 * value, 30);
+    });
+    // var proloadSelf = this;
+    // var loading;
+    // var loadingAnime;
+    this.load.on('fileprogress', function (file) {
+        //console.log(file);
+        // if(file.key === 'ninja_right'){
+        //     loadingAnime = {
+        //         key: 'load',
+        //         frames: proloadSelf.anims.generateFrameNumbers('ninja_right',{start: 0, end: 2}),
+        //         frameRate: 16,
+        //         repeat: -1
+        //     };
+        //     proloadSelf.anims.create(loadingAnime);
+        //     loading = proloadSelf.add.sprite(width/2, height/2, 'ninja_right');
+        //     loading.anims.play('load');
+        // }
+        assetText.setText('Loading asset: ' + file.key);
+    });
+
+    this.load.on('complete', function () {
+        progressBar.destroy();
+        progressBox.destroy();
+        percentText.destroy();
+        assetText.destroy();
+        //loading.destroy();
+    });
+
     this.load.image('wall', 'assets/images/wall.png');
     this.load.image('wallx', 'assets/images/wallx.png');
     this.load.image('wally', 'assets/images/wally.png');
@@ -89,7 +168,7 @@ function preload(){
     this.load.spritesheet('ninja_up', 'assets/images/ninja_up.png', {frameWidth: 32, frameHeight: 32});
     this.load.spritesheet('ninja_down', 'assets/images/ninja_down.png', {frameWidth: 32, frameHeight: 32});
     this.load.spritesheet('ninja_left', 'assets/images/ninja_left.png', {frameWidth: 32, frameHeight: 32});
-    this.load.spritesheet('ninja_right', 'assets/images/ninja_right.png', {frameWidth: 32, frameHeight: 32});
+    
     this.load.spritesheet('ninja_smoke', 'assets/images/ninja_smoke.png', {frameWidth: 32, frameHeight: 32});
     this.load.spritesheet('slash_anim', 'assets/images/slash_anim.png', {frameWidth: 16, frameHeight: 16});
     this.load.spritesheet('shuri_anim', 'assets/images/shuri_anim.png', {frameWidth: 13, frameHeight: 13});
