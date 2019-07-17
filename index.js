@@ -43,12 +43,12 @@ app.set('view engine', 'ejs');//using ejs
 var http2 = require('http');
 var weather_json="";
 var weather_data;
+var weather="Clear";
 var api_key = '89712763149745a41a5e5152afa563b7';
 var options = {
   host: 'api.openweathermap.org',
   path: '/data/2.5/weather?q=Vancouver&APPID='+api_key
 }
-//console.log('test');
 http2.request(options, function(weather_response){
   weather_response.on("data",function(json){
     weather_json+=json;
@@ -59,7 +59,6 @@ http2.request(options, function(weather_response){
   })
 }).end();
 
-
 //app.get('/', (req, res) => res.render('pages/index'))
 app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
@@ -68,7 +67,6 @@ app.get('/', function(req, res){
 app.get('/players', function(req, res){
   res.send(players);
 });
-var weather;
 io.sockets.on('connection', function(socket){
   // weather api
   weather= weather_data.weather[0].main;
@@ -140,7 +138,8 @@ io.sockets.on('connection', function(socket){
 
   // Broadcast shuriken hit
   socket.on('shuri_hit', function (otherPlayer) {
-    players[otherPlayer.id].health = players[otherPlayer.id].health - 10;
+    var h = players[otherPlayer.id].health;
+    players[otherPlayer.id].health = h - 10;
     //console.log(player.id);
     if(players[otherPlayer.id].health<=0){
       players[otherPlayer.id].deaths+=1;
@@ -154,7 +153,8 @@ io.sockets.on('connection', function(socket){
     socket.emit('shurikenHit', players[otherPlayer.id]);
   });
   socket.on('dash_hit', function (otherPlayer) {
-    players[otherPlayer.id].health = players[otherPlayer.id].health - 5;
+    var h = players[otherPlayer.id].health;
+    players[otherPlayer.id].health = h - 5;
     //console.log(player.id);
     if(players[otherPlayer.id].health<=0){
       players[otherPlayer.id].deaths+=1;
@@ -169,7 +169,8 @@ io.sockets.on('connection', function(socket){
   });
 
   socket.on('kata_hit', function (otherPlayer) {
-    players[otherPlayer.id].health = players[otherPlayer.id].health - 50;
+    var h = players[otherPlayer.id].health;
+    players[otherPlayer.id].health = h - 50;
     //console.log(player.id);
     if(players[otherPlayer.id].health<=0){
       players[otherPlayer.id].deaths+=1;
@@ -259,4 +260,8 @@ app.post('/login', function(req, res){
 //app.listen(PORT, () => console.log(`Listening on ${ PORT }`))
 http.listen(PORT, () => console.log(`Listening on ${ PORT }`))
 
-module.exports = app;
+var hello = 'hello';
+
+module.exports = {
+  weather: weather,
+}
