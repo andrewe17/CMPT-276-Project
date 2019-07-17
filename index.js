@@ -250,6 +250,10 @@ app.post('/signup1', function(req, res){
     var results = {'results':0};
     res.render('pages/signup',results);
 });
+app.post('/login', function(req, res){
+    var results = {'results':-1};
+    res.render('pages/login',results);
+});
 
 
 //app.listen(PORT, () => console.log(`Listening on ${ PORT }`))
