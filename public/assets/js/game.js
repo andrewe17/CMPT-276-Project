@@ -1065,7 +1065,7 @@ function slowdown(player, wall){
 // collisions
 function katahit(self, otherPlayer, kk){
     //kk.destroy();
-    if(otherPlayer.health<=50){
+    if(otherPlayer.health<=100){
         kills+=1;
         console.log(self.socket.id);
         self.socket.emit('shuri_kill', {id:self.socket.id});
@@ -1084,7 +1084,7 @@ function shurihit(self, otherPlayer, ss){
 
 function dashhit(self, otherPlayer, dd){
     //dd.destroy();
-    if(otherPlayer.health<=25){
+    if(otherPlayer.health<=5){
         kills+=1;
         console.log(self.socket.id);
         self.socket.emit('shuri_kill', {id:self.socket.id});
