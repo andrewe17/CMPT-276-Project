@@ -165,7 +165,7 @@ io.sockets.on('connection', function(socket){
   });
 
   socket.on('kata_hit', function (otherPlayer) {
-    players[otherPlayer.id].health = players[otherPlayer.id].health - 100;
+    players[otherPlayer.id].health = players[otherPlayer.id].health - 50;
     //console.log(player.id);
     if(players[otherPlayer.id].health<=0){
       players[otherPlayer.id].deaths+=1;
