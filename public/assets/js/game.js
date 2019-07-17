@@ -508,6 +508,13 @@ function create(){
     this.socket.on('weather', function(current_weather) {
         //current_weather='Snow'; // testing only
         console.log(current_weather);
+        rain_particles.destroy();
+        snow_particles.destroy();
+        cloud_particles.destroy();
+        rain_particles = this.add.particles('rain');
+        snow_particles = this.add.particles('snow');
+        cloud_particles = this.add.particles('cloud');
+        bg.stop();
         // Thunderstorm, Drizzle, Rain, Snow, Clear, Clouds
         // Mist, Smoke, Haze, Dust, Fog, Sand, Dust, Ash, Squall, Tornado
         if(current_weather=='Drizzle' || current_weather=='Rain'){
