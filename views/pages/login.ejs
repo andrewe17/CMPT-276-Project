@@ -9,7 +9,6 @@
   </head>
   <body>
     <% if(results == 0) { %>
-          <% console.log(rows); %>
           <div>
           <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
           <strong>Success!</strong> you have successfully created a new login.
@@ -17,7 +16,6 @@
     <% } %>
 
     <% if(results != 0) { %>
-          <% console.log(rows); %>
           <div>
             <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
             <strong>Error</strong> you have either the wrong username or password.
