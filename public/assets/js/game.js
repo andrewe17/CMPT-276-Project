@@ -511,9 +511,9 @@ function create(){
         rain_particles.destroy();
         snow_particles.destroy();
         cloud_particles.destroy();
-        rain_particles = this.add.particles('rain');
-        snow_particles = this.add.particles('snow');
-        cloud_particles = this.add.particles('cloud');
+        rain_particles = self.add.particles('rain');
+        snow_particles = self.add.particles('snow');
+        cloud_particles = self.add.particles('cloud');
         bg.stop();
         // Thunderstorm, Drizzle, Rain, Snow, Clear, Clouds
         // Mist, Smoke, Haze, Dust, Fog, Sand, Dust, Ash, Squall, Tornado
