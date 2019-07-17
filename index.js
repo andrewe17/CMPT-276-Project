@@ -234,7 +234,7 @@ app.post('/signup', async (req, res) => {//this updates the form when the form f
       const inner_results = await client.query('insert into login (id,username,password,email) values ($1,$2,$3,$4)',
       value);
       var myres = {'results': 0};
-      res.redirect('pages/login',myres);
+      res.render('pages/login',myres);
     }else{
       res.render('pages/error');
     }
