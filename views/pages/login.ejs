@@ -16,10 +16,14 @@
           </div>
     <% } %>
 
-    <div id= "Loginfail "class="Loginfail">
-      <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
-      <strong>Error</strong> you have either the wrong username or password.
-    </div>
+    <% if(results != 0) { %>
+          <% console.log(rows); %>
+          <div>
+            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+            <strong>Error</strong> you have either the wrong username or password.
+          </div>
+    <% } %>
+
 
     <form id="signin" class="" method="post" action="/signin">
       <h1>Sign In</h1>

@@ -206,6 +206,10 @@ app.post('/signin', async (req, res) => {//this updates the form when the form f
       res.redirect('/game.html');
       client.release();
     }
+    else {
+      var myres = {'results': 1};
+      res.render('pages/login',myres);
+    }
   } catch (err) {
       res.send("Error " + err);
   }
