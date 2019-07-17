@@ -15,11 +15,6 @@
           <strong>Error</strong> Username already used.
           </div>
         <% } %>
-
-      <!-- prompt for repeated user -->
-      
-
-      <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
       <form class="modal-content" method="post" action="/signup">
         <div class="container">
           <h1>Sign Up</h1>
@@ -35,11 +30,11 @@
           <label for="psw-repeat"><b>Repeat Password</b></label>
           <input type="password" placeholder="Repeat Password" name="psw-repeat" required>
 
-          <div class="clearfix">
-            <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
             <button type="submit" class="signupbtn">Sign Up</button>
-          </div>
         </div>
+      </form>
+      <form class="" action="/login" method="post">
+        <button type="submit" name="button">Signin Page</button>
       </form>
     </div>
   </body>

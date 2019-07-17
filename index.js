@@ -107,6 +107,10 @@ io.sockets.on('connection', function(socket){
     io.emit('disconnect', socket.id);
   });
 
+    socket.on('disconnect', function(username) {
+        io.emit('is_online', '🔴 <i>' + socket.username + ' left the chat..</i>');
+    })
+
   socket.on('playerMovement', function (movementData) {
     players[socket.id].x = movementData.x;
     players[socket.id].y = movementData.y;
@@ -202,6 +206,10 @@ app.post('/signin', async (req, res) => {//this updates the form when the form f
       res.redirect('/game.html');
       client.release();
     }
+    else {
+      var myres = {'results': 1};
+      res.render('pages/login',myres);
+    }
   } catch (err) {
       res.send("Error " + err);
   }
@@ -220,39 +228,31 @@ app.post('/signup', async (req, res) => {//this updates the form when the form f
     if (results.rowCount > 0){//I noticed that if the queue returns true the rowCount is larger than 0
       var myres = {'results': 1};
       res.render('pages/signup',myres);
-      client.release();
     }
     else if(results.rowCount == 0){
-      var myres = {'results': 0};
-      res.render('pages/login',myres);
       const value =[Math.floor(Math.random() * (100)),req.body.userup,req.body.psw,req.body.emailup]//randomly generated ID
       const inner_results = await client.query('insert into login (id,username,password,email) values ($1,$2,$3,$4)',
       value);
-      client.release();
+      var myres = {'results': 0};
+      res.render('pages/login',myres);
+    }else{
+      res.render('pages/error');
     }
-    res.render('pages/login',myres);
+
     client.release();
-
-
   } catch (err) {
     res.send("Error " + err);
   }
 })
 
-app.get('/login', function(req, res){
-  var results = {'results':1};
-  res.render('pages/login',results);
 
-});
-
-// app.get('/signup', function(req, res){
-//   var result = {'rowcount':0};
-//   res.render('pages/signup',result);
-// });
-
-app.get('/signup', function(req, res){
+app.post('/signup1', function(req, res){
     var results = {'results':0};
     res.render('pages/signup',results);
+});
+app.post('/login', function(req, res){
+    var results = {'results':-1};
+    res.render('pages/login',results);
 });
 
 
