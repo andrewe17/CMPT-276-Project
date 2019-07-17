@@ -17,7 +17,7 @@
         <% } %>
 
       <!-- prompt for repeated user -->
-      
+
 
       <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
       <form class="modal-content" method="post" action="/signup">
@@ -36,7 +36,9 @@
           <input type="password" placeholder="Repeat Password" name="psw-repeat" required>
 
           <div class="clearfix">
-            <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
+            <form method="get" action="/" method="post">
+              <button type="submit"  class="cancelbtn">Cancel</button>
+            </form>
             <button type="submit" class="signupbtn">Sign Up</button>
           </div>
         </div>

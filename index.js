@@ -245,13 +245,8 @@ app.post('/signup', async (req, res) => {//this updates the form when the form f
   }
 })
 
-app.get('/login', function(req, res){
-  var results = {'results':1};
-  res.render('pages/login',results);
 
-});
-
-app.get('/signup', function(req, res){
+app.post('/signup1', function(req, res){
     var results = {'results':0};
     res.render('pages/signup',results);
 });
