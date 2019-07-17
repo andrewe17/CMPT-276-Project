@@ -107,6 +107,10 @@ io.sockets.on('connection', function(socket){
     io.emit('disconnect', socket.id);
   });
 
+    socket.on('disconnect', function(username) {
+        io.emit('is_online', '🔴 <i>' + socket.username + ' left the chat..</i>');
+    })
+
   socket.on('playerMovement', function (movementData) {
     players[socket.id].x = movementData.x;
     players[socket.id].y = movementData.y;
@@ -230,7 +234,7 @@ app.post('/signup', async (req, res) => {//this updates the form when the form f
     }else{
       res.render('pages/error');
     }
-    
+
     client.release();
   } catch (err) {
     res.send("Error " + err);
