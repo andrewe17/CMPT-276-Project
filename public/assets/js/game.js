@@ -183,7 +183,7 @@ function preload(){
     this.load.audio('ancients',  ['assets/audio/Music-Song of the Ancients.mp3'] );
     this.load.audio('loneliness',  ['assets/audio/Music-Loneliness.mp3'] );
     this.load.audio('strike',  ['assets/audio/Music-Strong and Strike.mp3'] );
-    this.load.audio('wretched',  ['assets/audio/Music-Wretched Weaponry.mp3'] );
+    this.load.audio('wretched',  ['assets/audio/Music-Wretched Weaponry.mp3'] ); // can we delete this, it's 9 mb...
     
     this.load.spritesheet('ninja_up', 'assets/images/ninja_up.png', {frameWidth: 32, frameHeight: 32});
     this.load.spritesheet('ninja_down', 'assets/images/ninja_down.png', {frameWidth: 32, frameHeight: 32});
