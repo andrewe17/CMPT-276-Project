@@ -91,6 +91,10 @@ io.sockets.on('connection', function(socket){
   // update all other players of the new player
   socket.broadcast.emit('newPlayer', players[socket.id]);
 
+  socket.on('changeWeather', function(weather){
+    socket.broadcast.emit('weather', weather);
+  });
+
   // user connect (chat)
   socket.on('username', function(username){
     socket.username = username;
