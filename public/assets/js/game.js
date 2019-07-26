@@ -770,8 +770,8 @@ function update(){
     // items
     if(one.isDown) options=1;
     if(two.isDown) options=2;
-    if(three.isDown) options=3;
-    if(four.isDown) options=4;
+    // if(three.isDown) options=3;
+    // if(four.isDown) options=4;
     if(upgrade.isDown && upgrade_time<this.time.now){
         if(one.isDown){
             if(gold>=200){
