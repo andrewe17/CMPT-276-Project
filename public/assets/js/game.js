@@ -172,6 +172,7 @@ function preload(){
     this.load.image('rain', 'assets/images/rain.png');
     this.load.image('snow', 'assets/images/snow.png');
     this.load.image('cloud', 'assets/images/cloud.png');
+    this.load.image('star', 'assets/images/star.png');
 
     this.load.audio('katana',  ['assets/audio/Sound-katana.mp3'] );
     this.load.audio('flash',  ['assets/audio/Sound-dash.mp3'] );
@@ -194,6 +195,7 @@ function preload(){
     this.load.spritesheet('slash_anim', 'assets/images/slash_anim.png', {frameWidth: 16, frameHeight: 16});
     this.load.spritesheet('kata_anim', 'assets/images/kata_anim.png', {frameWidth: 46, frameHeight: 46});
     this.load.spritesheet('shuri_anim', 'assets/images/shuri_anim.png', {frameWidth: 13, frameHeight: 13});
+    this.load.spritesheet('star_anim', 'assets/images/star.png', {frameWidth: 24, frameHeight: 22});
 }
 
 
@@ -239,9 +241,11 @@ function create(){
     // background
     this.add.image(mapy/2, mapy/2, 'van');
 
-    // // walls
+    // walls
     wx = this.physics.add.staticGroup();
     wy = this.physics.add.staticGroup();
+    // stars
+    stars = this.physics.add.staticGroup();
 
     waterLayer = this.physics.add.staticGroup();
     maze();
@@ -461,6 +465,12 @@ function create(){
         frameRate: 16,
         repeat: -1
     });
+    this.anims.create({
+        key: 'star_anim',
+        frames: this.anims.generateFrameNumbers('star_anim'),
+        frameRate: 1,
+        repeat: 20
+    });
 
     // collisions
     ss = this.physics.add.group(); // shurikens
@@ -478,7 +488,10 @@ function create(){
     this.physics.add.collider(wx, ss, function(wx, ss){ // wall and shuri
         shuri_destroy(wx, ss);
     });
-
+    this.physics.add.overlap(this.otherPlayers, stars, function(player, stars){ // wall and shuri
+        stars_destroy(player, stars);
+    });
+    spawn_time = this.time.now;
 
     // weapons
     options=1;
@@ -624,6 +637,10 @@ function addPlayer(self, playerInfo) {
     self.ninja.healthText = self.add.text(playerInfo.x - 12, playerInfo.y - 20, healthToText(playerInfo.health), {fontFamily:'Arial', fontSize: '3px' ,fill: '#00ff00'});
     self.physics.add.collider(self.ninja, wx, pb);
     self.physics.add.collider(self.ninja, ss, shuri_destroy);
+    self.physics.add.overlap(self.ninja, stars, function(player, stars){
+        gold+=10;
+        stars_destroy(player, stars)
+    });
     self.physics.add.overlap(self.ninja, waterLayer, slowdown);
     self.ninja.setSize(15,10).setOffset(8,20);
 }
@@ -881,11 +898,17 @@ function update(){
     text3.setText([
         'Timer: '+Math.floor(((gg-this.time.now)/1000)/60)+':'+Math.floor(((gg-this.time.now)/1000)%60)
     ]);
-    // // Stephen's version testing
-    // text4.setText([
-    //     'Vers: '+535 // test
-    // ]);
 
+    if(spawn_time<this.time.now){
+        var stars_x = Math.floor((Math.random()*mapx));
+        var stars_y = Math.floor((Math.random()*mapy));
+        
+        var star=stars.create(stars_x, stars_y, 'star');
+        star.play('star_anim');
+        star.on('animationcomplete', ()=>{star.destroy();});
+
+        spawn_time=this.time.now+5000;
+    }    
 }
 
 // create maze
@@ -1136,5 +1159,6 @@ function shuri_destroy(wx, ss){
     ss.destroy();
 }
 
-
-// test
+function stars_destroy(ninja, stars){
+    stars.destroy();
+}
