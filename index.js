@@ -61,7 +61,7 @@ http2.request(options, function(weather_response){
 
 //app.get('/', (req, res) => res.render('pages/index'))
 app.get('/', function(req, res){
-  res.sendFile(__dirname + '/index.html');
+  res.sendFile(__dirname + 'pages/login');
 });
 
 app.get('/players', function(req, res){
