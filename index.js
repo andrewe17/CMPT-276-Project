@@ -218,8 +218,8 @@ app.post('/signin', async (req, res) => {//this updates the form when the form f
 
 app.post('/signup', async (req, res) => {//this updates the form when the form from login is submited
   try {
-    const que = 'SELECT username FROM login WHERE EXISTS (SELECT username FROM login WHERE login.username = $1);'
-    const value =[req.body.userup];
+    const que = 'SELECT username FROM login WHERE EXISTS (SELECT username FROM login WHERE login.username = $1 and login.username = $1);'
+    const value =[req.body.userup, req.body.emailup];
     const client = await pool.connect()
     const results = await client.query(que,
     value);
