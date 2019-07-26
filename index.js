@@ -227,7 +227,7 @@ app.post('/signup', async (req, res) => {//this updates the form when the form f
     // res.send(results.rowCount);
     if (results.rowCount > 0){//I noticed that if the queue returns true the rowCount is larger than 0
       var myres = {'results': 1};
-      res.render('pages/signup',myres);
+      res.render('pages/login',myres);
     }
     else if(results.rowCount == 0){
       const value =[Math.floor(Math.random() * (100)),req.body.userup,req.body.psw,req.body.emailup]//randomly generated ID
@@ -248,7 +248,7 @@ app.post('/signup', async (req, res) => {//this updates the form when the form f
 
 app.post('/signup1', function(req, res){
     var results = {'results':0};
-    res.render('pages/signup',results);
+    res.render('pages/login',results);
 });
 app.post('/login', function(req, res){
     var results = {'results':-1};
