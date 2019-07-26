@@ -82,13 +82,13 @@ var mousex;
 var mousey;
 var angle;
 
-function preload(){   
+function preload(){
     var offset = 30;
     var progressBar = this.add.graphics();
     var progressBox = this.add.graphics();
     progressBox.fillStyle(0xFF2222, 0.8);
     progressBox.fillRect(240, 290 + offset, 320, 50);
-    
+
     var width = this.cameras.main.width;
     var height = this.cameras.main.height;
 
@@ -103,7 +103,7 @@ function preload(){
     });
 
     logoText.setOrigin(0.5,0.5);
-    
+
     var percentText = this.make.text({
         x: width / 2,
         y: height / 2 + 15  + offset,
@@ -114,7 +114,7 @@ function preload(){
         }
     });
     percentText.setOrigin(0.5, 0.5);
-    
+
     var assetText = this.make.text({
         x: width / 2,
         y: height / 2 + 70  + offset,
@@ -126,7 +126,7 @@ function preload(){
     });
 
     assetText.setOrigin(0.5, 0.5);
-    
+
     this.load.on('progress', function (value) {
         percentText.setText(parseInt(value * 99) + '%');
         progressBar.clear();
@@ -184,7 +184,7 @@ function preload(){
     this.load.audio('loneliness',  ['assets/audio/Music-Loneliness.mp3'] );
     this.load.audio('strike',  ['assets/audio/Music-Strong and Strike.mp3'] );
     this.load.audio('wretched',  ['assets/audio/Music-Wretched Weaponry.mp3'] ); // can we delete this, it's 9 mb...
-    
+
     this.load.spritesheet('ninja_up', 'assets/images/ninja_up.png', {frameWidth: 32, frameHeight: 32});
     this.load.spritesheet('ninja_down', 'assets/images/ninja_down.png', {frameWidth: 32, frameHeight: 32});
     this.load.spritesheet('ninja_left', 'assets/images/ninja_left.png', {frameWidth: 32, frameHeight: 32});
@@ -287,7 +287,7 @@ function create(){
                 console.log(playerInfo.dashed);
                 if(playerInfo.dashed==1){
                     smoke=self.physics.add.sprite(playerInfo.x, playerInfo.y, 'ninja');
-                    
+
                     smoke.anims.play('ninja_smoke');
                 }
                 otherPlayer.setPosition(playerInfo.x, playerInfo.y);
@@ -705,7 +705,7 @@ function update(){
                 smoke.setVelocityX(dashX);
                 smoke.setVelocityY(dashY);
                 this.socket.emit('smoke', { x:this.ninja.x, y:this.ninja.y, velx:dashX, vely: dashY, r:angle}); // dash animation location info
-                
+
                 this.ninja.x+=Math.cos(angle)*100;
                 this.ninja.y+=Math.sin(angle)*100;
                 dashtime=this.time.now+200;
@@ -747,7 +747,7 @@ function update(){
     }
 
     // items
-    if(one.isDown) options=1; 
+    if(one.isDown) options=1;
     if(two.isDown) options=2;
     if(three.isDown) options=3;
     if(four.isDown) options=4;
@@ -857,7 +857,7 @@ function update(){
     // // Stephen's version testing
     // text4.setText([
     //     'Vers: '+535 // test
-    // ]);  
+    // ]);
 
 
 }
