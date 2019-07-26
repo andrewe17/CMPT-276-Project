@@ -27,7 +27,7 @@ var gg;
 // keyboard
 var cursor;
 var w, a, s, d, space;
-var one, two, three, four;
+var one, two, three, four, upgrade;
 //audio
 var m, n, b;
 var flash;
@@ -73,8 +73,9 @@ var kibakureg;
 var saisei;
 var saiseitime;
 var saiseireg;
+var upgrade_time;
 // cannot use ctrl+c or move
-var health, kills, deaths; // misc
+var health, kills, deaths, gold; // misc
 var text1, text2, text3, text4; // textbox
 
 // mouse
@@ -399,6 +400,7 @@ function create(){
     two = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TWO);
     three = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.THREE);
     four = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.FOUR);
+    upgrade = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.U);
     m = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M);
     n = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.N);
     b = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.B);
@@ -488,11 +490,13 @@ function create(){
     shurireg=this.time.now;
     kibaku=0;
     saisei=0;
+    upgrade_time = this.time.now;
     // probably better if ninjas have to search for items!!
 
     // misc
     health=100;
     kills=0;
+    gold=0;
     deaths=0;
 
     // text
@@ -751,6 +755,27 @@ function update(){
     if(two.isDown) options=2;
     if(three.isDown) options=3;
     if(four.isDown) options=4;
+    if(upgrade.isDown && upgrade_time<this.time.now){
+        if(one.isDown){
+            if(gold>=200){
+                gold-=200;
+                console.log('upgrade_kata');
+                kata_d+=10;
+                upgrade_time=this.time.now+1000;
+            }
+        };
+        if(two.isDown){
+            if(gold>=200){
+                gold-=200;
+                console.log('upgrade_shuri');
+                shuri_d+=5;
+                shuri_s+=25;
+                upgrade_time=this.time.now+1000;
+            }
+        };
+        // if(three.isDown) options=3;
+        // if(four.isDown) options=4;
+    }
 
     // use items
     if(pointer.leftButtonDown()){ // left click
@@ -775,8 +800,8 @@ function update(){
             //shuris.add.group();
             var toss = ss.create(initX, initY, 'shuri');
             toss.play('shuri_anim');
-            var velX = Math.cos(angle)*300;
-            var velY = Math.sin(angle)*300;
+            var velX = Math.cos(angle)*shuri_s;
+            var velY = Math.sin(angle)*shuri_s;
             toss.setVelocityX(velX);
             toss.setVelocityY(velY);
             this.socket.emit('shuriken', { initX:initX, initY:initY, velX:velX, velY:velY}); // slash location info
@@ -843,13 +868,15 @@ function update(){
 
     // text
     text1.setText([
-        'Dash: '+dash+'/2', // blink
+        'Dash: '+dash+'/2',
         otext, // options
+        'upgrade [u+1or2]',
     ]);
     text2.setText([
-        'Health: '+health, // health bar
-        'Kills: '+kills, // #kills
-        'Deaths: '+deaths // #kills
+        'Health: '+health,
+        'Kills: '+kills,
+        'Gold: '+gold,
+        'Deaths: '+deaths
     ]);
     text3.setText([
         'Timer: '+Math.floor(((gg-this.time.now)/1000)/60)+':'+Math.floor(((gg-this.time.now)/1000)%60)
@@ -858,7 +885,6 @@ function update(){
     // text4.setText([
     //     'Vers: '+535 // test
     // ]);
-
 
 }
 
@@ -1069,30 +1095,37 @@ function slowdown(player, wall){
     }
 }
 
+var kata_d = 50;
+var shuri_s = 300;
+var shuri_d = 10;
+
 // collisions
 function katahit(self, otherPlayer, kk){
     kk.destroy();
-    if(otherPlayer.health<=50){
+    if(otherPlayer.health<=kata_d){
         kills+=1;
+        gold+=100;
         console.log(self.socket.id);
         self.socket.emit('shuri_kill', {id:self.socket.id});
     }
-    self.socket.emit('kata_hit', {id:otherPlayer.playerId});
+    self.socket.emit('kata_hit', {id:otherPlayer.playerId, kata_d:kata_d});
 }
 function shurihit(self, otherPlayer, ss){
     ss.destroy();
-    if(otherPlayer.health<=10){
+    if(otherPlayer.health<=shuri_d){
         kills+=1;
+        gold+=100;
         console.log(self.socket.id);
         self.socket.emit('shuri_kill', {id:self.socket.id});
     }
-    self.socket.emit('shuri_hit', {id:otherPlayer.playerId});
+    self.socket.emit('shuri_hit', {id:otherPlayer.playerId, shuri_d:shuri_d});
 }
 
 function dashhit(self, otherPlayer, dd){
     //dd.destroy();
     if(otherPlayer.health<=5){
         kills+=1;
+        gold+=100;
         console.log(self.socket.id);
         self.socket.emit('shuri_kill', {id:self.socket.id});
     }

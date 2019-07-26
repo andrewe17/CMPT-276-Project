@@ -139,7 +139,7 @@ io.sockets.on('connection', function(socket){
   // Broadcast shuriken hit
   socket.on('shuri_hit', function (otherPlayer) {
     var h = players[otherPlayer.id].health;
-    players[otherPlayer.id].health = h - 10;
+    players[otherPlayer.id].health = h-otherPlayer.shuri_d;
     //console.log(player.id);
     if(players[otherPlayer.id].health<=0){
       players[otherPlayer.id].deaths+=1;
@@ -170,8 +170,7 @@ io.sockets.on('connection', function(socket){
 
   socket.on('kata_hit', function (otherPlayer) {
     var h = players[otherPlayer.id].health;
-    players[otherPlayer.id].health = h - 50;
-    //console.log(player.id);
+    players[otherPlayer.id].health = h-otherPlayer.kata_d;
     if(players[otherPlayer.id].health<=0){
       players[otherPlayer.id].deaths+=1;
       players[otherPlayer.id].x=Math.floor(Math.random()*2400);
