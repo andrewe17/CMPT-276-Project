@@ -207,7 +207,7 @@ app.post('/signin', async (req, res) => {//this updates the form when the form f
       client.release();
     }
     else {
-      var myres = {'results': 1};
+      var myres = {'results': 2};
       res.render('pages/login',myres);
     }
   } catch (err) {
