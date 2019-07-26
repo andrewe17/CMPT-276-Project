@@ -1071,7 +1071,7 @@ function slowdown(player, wall){
 
 // collisions
 function katahit(self, otherPlayer, kk){
-    //kk.destroy();
+    kk.destroy();
     if(otherPlayer.health<=50){
         kills+=1;
         console.log(self.socket.id);
