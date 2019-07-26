@@ -1102,3 +1102,6 @@ function dashhit(self, otherPlayer, dd){
 function shuri_destroy(wx, ss){
     ss.destroy();
 }
+
+
+// test
