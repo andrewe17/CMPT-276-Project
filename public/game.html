@@ -5,16 +5,21 @@
 	<title>Ninja-Dash</title>
 	<link rel="stylesheet" href="assets/stylesheets/chat.css">
 	<style media='screen' type='text/css'>
+
 	@font-face {
 		font-family: ninjafont;
 		src: url('assets/njnaruto.ttf');
 	}
 
-	canvas {
-	display: block;
-	margin: 0 auto;
-}
 
+canvas{
+	display:block;
+	margin: 0;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
 	</style>
 	<!-- The following two lines are for Phaser game engine -->
 	<script src="//cdn.jsdelivr.net/npm/phaser@3.18.1/dist/phaser.js"></script>
