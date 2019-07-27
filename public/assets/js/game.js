@@ -372,7 +372,7 @@ function create(){
 
     //submit chat message
     $('form').submit(function(e){
-        e.preventDefault(); // prevents page reloading
+        //e.preventDefault(); // prevents page reloading
         self.socket.emit('chat message', $('#m').val());
         $('#m').val('');
         return false;
@@ -400,14 +400,18 @@ function create(){
     s = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
     d = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
     space = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+    this.input.keyboard.removeCapture('W,S,A,D,SPACE');
     one = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ONE);
     two = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TWO);
     three = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.THREE);
     four = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.FOUR);
+    this.input.keyboard.removeCapture('ONE,TWO,THREE,FOUR');
     upgrade = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.U);
     m = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M);
     n = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.N);
     b = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.B);
+    this.input.keyboard.removeCapture('U,M,N,B');
+    //alt = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ALT);
     // mouse
     pointer = this.input.activePointer; // mouse location relative to screen
 
@@ -615,6 +619,9 @@ function create(){
             });
         }
     });
+    // // chat toggle
+    // toggle = true;
+    // toggle_time = this.time.now;
 }
 function healthToText(health){
     var percentage = health / 10;
@@ -653,11 +660,11 @@ function addOtherPlayers(self, playerInfo) {
 }
 
 
+
 function update(){
     if(this.ninja){
         this.ninja.healthText.x = this.ninja.x - 12;
         this.ninja.healthText.y = this.ninja.y - 20;
-
         // keyboard
         if(w.isDown){
             if(this.ninja.anims.getCurrentKey()!='ninja_up') this.ninja.play('ninja_up');
@@ -699,6 +706,7 @@ function update(){
             if(this.ninja.anims.getCurrentKey()=='ninja_right') this.ninja.play('ninja_right');
             this.ninja.setVelocityX(0);
         }
+
         reduced = false;
         vel = 200;
 
@@ -752,7 +760,6 @@ function update(){
         text4.setText([
             this.ninja.f
         ]);
-        //var d = angle;
 
         if (this.ninja.oldPosition && (x !== this.ninja.oldPosition.x || y !== this.ninja.oldPosition.y)) {
             this.socket.emit('playerMovement', { x:this.ninja.x, y:this.ninja.y, f:this.ninja.f, dashed:this.ninja.dashed}); // send player info to server
@@ -873,10 +880,7 @@ function update(){
         hit.setMute(false);
         shuriThrow.setMute(false);
     }
-    // // SPAWNING POINTS
-    // // UPGRADE AREA: UPGRADE CHANGED TO OPTIONS 1,2,3,4
-    // // UPGRADES: #SHURIKENS, SHURIKEN SPEED, REGEN SPEED, DAMAGE, EXPLOSION RADIUS
-    // // limited views --> we need to either have fog of war or make the camera display a smaller area...
+    
     otext='';
     if(options==1) otext='Katana: ∞'; // melee
     if(options==2) otext='Shuriken: '+shuri+'/10'; // range
@@ -1074,7 +1078,6 @@ function maze(){
     for (var i=0; i<50; i++){
         for (var j=0; j<50; j++){
             if(water[i][j]==1) waterLayer.create((j*48)+24,(i*48)+24, 'twall');
-            //if(building[i][j]==1) wx.create((j*48)+24,(i*48)+24, 'twall');
             if(tiles[i][j] == 67){
                 wx.create((j*48)+24,(i*48)+24, 'twall').setSize(30,48).setOffset(18,0);
             }
