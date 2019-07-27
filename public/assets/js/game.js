@@ -96,9 +96,9 @@ function preload(){
     var logoText = this.make.text({
         x: width / 2,
         y: height / 2 - 150 ,
-        text: 'ninja-dash',
+        text: 'Getting ready..',
         style: {
-            font: '80px ninjafont',
+            font: '50px ninjafont',
             fill: '#1d68ff'
         }
     });
@@ -138,7 +138,7 @@ function preload(){
     // var loading;
     // var loadingAnime;
     this.load.on('fileprogress', function (file) {
-        console.log(file);
+        //console.log(file);
         // if(file.key === 'ninja_right'){
         //     loadingAnime = {
         //         key: 'load',
@@ -520,7 +520,7 @@ function create(){
     text1=this.add.text(0, 0, '', {fontFamily:'"Roboto Condensed"', fill: '#ffffff'}).setScrollFactor(0);
     text2=this.add.text(700, 0, '', {fontFamily:'"Roboto Condensed"', fill: '#ffffff'}).setScrollFactor(0);
     text3=this.add.text(0, 580, '', {fontFamily:'"Roboto Condensed"', fill: '#ffffff'}).setScrollFactor(0);
-    text4=this.add.text(700, 580, '', {fontFamily:'"Roboto Condensed"', fill: '#ffffff'}).setScrollFactor(0);
+    //text4=this.add.text(700, 580, '', {fontFamily:'"Roboto Condensed"', fill: '#ffffff'}).setScrollFactor(0);
 
     // weather effects
     var rain_particles = this.add.particles('rain');
@@ -757,9 +757,9 @@ function update(){
         var y = this.ninja.y;
         var f = this.ninja.f;
         var dashed = this.ninja.dashed;
-        text4.setText([
-            this.ninja.f
-        ]);
+        // text4.setText([
+        //     this.ninja.f
+        // ]);
 
         if (this.ninja.oldPosition && (x !== this.ninja.oldPosition.x || y !== this.ninja.oldPosition.y)) {
             this.socket.emit('playerMovement', { x:this.ninja.x, y:this.ninja.y, f:this.ninja.f, dashed:this.ninja.dashed}); // send player info to server
@@ -880,9 +880,9 @@ function update(){
         hit.setMute(false);
         shuriThrow.setMute(false);
     }
-    
+
     otext='';
-    if(options==1) otext='Katana: ∞'; // melee
+    if(options==1) otext='Blade: ∞'; // melee
     if(options==2) otext='Shuriken: '+shuri+'/10'; // range
     if(options==3) otext='Kibaku: '+kibaku+'/10'; // land mine
     if(options==4) otext='Saisei: '+saisei+'/10'; // health regen
@@ -906,13 +906,13 @@ function update(){
     if(spawn_time<this.time.now){
         var stars_x = Math.floor((Math.random()*mapx));
         var stars_y = Math.floor((Math.random()*mapy));
-        
+
         var star=stars.create(stars_x, stars_y, 'star');
         star.play('star_anim');
         star.on('animationcomplete', ()=>{star.destroy();});
 
         spawn_time=this.time.now+5000;
-    }    
+    }
 }
 
 // create maze
