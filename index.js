@@ -230,8 +230,8 @@ app.post('/signup', async (req, res) => {//this updates the form when the form f
       res.render('pages/login',myres);
     }
     else if(results.rowCount == 0){
-      const value =[Math.floor(Math.random() * (100)),req.body.userup,req.body.psw,req.body.emailup]//randomly generated ID
-      const inner_results = await client.query('insert into login (id,username,password,email) values ($1,$2,$3,$4)',
+      const value =[Math.floor(Math.random() * (100)),req.body.userup,req.body.psw]//randomly generated ID
+      const inner_results = await client.query('insert into login (id,username,password) values ($1,$2,$3)',
       value);
       var myres = {'results': 0};
       res.render('pages/login',myres);
