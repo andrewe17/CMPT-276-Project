@@ -204,7 +204,7 @@ app.post('/signin', async (req, res) => {//this updates the form when the form f
     // res.send(result.rowCount);
     if (result.rowCount > 0){//I noticed that if the queue returns true the rowCount is larger than 0
       var user = {'username':req.body.user};
-      res.render('/game.html',user);
+      res.render('/game',user);
       client.release();
     }
     else {
