@@ -106,7 +106,7 @@ io.sockets.on('connection', function(socket){
   });
 
     socket.on('disconnect', function(username) {
-        io.emit('is_online', '🔴 ' + socket.username + ' left the chat.');
+        io.emit('is_online', '🔴' + socket.username + ' left the chat.');
     })
 
   socket.on('playerMovement', function (movementData) {
@@ -194,7 +194,7 @@ io.sockets.on('connection', function(socket){
 
 app.use(express.static(path.join(__dirname, 'node_modules')))
 
-app.post('/', async (req, res) => {//this updates the form when the form from login is submited
+app.post('/signin', async (req, res) => {//this updates the form when the form from login is submited
   try {
     const que = 'SELECT username, password FROM login WHERE EXISTS (SELECT username, password FROM login WHERE login.username = $1 AND login.password = $2);'
     const value =[req.body.user,req.body.password]
@@ -217,7 +217,7 @@ app.post('/', async (req, res) => {//this updates the form when the form from lo
 })
 
 
-app.post('/', async (req, res) => {//this updates the form when the form from login is submited
+app.post('/signup', async (req, res) => {//this updates the form when the form from login is submited
   try {
     const que = 'SELECT username FROM login WHERE EXISTS (SELECT username FROM login WHERE login.username = $1 );'
     const value =[req.body.userup];
@@ -247,11 +247,11 @@ app.post('/', async (req, res) => {//this updates the form when the form from lo
 })
 
 
-// app.post('/signup1', function(req, res){
-//     var results = {'results':0};
-//     res.render('pages/login',results);
-// });
-app.post('/', function(req, res){
+app.post('/signup1', function(req, res){
+    var results = {'results':0};
+    res.render('pages/login',results);
+});
+app.post('/login', function(req, res){
     var results = {'results':-1};
     res.render('pages/login',results);
 });
