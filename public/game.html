@@ -16,7 +16,7 @@ canvas{
 	display:block;
 	margin: 0;
 	position: absolute;
-	top: 50%;
+	top: 60%;
 	left: 50%;
 	transform: translate(-50%, -50%);
 	border-style: solid;
@@ -75,6 +75,11 @@ h2 {
 	text-align: center;
 	left: 2.5%;
 }
+
+.header{
+	position: absolute;
+	left: 35%;
+}
 	</style>
 	<!-- The following two lines are for Phaser game engine -->
 	<script src="//cdn.jsdelivr.net/npm/phaser@3.18.1/dist/phaser.js"></script>
@@ -82,6 +87,7 @@ h2 {
 
 </head>
 <body>
+	<img class="header" src="assets/images/header.png" alt="header">
 <h2> Controls </h2>
 <img class="i1" src="assets/images/wasd.png" alt="wasd">
 <p class="p1">Movement</p>
