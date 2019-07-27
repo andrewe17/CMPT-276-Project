@@ -226,7 +226,7 @@ app.post('/signup', async (req, res) => {//this updates the form when the form f
     value);
     var count = results.rowCount;
     // res.send(results.rowCount);
-    if (results.rowCount > 0 || req.body.psw == req.body.psw_repeat){//I noticed that if the queue returns true the rowCount is larger than 0
+    if (results.rowCount > 0 || req.body.psw != req.body.psw_repeat){//I noticed that if the queue returns true the rowCount is larger than 0
       var myres = {'results': 1};
       res.render('pages/login',myres);
     }
