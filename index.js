@@ -29,7 +29,6 @@ var pool = new Pool({
 //    database: 'postgres'
 //  });
 
-
 app.use(express.static(path.join(__dirname, 'public')));//joining the files public and current folder
 app.use(express.json());
 app.use(express.urlencoded({extended:false}));
@@ -67,6 +66,7 @@ app.get('/', function(req, res){
 app.get('/players', function(req, res){
   res.send(players);
 });
+
 io.sockets.on('connection', function(socket){
   // weather api
   weather= weather_data.weather[0].main;
@@ -105,9 +105,9 @@ io.sockets.on('connection', function(socket){
     io.emit('disconnect', socket.id);
   });
 
-    socket.on('disconnect', function(username) {
-        io.emit('is_online', '🔴' + socket.username + ' left the chat.');
-    })
+  socket.on('disconnect', function(username) {
+      io.emit('is_online', '🔴' + socket.username + ' left the chat.');
+  })
 
   socket.on('playerMovement', function (movementData) {
     players[socket.id].x = movementData.x;
@@ -189,7 +189,6 @@ io.sockets.on('connection', function(socket){
     io.emit('chat message',socket.username + ': ' + msg);
   });
 
-
 });
 
 app.use(express.static(path.join(__dirname, 'node_modules')))
@@ -215,7 +214,6 @@ app.post('/signin', async (req, res) => {//this updates the form when the form f
       res.send("Error " + err);
   }
 })
-
 
 app.post('/signup', async (req, res) => {//this updates the form when the form from login is submited
   try {
@@ -246,7 +244,6 @@ app.post('/signup', async (req, res) => {//this updates the form when the form f
   }
 })
 
-
 app.post('/signup1', function(req, res){
     var results = {'results':0};
     res.render('pages/login',results);
@@ -256,12 +253,10 @@ app.post('/login', function(req, res){
     res.render('pages/login',results);
 });
 
-
 //app.listen(PORT, () => console.log(`Listening on ${ PORT }`))
-http.listen(PORT, () => console.log(`Listening on ${ PORT }`))
-
-var hello = 'hello';
+http.listen(PORT, () => console.log(`Listening on ${ PORT }`));
 
 module.exports = {
   weather: weather,
+  players: players,
 }
