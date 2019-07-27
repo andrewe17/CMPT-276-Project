@@ -11,7 +11,7 @@
     <% if(results == 1) { %>
       <div class="alert">
       <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
-      <strong>Error</strong> Username or email already used.
+      <strong>Error:</strong> Username already used or password mismatch.
       </div>
     <% } %>
     <% if(results == 0) { %>
@@ -24,7 +24,7 @@
     <% if(results == 2) { %>
           <div class= "Loginfail">
             <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
-            <strong>Error</strong> you have either the wrong username or password.
+            <strong>Error:</strong> Wrong username or password.
           </div>
     <% } %>
     <div class ="row">
