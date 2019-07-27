@@ -5,9 +5,7 @@
 	<title>Ninja-Dash</title>
 	<link rel="stylesheet" href="assets/stylesheets/chat.css">
 	<style media='screen' type='text/css'>
-	* {
-		background-color: lightgray;
-	}
+
 	@font-face {
 		font-family: ninjafont;
 		src: url('assets/njnaruto.ttf');
@@ -22,6 +20,59 @@ canvas{
 	left: 50%;
 	transform: translate(-50%, -50%);
 }
+
+h2 {
+	width: 250px;
+	display: block;
+	position: absolute;
+	text-align: center;
+	height: 100px;
+}
+
+.i1 {
+	display: block;
+	position: absolute;
+	top: 10%;
+	left: 2.5%;
+}
+
+.i2 {
+	display: block;
+	position: absolute;
+	top: 30%;
+	left: 2.5%;
+}
+
+.i3 {
+	display: block;
+	position: absolute;
+	top: 45%;
+	left: 2.5%;
+}
+
+.p1 {
+	display: block;
+	position: absolute;
+	top: 23.5%;
+	text-align: center;
+	left: 2.5%;
+}
+
+.p2 {
+	display: block;
+	position: absolute;
+	top:37.5%;
+	text-align: center;
+	left: 2.5%;
+}
+
+.p3 {
+	display: block;
+	position: absolute;
+	top: 52.5%;
+	text-align: center;
+	left: 2.5%;
+}
 	</style>
 	<!-- The following two lines are for Phaser game engine -->
 	<script src="//cdn.jsdelivr.net/npm/phaser@3.18.1/dist/phaser.js"></script>
@@ -29,16 +80,23 @@ canvas{
 
 </head>
 <body>
+<h2> Controls </h2>
+<img class="i1" src="assets/images/wasd.png" alt="wasd">
+<p class="p1">Movement</p>
+<img class="i2"src="assets/images/select.png" alt="select">
+<p class="p2">Select Weapon</p>
+<img class="i3"src="assets/images/space.png" alt="space">
+<p class="p3">Dash</p>
 	<div style="font-family:ninjafont; position:absolute; left:-1000px; visibility:hidden;">.</div>
 	<script src="/socket.io/socket.io.js"></script>
 	<canvas>
 	<script src="assets/js/game.js"></script>
 </canvas>
 	<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
-	<!-- <ul id="messages"></ul>
+	<ul id="messages"></ul>
 	<form action="">
 		<input id="m" autocomplete="off" /><button>Send</button>
-	</form> -->
+	</form>
 </body>
 
 </body>
