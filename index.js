@@ -72,7 +72,7 @@ io.sockets.on('connection', function(socket){
   weather= weather_data.weather[0].main;
   io.emit('weather', weather);
   // playercount++;
-  console.log('A user connected');
+  //console.log('A user connected');
   // create a new player and add it to our players object
   players[socket.id] = {
     x: Math.floor(Math.random()*2400),
@@ -97,7 +97,7 @@ io.sockets.on('connection', function(socket){
 
   // when a player disconnects, remove them from our players object
   socket.on('disconnect', function(){ //on reload or exit
-    console.log('A user disconnected');
+    //console.log('A user disconnected');
     // remove this player from our players object
     socket.broadcast.emit('deletePlayer', socket.id);
     delete players[socket.id];
@@ -185,7 +185,7 @@ io.sockets.on('connection', function(socket){
 
   //show chat messages
   socket.on('chat message', function(msg){
-    console.log('message: ' + msg);
+    //console.log('message: ' + msg);
     io.emit('chat message',socket.username + ': ' + msg);
   });
 
