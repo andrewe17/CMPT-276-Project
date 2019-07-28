@@ -92,7 +92,7 @@ io.sockets.on('connection', function(socket){
   // user connect (chat)
   socket.on('username', function(username){
     socket.username = username;
-    io.emit('is_online', '🔵 ' + socket.username + ' has connected.');
+    io.emit('is_online', '✧ ' + socket.username + ' has connected.');
   });
 
   // when a player disconnects, remove them from our players object
@@ -106,7 +106,7 @@ io.sockets.on('connection', function(socket){
   });
 
   socket.on('disconnect', function(username) {
-      io.emit('is_online', '🔴' + socket.username + ' left the chat.');
+      io.emit('is_online', '✧' + socket.username + ' left the chat.');
   })
 
   socket.on('playerMovement', function (movementData) {

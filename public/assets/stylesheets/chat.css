@@ -8,24 +8,25 @@ form {
   float: right;
   background: #000;
   padding: 3px;
-  bottom: 0;
-  right: 2.5%;
+  bottom: 17%;
+  right: 4%;
   position: fixed;
-  width: 345px;
+  width: 347px;
+
     }
 form input {
   border: 0;
   padding: 10px;
   width: 250px;
   margin-left: 0.5%;
-  margin-right: 2.5%;
+  margin-right: 3%;
  }
 form button {
   width: 60px;
   background: rgb(130, 224, 255);
   border: none;
   position: absolute;
-  margin-right: 2.5%;
+  margin-right: 4%;
   padding: 10px; }
 #messages {
   display: block;
@@ -34,13 +35,15 @@ form button {
   margin: 0;
   padding: 0;
   width: 350px;
-  height: 95%;
+  height: 60%;
   float: right;
   border-style: solid;
   border-width: 1px;
   position: absolute;
-  right: 2.5%;
+  top: 20%;
+  right: 4%;
   overflow: auto;
+  vertical-align: center;
 }
 #messages li {
   padding: 5px 10px;
