@@ -96,9 +96,9 @@ function preload(){
     var logoText = this.make.text({
         x: width / 2,
         y: height / 2 - 150 ,
-        text: 'Getting ready..',
+        text: 'ninja-dash',
         style: {
-            font: '50px ninjafont',
+            font: '80px ninjafont',
             fill: '#1d68ff'
         }
     });
@@ -138,7 +138,7 @@ function preload(){
     // var loading;
     // var loadingAnime;
     this.load.on('fileprogress', function (file) {
-        //console.log(file);
+        console.log(file);
         // if(file.key === 'ninja_right'){
         //     loadingAnime = {
         //         key: 'load',
@@ -166,7 +166,7 @@ function preload(){
     this.load.image('twall', 'assets/images/Twall.png');
     this.load.image('van', 'assets/images/van.jpg');
     this.load.image('ninja', 'assets/images/ninja.png');
-    this.load.image('dashobject', 'assets/images/ninja.png');
+    this.load.image('dashobject', 'assets/images/dashObject.png');
     this.load.image('slash', 'assets/images/slash.png');
     this.load.image('shuri', 'assets/images/shuri.png');
     this.load.image('rain', 'assets/images/rain.png');
@@ -196,6 +196,7 @@ function preload(){
     this.load.spritesheet('kata_anim', 'assets/images/kata_anim.png', {frameWidth: 46, frameHeight: 46});
     this.load.spritesheet('shuri_anim', 'assets/images/shuri_anim.png', {frameWidth: 13, frameHeight: 13});
     this.load.spritesheet('star_anim', 'assets/images/star.png', {frameWidth: 24, frameHeight: 22});
+    this.load.spritesheet('dash_anim', 'assets/images/dashAni.png', {frameWidth: 32, frameHeight: 32});
 }
 
 
@@ -320,7 +321,7 @@ function create(){
      // receiving dash
     this.socket.on('smoke_ani', function (smokeInfo) {
         flash.play();
-        var smoke=dd.create(smokeInfo.x, smokeInfo.y, 'dashobject');
+        var smoke=self.physics.add.sprite(smokeInfo.x, smokeInfo.y, 'ninja');
         smoke.rotation = smokeInfo.r;
         smoke.play('ninja_smoke');
         smoke.setVelocityX(smokeInfo.velx);
@@ -333,7 +334,7 @@ function create(){
         var toss = ss.create(shurikenInfo.initX, shurikenInfo.initY, 'shuri');
         //var toss = self.physics.add.sprite(shurikenInfo.initX, shurikenInfo.initY, 'shuri');
         toss.play('shuri_anim');
-        toss.setVelocityX(shurikenInfo.velX);
+        toss.setVelocityX(shurikenInfo.velXaw);
         toss.setVelocityY(shurikenInfo.velY);
     });
 
@@ -372,7 +373,7 @@ function create(){
 
     //submit chat message
     $('form').submit(function(e){
-        //e.preventDefault(); // prevents page reloading
+        e.preventDefault(); // prevents page reloading
         self.socket.emit('chat message', $('#m').val());
         $('#m').val('');
         return false;
@@ -400,18 +401,14 @@ function create(){
     s = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
     d = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
     space = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-    this.input.keyboard.removeCapture('W,S,A,D,SPACE');
     one = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ONE);
     two = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TWO);
     three = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.THREE);
     four = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.FOUR);
-    this.input.keyboard.removeCapture('ONE,TWO,THREE,FOUR');
     upgrade = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.U);
     m = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M);
     n = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.N);
     b = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.B);
-    this.input.keyboard.removeCapture('U,M,N,B');
-    //alt = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ALT);
     // mouse
     pointer = this.input.activePointer; // mouse location relative to screen
 
@@ -448,8 +445,8 @@ function create(){
     this.anims.create({
         key: 'ninja_smoke',
         frames: this.anims.generateFrameNumbers('ninja_smoke'),
-        frameRate: 700,
-        repeat: 1
+        frameRate: 15,
+        repeat: 0
     });
     this.anims.create({
         key: 'slash_anim',
@@ -474,6 +471,12 @@ function create(){
         frames: this.anims.generateFrameNumbers('star_anim'),
         frameRate: 1,
         repeat: 20
+    });
+    this.anims.create({
+        key: 'dash_anim',
+        frames: this.anims.generateFrameNumbers('dash_anim'),
+        frameRate: 10,
+        repeat: 0
     });
 
     // collisions
@@ -520,7 +523,7 @@ function create(){
     text1=this.add.text(0, 0, '', {fontFamily:'"Roboto Condensed"', fill: '#ffffff'}).setScrollFactor(0);
     text2=this.add.text(700, 0, '', {fontFamily:'"Roboto Condensed"', fill: '#ffffff'}).setScrollFactor(0);
     text3=this.add.text(0, 580, '', {fontFamily:'"Roboto Condensed"', fill: '#ffffff'}).setScrollFactor(0);
-    //text4=this.add.text(700, 580, '', {fontFamily:'"Roboto Condensed"', fill: '#ffffff'}).setScrollFactor(0);
+    text4=this.add.text(700, 580, '', {fontFamily:'"Roboto Condensed"', fill: '#ffffff'}).setScrollFactor(0);
 
     // weather effects
     var rain_particles = this.add.particles('rain');
@@ -619,9 +622,6 @@ function create(){
             });
         }
     });
-    // // chat toggle
-    // toggle = true;
-    // toggle_time = this.time.now;
 }
 function healthToText(health){
     var percentage = health / 10;
@@ -660,11 +660,11 @@ function addOtherPlayers(self, playerInfo) {
 }
 
 
-
 function update(){
     if(this.ninja){
         this.ninja.healthText.x = this.ninja.x - 12;
         this.ninja.healthText.y = this.ninja.y - 20;
+
         // keyboard
         if(w.isDown){
             if(this.ninja.anims.getCurrentKey()!='ninja_up') this.ninja.play('ninja_up');
@@ -706,7 +706,6 @@ function update(){
             if(this.ninja.anims.getCurrentKey()=='ninja_right') this.ninja.play('ninja_right');
             this.ninja.setVelocityX(0);
         }
-
         reduced = false;
         vel = 200;
 
@@ -724,23 +723,26 @@ function update(){
         // dash
         if(space.isDown && dash>0){
             if(this.time.now>dashtime){
-                flash.play();
-                var smoke=dd.create(this.ninja.x, this.ninja.y, 'dashobject');
-                smoke.rotation = angle;
-                smoke.play('ninja_smoke');
-                smoke.on('animationcomplete', ()=>{smoke.destroy();});
-                var dashX = Math.cos(angle)*650;
-                var dashY = Math.sin(angle)*650;
-                smoke.setVelocityX(dashX);
-                smoke.setVelocityY(dashY);
-                this.socket.emit('smoke', { x:this.ninja.x, y:this.ninja.y, velx:dashX, vely: dashY, r:angle}); // dash animation location info
+                var tempx = this.ninja.x;
+                var tempy = this.ninja.y;
+                var tempr = angle;
+                this.ninja.x+=Math.cos(angle)*200;
+                this.ninja.y+=Math.sin(angle)*200;
 
-                this.ninja.x+=Math.cos(angle)*100;
-                this.ninja.y+=Math.sin(angle)*100;
+                flash.play();
+                var smoke1=dd.create(tempx, tempy, 'ninja');
+                smoke1.play('ninja_smoke');
+                smoke1.on('animationcomplete', ()=>{smoke1.destroy();});
+                var dashX = Math.cos(angle)*740;
+                var dashY = Math.sin(angle)*740;
+                smoke1.setVelocityX(dashX);
+                smoke1.setVelocityY(dashY);
+                this.socket.emit('smoke', { x:tempx, y:tempy, velx:dashX, vely: dashY, r:tempr}); // dash animation location info
+
                 dashtime=this.time.now+200;
                 dash--;
                 dashreg=this.time.now+1000; // only 2 dashes
-                this.ninja.dash=1;
+                this.ninja.dash=1; 
             }
         }
         if(this.time.now>dashreg){ // dash regen
@@ -757,9 +759,10 @@ function update(){
         var y = this.ninja.y;
         var f = this.ninja.f;
         var dashed = this.ninja.dashed;
-        // text4.setText([
-        //     this.ninja.f
-        // ]);
+        text4.setText([
+            this.ninja.f
+        ]);
+        //var d = angle;
 
         if (this.ninja.oldPosition && (x !== this.ninja.oldPosition.x || y !== this.ninja.oldPosition.y)) {
             this.socket.emit('playerMovement', { x:this.ninja.x, y:this.ninja.y, f:this.ninja.f, dashed:this.ninja.dashed}); // send player info to server
@@ -880,9 +883,12 @@ function update(){
         hit.setMute(false);
         shuriThrow.setMute(false);
     }
-
+    // // SPAWNING POINTS
+    // // UPGRADE AREA: UPGRADE CHANGED TO OPTIONS 1,2,3,4
+    // // UPGRADES: #SHURIKENS, SHURIKEN SPEED, REGEN SPEED, DAMAGE, EXPLOSION RADIUS
+    // // limited views --> we need to either have fog of war or make the camera display a smaller area...
     otext='';
-    if(options==1) otext='Blade: ∞'; // melee
+    if(options==1) otext='Katana: ∞'; // melee
     if(options==2) otext='Shuriken: '+shuri+'/10'; // range
     if(options==3) otext='Kibaku: '+kibaku+'/10'; // land mine
     if(options==4) otext='Saisei: '+saisei+'/10'; // health regen
@@ -906,13 +912,13 @@ function update(){
     if(spawn_time<this.time.now){
         var stars_x = Math.floor((Math.random()*mapx));
         var stars_y = Math.floor((Math.random()*mapy));
-
+        
         var star=stars.create(stars_x, stars_y, 'star');
         star.play('star_anim');
         star.on('animationcomplete', ()=>{star.destroy();});
 
         spawn_time=this.time.now+5000;
-    }
+    }    
 }
 
 // create maze
@@ -1078,6 +1084,7 @@ function maze(){
     for (var i=0; i<50; i++){
         for (var j=0; j<50; j++){
             if(water[i][j]==1) waterLayer.create((j*48)+24,(i*48)+24, 'twall');
+            //if(building[i][j]==1) wx.create((j*48)+24,(i*48)+24, 'twall');
             if(tiles[i][j] == 67){
                 wx.create((j*48)+24,(i*48)+24, 'twall').setSize(30,48).setOffset(18,0);
             }
@@ -1148,8 +1155,8 @@ function shurihit(self, otherPlayer, ss){
 }
 
 function dashhit(self, otherPlayer, dd){
-    //dd.destroy();
-    if(otherPlayer.health<=5){
+    dd.destroy();
+    if(otherPlayer.health<=25){
         kills+=1;
         gold+=100;
         console.log(self.socket.id);
