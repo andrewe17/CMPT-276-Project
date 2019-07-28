@@ -23,11 +23,17 @@ form input {
  }
 form button {
   width: 65px;
-  background: rgb(130, 224, 255);
+  background: lightblue;
   border: none;
   position: absolute;
   margin-right: 4%;
   padding: 10px; }
+
+button:hover{
+  background: #0099ff;
+
+}
+
 #messages {
   display: block;
   margin: 0 auto;
