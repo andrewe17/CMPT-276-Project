@@ -115,6 +115,9 @@ io.sockets.on('connection', function(socket){
   // when a player disconnects, remove them from our players object
   socket.on('disconnect', function(){ //on reload or exit
     player_count--;
+    if(player_count<4 && initialized==false){
+      io.sockets.emit('waiting', player_count);
+    }
     if(player_count<=0){
       initialized=false;
     }
