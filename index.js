@@ -154,7 +154,7 @@ io.sockets.on('connection', function(socket){
   });
   socket.on('dash_hit', function (otherPlayer) {
     var h = players[otherPlayer.id].health;
-    players[otherPlayer.id].health = h - 25;
+    players[otherPlayer.id].health = h - 5;
     //console.log(player.id);
     if(players[otherPlayer.id].health<=0){
       players[otherPlayer.id].deaths+=1;
