@@ -21,8 +21,6 @@ var game = new Phaser.Game(config);
 
 var mapx = 2400; // need a map that's 3000+200 x
 var mapy = 2400; // and 2000+200 y
-// global time
-var gg;
 
 // keyboard
 var cursor;
@@ -82,6 +80,10 @@ var text1, text2, text3, text4; // textbox
 var mousex;
 var mousey;
 var angle;
+
+// global time
+var game_time;
+var game_starts=false;
 
 function preload(){
     var offset = 30;
@@ -196,9 +198,6 @@ function preload(){
     this.load.spritesheet('shuri_anim', 'assets/images/shuri_anim.png', {frameWidth: 13, frameHeight: 13});
     this.load.spritesheet('star_anim', 'assets/images/star.png', {frameWidth: 24, frameHeight: 22});
 }
-
-
-
 
 function create(){
 
@@ -388,9 +387,6 @@ function create(){
     //var username = prompt('Please tell me your name');
     this.socket.emit('username', 'player' + Math.floor(Math.random() * 99));
 
-    // global time
-    gg=this.time.now+(1000*60*10);
-
     // keyboard
     cursor = this.input.keyboard.createCursorKeys();
     w = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
@@ -409,9 +405,23 @@ function create(){
     n = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.N);
     b = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.B);
     this.input.keyboard.removeCapture('M,N,B');
-
     // mouse
     pointer = this.input.activePointer; // mouse location relative to screen
+
+    text4=this.add.text(700, 580, '', {fontFamily:'"Roboto Condensed"', fill: '#ffffff'}).setScrollFactor(0);
+    // waiting for players
+    this.socket.on('waiting', (player_count)=>{
+        text4.setText([
+            player_count+'/4 players',
+        ]);
+    });
+
+    // game starts
+    this.socket.on('game_start', ()=>{
+        text4.setText('game starts');
+        game_starts=true;
+        game_time=this.time.now+(1000*60*10);
+    });
 
     // dash
     dash=0;
@@ -657,8 +667,6 @@ function addOtherPlayers(self, playerInfo) {
     self.otherPlayers.add(otherPlayer);
 }
 
-
-
 function update(){
     if(this.ninja){
         this.ninja.healthText.x = this.ninja.x - 12;
@@ -720,7 +728,7 @@ function update(){
         if(mousex<0) angle+=Math.PI;
 
         // dash
-        if(space.isDown && dash>0){
+        if(space.isDown && dash>0 && game_starts==true){
             if(this.time.now>dashtime){
                 var tempx = this.ninja.x;
                 var tempy = this.ninja.y;
@@ -758,9 +766,6 @@ function update(){
         var y = this.ninja.y;
         var f = this.ninja.f;
         var dashed = this.ninja.dashed;
-        // text4.setText([
-        //     this.ninja.f
-        // ]);
 
         if (this.ninja.oldPosition && (x !== this.ninja.oldPosition.x || y !== this.ninja.oldPosition.y)) {
             this.socket.emit('playerMovement', { x:this.ninja.x, y:this.ninja.y, f:this.ninja.f, dashed:this.ninja.dashed}); // send player info to server
@@ -803,7 +808,7 @@ function update(){
     }
 
     // use items
-    if(pointer.leftButtonDown()){ // left click
+    if(pointer.leftButtonDown() && game_starts==true){ // left click
         if(options==1 && this.time.now>katatime && kata>0){
             katana.play(); // sound
             var slashx = this.ninja.x+Math.cos(angle)*0;
@@ -883,10 +888,13 @@ function update(){
     }
 
     otext='';
-    if(options==1) otext='Blade: ∞'; // melee
-    if(options==2) otext='Shuriken: '+shuri+'/10'; // range
-    if(options==3) otext='Kibaku: '+kibaku+'/10'; // land mine
-    if(options==4) otext='Saisei: '+saisei+'/10'; // health regen
+    if(game_starts==false){
+        otext='Weapons Disabled'; // melee
+    }
+    else{
+        if(options==1) otext='Blade: ∞'; // melee
+        if(options==2) otext='Shuriken: '+shuri+'/10'; // range
+    }
 
     // text
     text1.setText([
@@ -900,9 +908,11 @@ function update(){
         'Gold: '+gold,
         'Deaths: '+deaths
     ]);
-    text3.setText([
-        'Timer: '+Math.floor(((gg-this.time.now)/1000)/60)+':'+Math.floor(((gg-this.time.now)/1000)%60)
-    ]);
+    if(game_starts==true){
+        text3.setText([
+            'Timer: '+Math.floor(((game_time-this.time.now)/1000)/60)+':'+Math.floor(((game_time-this.time.now)/1000)%60)
+        ]);
+    }
 
     if(spawn_time<this.time.now){
         var stars_x = Math.floor((Math.random()*mapx));
