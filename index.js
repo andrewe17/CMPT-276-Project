@@ -67,11 +67,24 @@ app.get('/players', function(req, res){
   res.send(players);
 });
 
+var player_count=0;
+var initialized=false;
 io.sockets.on('connection', function(socket){
   // weather api
   weather= weather_data.weather[0].main;
   io.emit('weather', weather);
-  // playercount++;
+
+  // game starts
+  player_count++;
+  console.log(player_count);
+  if(player_count<4 && initialized==false){
+    io.sockets.emit('waiting', player_count);
+  }
+  if(player_count>=4 && initialized==false){
+    initialized=true;
+    io.sockets.emit('game_start');
+  }
+  
   //console.log('A user connected');
   // create a new player and add it to our players object
   players[socket.id] = {
@@ -97,6 +110,7 @@ io.sockets.on('connection', function(socket){
 
   // when a player disconnects, remove them from our players object
   socket.on('disconnect', function(){ //on reload or exit
+    player_count--;
     //console.log('A user disconnected');
     // remove this player from our players object
     socket.broadcast.emit('deletePlayer', socket.id);
