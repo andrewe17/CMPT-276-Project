@@ -431,7 +431,7 @@ function create(){
     });
     // ask username
     //var username = prompt('Please tell me your name');
-    this.socket.emit('username', 'player' + Math.floor(Math.random() * 99));
+    this.socket.emit('username', user);
 
     // keyboard
     cursor = this.input.keyboard.createCursorKeys();
