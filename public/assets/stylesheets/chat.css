@@ -11,18 +11,18 @@ form {
   bottom: 17%;
   right: 4%;
   position: fixed;
-  width: 15.25%;
+  width: 354px;
 
     }
 form input {
   border: 0;
   padding: 10px;
-  width: 60%;
+  width: 250px;
   margin-left: 0.5%;
   margin-right: 3%;
  }
 form button {
-  width: 25%;
+  width: 65px;
   background: lightblue;
   border: none;
   position: absolute;
@@ -40,7 +40,7 @@ button:hover{
   list-style-type: none;
   margin: 0;
   padding: 0;
-  width: 15%;
+  width: 350px;
   height: 60%;
   float: right;
   border-style: solid;
