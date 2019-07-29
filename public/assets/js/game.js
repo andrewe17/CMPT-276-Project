@@ -720,7 +720,7 @@ function create(){
 function healthToText(health){
     var percentage = health / 10;
     var ii;
-    var textHealth ='';
+    var textHealth = uNametext + '\n';
     for( ii = 1 ; ii <= percentage ; ii++){
         textHealth += '█';
     }
