@@ -319,8 +319,7 @@ function create(){
      // receiving dash
     this.socket.on('smoke_ani', function (smokeInfo) {
         flash.play();
-        var smoke=dd.create(smokeInfo.x, smokeInfo.y, 'dashobject');
-        smoke.rotation = smokeInfo.r;
+        var smoke=self.physics.add.sprite(smokeInfo.x, smokeInfo.y, 'dashobject');
         smoke.play('ninja_smoke');
         smoke.setVelocityX(smokeInfo.velx);
         smoke.setVelocityY(smokeInfo.vely);
@@ -447,7 +446,7 @@ function create(){
     this.anims.create({
         key: 'ninja_smoke',
         frames: this.anims.generateFrameNumbers('ninja_smoke'),
-        frameRate: 700,
+        frameRate: 50,
         repeat: 1
     });
     this.anims.create({
@@ -723,19 +722,22 @@ function update(){
         // dash
         if(space.isDown && dash>0){
             if(this.time.now>dashtime){
+                var tempx = this.ninja.x;
+                var tempy = this.ninja.y;
+                var tempr = angle;
+                this.ninja.x+=Math.cos(angle)*200;
+                this.ninja.y+=Math.sin(angle)*200;
+
                 flash.play();
-                var smoke=dd.create(this.ninja.x, this.ninja.y, 'dashobject');
-                smoke.rotation = angle;
+                var smoke=dd.create(tempx, tempy, 'ninja');
                 smoke.play('ninja_smoke');
                 smoke.on('animationcomplete', ()=>{smoke.destroy();});
-                var dashX = Math.cos(angle)*650;
-                var dashY = Math.sin(angle)*650;
+                var dashX = Math.cos(tempr)*900;
+                var dashY = Math.sin(tempr)*900;
                 smoke.setVelocityX(dashX);
                 smoke.setVelocityY(dashY);
-                this.socket.emit('smoke', { x:this.ninja.x, y:this.ninja.y, velx:dashX, vely: dashY, r:angle}); // dash animation location info
+                this.socket.emit('smoke', { x:tempx, y:tempy, velx:dashX, vely: dashY, r:tempr}); // dash animation location info
 
-                this.ninja.x+=Math.cos(angle)*100;
-                this.ninja.y+=Math.sin(angle)*100;
                 dashtime=this.time.now+200;
                 dash--;
                 dashreg=this.time.now+1000; // only 2 dashes
@@ -1147,8 +1149,8 @@ function shurihit(self, otherPlayer, ss){
 }
 
 function dashhit(self, otherPlayer, dd){
-    //dd.destroy();
-    if(otherPlayer.health<=5){
+    dd.destroy();
+    if(otherPlayer.health<=25){
         kills+=1;
         gold+=100;
         console.log(self.socket.id);
