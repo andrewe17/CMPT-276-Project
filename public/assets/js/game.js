@@ -87,6 +87,34 @@ var game_starts=false;
 
 //ui
 var ui_dash,ui_shuriken,ui_katana;
+var killInfo = [];
+
+// killInfo.push('a Kills B');
+// killInfo.push('sadaa Kills B');
+// killInfo.push('a12212 Kills B');
+// killInfo.push('----a Kills B');
+// killInfo.push(';#####ddda Kills B');
+
+var killInfoPtr = [];
+
+
+
+function popInfo(){
+    if(killInfo.size != 0){
+        killInfo.shift();
+        drawInfo();
+    }
+}
+
+function drawInfo(){
+    killInfoPtr.forEach( function(element, index) {
+        if(killInfo[index] != null){
+            element.setText(killInfo[index]);
+        }else {
+            element.setText('');
+        }
+    });
+}
 
 function preload(){
     var offset = 30;
@@ -370,11 +398,19 @@ function create(){
         }
     });
     // update kill counter
-    this.socket.on('shurikenKill', function (playerInfo){
+    this.socket.on('shurikenKill', function (playerInfo,killer,dead){
         if(playerInfo.playerId === self.socket.id){
             console.log('increase kills');
             kills=playerInfo.kills;
         }
+    });
+
+    this.socket.on('killInfo', function (killer,dead){
+        killInfo.push(killer + ' $$$ ' + dead);
+        if(killInfo.size > 5){
+            killInfo.shift();
+        }
+        drawInfo();
     });
 
     //submit chat message
@@ -668,6 +704,16 @@ function create(){
     // // chat toggle
     // toggle = true;
     // toggle_time = this.time.now;
+    killInfo_X = 500;
+    killInfo_Y = 10;
+    killInfoPtr.push(this.add.text(killInfo_X, killInfo_Y, '', {fontFamily:'"Roboto Condensed"', fill: '#22ccff'}).setScrollFactor(0));
+    killInfoPtr.push(this.add.text(killInfo_X, killInfo_Y + 20, '', {fontFamily:'"Roboto Condensed"', fill: '#22ccff'}).setScrollFactor(0));
+    killInfoPtr.push(this.add.text(killInfo_X, killInfo_Y + 40, '', {fontFamily:'"Roboto Condensed"', fill: '#22ccff'}).setScrollFactor(0));
+    killInfoPtr.push(this.add.text(killInfo_X, killInfo_Y + 60, '', {fontFamily:'"Roboto Condensed"', fill: '#22ccff'}).setScrollFactor(0));
+    killInfoPtr.push(this.add.text(killInfo_X, killInfo_Y + 80, '', {fontFamily:'"Roboto Condensed"', fill: '#22ccff'}).setScrollFactor(0));
+
+    //setInterval(popInfo(), 2000);
+    timedEvent = this.time.addEvent({ delay: 4000, callback: popInfo, callbackScope: this, loop: true });
 }
 function healthToText(health){
     var percentage = health / 10;

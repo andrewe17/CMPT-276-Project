@@ -91,6 +91,7 @@ io.sockets.on('connection', function(socket){
     x: Math.floor(Math.random()*2400),
     y: Math.floor(Math.random()*2400),
     playerId: socket.id,
+    s_username: socket.username,
     f: 0,
     dashed:0,
     health:100,
@@ -109,6 +110,7 @@ io.sockets.on('connection', function(socket){
   // user connect (chat)
   socket.on('username', function(username){
     socket.username = username;
+    players[socket.id].s_username = username;
     io.emit('is_online', '✧ ' + socket.username + ' has connected.');
   });
 
@@ -166,6 +168,8 @@ io.sockets.on('connection', function(socket){
     players[otherPlayer.id].health = h-otherPlayer.shuri_d;
     //console.log(player.id);
     if(players[otherPlayer.id].health<=0){
+      socket.broadcast.emit('killInfo',socket.username, players[otherPlayer.id].s_username);
+      socket.emit('killInfo', socket.username, players[otherPlayer.id].s_username);
       players[otherPlayer.id].deaths+=1;
       players[otherPlayer.id].x=Math.floor(Math.random()*2400);
       players[otherPlayer.id].y=Math.floor(Math.random()*2400);
@@ -181,6 +185,8 @@ io.sockets.on('connection', function(socket){
     players[otherPlayer.id].health = h - 25;
     //console.log(player.id);
     if(players[otherPlayer.id].health<=0){
+      socket.broadcast.emit('killInfo', socket.username, players[otherPlayer.id].s_username);
+      socket.emit('killInfo', socket.username, players[otherPlayer.id].s_username);
       players[otherPlayer.id].deaths+=1;
       players[otherPlayer.id].x=Math.floor(Math.random()*2400);
       players[otherPlayer.id].y=Math.floor(Math.random()*2400);
@@ -196,6 +202,8 @@ io.sockets.on('connection', function(socket){
     var h = players[otherPlayer.id].health;
     players[otherPlayer.id].health = h-otherPlayer.kata_d;
     if(players[otherPlayer.id].health<=0){
+      socket.broadcast.emit('killInfo', socket.username, players[otherPlayer.id].s_username);
+      socket.emit('killInfo', socket.username, players[otherPlayer.id].s_username);
       players[otherPlayer.id].deaths+=1;
       players[otherPlayer.id].x=Math.floor(Math.random()*2400);
       players[otherPlayer.id].y=Math.floor(Math.random()*2400);
