@@ -892,7 +892,7 @@ function update(){
     text1.setText([
         'Dash: '+dash+'/2',
         otext, // options
-        'upgrade [u+1or2]',
+        'Upgrade [SHIFT+1/2]',
     ]);
     text2.setText([
         'Health: '+health,
