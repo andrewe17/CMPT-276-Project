@@ -29,7 +29,6 @@ var pool = new Pool({
 //    database: 'postgres'
 //  });
 
-
 app.use(express.static(path.join(__dirname, 'public')));//joining the files public and current folder
 app.use(express.json());
 app.use(express.urlencoded({extended:false}));
@@ -61,18 +60,32 @@ http2.request(options, function(weather_response){
 
 //app.get('/', (req, res) => res.render('pages/index'))
 app.get('/', function(req, res){
-  res.sendFile(__dirname + '/index.html');
+  res.sendFile(__dirname + 'pages/login');
 });
 
 app.get('/players', function(req, res){
   res.send(players);
 });
+
+var player_count=0;
+var initialized=false;
 io.sockets.on('connection', function(socket){
   // weather api
   weather= weather_data.weather[0].main;
   io.emit('weather', weather);
-  // playercount++;
-  console.log('A user connected');
+
+  // game starts
+  player_count++;
+  console.log(player_count);
+  if(player_count<4 && initialized==false){
+    io.sockets.emit('waiting', player_count);
+  }
+  if(player_count>=4 && initialized==false){
+    initialized=true;
+    io.sockets.emit('game_start');
+  }
+  
+  //console.log('A user connected');
   // create a new player and add it to our players object
   players[socket.id] = {
     x: Math.floor(Math.random()*2400),
@@ -96,12 +109,13 @@ io.sockets.on('connection', function(socket){
   // user connect (chat)
   socket.on('username', function(username){
     socket.username = username;
-    io.emit('is_online', '🔵 <i>' + socket.username + ' has connected.</i>');
+    io.emit('is_online', '✧ ' + socket.username + ' has connected.');
   });
 
   // when a player disconnects, remove them from our players object
   socket.on('disconnect', function(){ //on reload or exit
-    console.log('A user disconnected');
+    player_count--;
+    //console.log('A user disconnected');
     // remove this player from our players object
     socket.broadcast.emit('deletePlayer', socket.id);
     delete players[socket.id];
@@ -109,9 +123,9 @@ io.sockets.on('connection', function(socket){
     io.emit('disconnect', socket.id);
   });
 
-    socket.on('disconnect', function(username) {
-        io.emit('is_online', '🔴 <i>' + socket.username + ' left the chat..</i>');
-    })
+  socket.on('disconnect', function(username) {
+      io.emit('is_online', '✧' + socket.username + ' left the chat.');
+  })
 
   socket.on('playerMovement', function (movementData) {
     players[socket.id].x = movementData.x;
@@ -143,7 +157,7 @@ io.sockets.on('connection', function(socket){
   // Broadcast shuriken hit
   socket.on('shuri_hit', function (otherPlayer) {
     var h = players[otherPlayer.id].health;
-    players[otherPlayer.id].health = h - 10;
+    players[otherPlayer.id].health = h-otherPlayer.shuri_d;
     //console.log(player.id);
     if(players[otherPlayer.id].health<=0){
       players[otherPlayer.id].deaths+=1;
@@ -158,7 +172,7 @@ io.sockets.on('connection', function(socket){
   });
   socket.on('dash_hit', function (otherPlayer) {
     var h = players[otherPlayer.id].health;
-    players[otherPlayer.id].health = h - 5;
+    players[otherPlayer.id].health = h - 25;
     //console.log(player.id);
     if(players[otherPlayer.id].health<=0){
       players[otherPlayer.id].deaths+=1;
@@ -174,8 +188,7 @@ io.sockets.on('connection', function(socket){
 
   socket.on('kata_hit', function (otherPlayer) {
     var h = players[otherPlayer.id].health;
-    players[otherPlayer.id].health = h - 50;
-    //console.log(player.id);
+    players[otherPlayer.id].health = h-otherPlayer.kata_d;
     if(players[otherPlayer.id].health<=0){
       players[otherPlayer.id].deaths+=1;
       players[otherPlayer.id].x=Math.floor(Math.random()*2400);
@@ -190,10 +203,9 @@ io.sockets.on('connection', function(socket){
 
   //show chat messages
   socket.on('chat message', function(msg){
-    console.log('message: ' + msg);
+    //console.log('message: ' + msg);
     io.emit('chat message',socket.username + ': ' + msg);
   });
-
 
 });
 
@@ -208,11 +220,12 @@ app.post('/signin', async (req, res) => {//this updates the form when the form f
     value);
     // res.send(result.rowCount);
     if (result.rowCount > 0){//I noticed that if the queue returns true the rowCount is larger than 0
-      res.redirect('/game.html');
+      var user = {'username':req.body.user};
+      res.render('pages/game',user);
       client.release();
     }
     else {
-      var myres = {'results': 1};
+      var myres = {'results': 2};
       res.render('pages/login',myres);
     }
   } catch (err) {
@@ -220,23 +233,22 @@ app.post('/signin', async (req, res) => {//this updates the form when the form f
   }
 })
 
-
 app.post('/signup', async (req, res) => {//this updates the form when the form from login is submited
   try {
-    const que = 'SELECT username FROM login WHERE EXISTS (SELECT username FROM login WHERE login.username = $1);'
+    const que = 'SELECT username FROM login WHERE EXISTS (SELECT username FROM login WHERE login.username = $1 );'
     const value =[req.body.userup];
     const client = await pool.connect()
     const results = await client.query(que,
     value);
     var count = results.rowCount;
     // res.send(results.rowCount);
-    if (results.rowCount > 0){//I noticed that if the queue returns true the rowCount is larger than 0
+    if (results.rowCount > 0 || req.body.psw != req.body.psw_repeat){//I noticed that if the queue returns true the rowCount is larger than 0
       var myres = {'results': 1};
-      res.render('pages/signup',myres);
+      res.render('pages/login',myres);
     }
     else if(results.rowCount == 0){
-      const value =[Math.floor(Math.random() * (100)),req.body.userup,req.body.psw,req.body.emailup]//randomly generated ID
-      const inner_results = await client.query('insert into login (id,username,password,email) values ($1,$2,$3,$4)',
+      const value =[Math.floor(Math.random() * (100)),req.body.userup,req.body.psw]//randomly generated ID
+      const inner_results = await client.query('insert into login (id,username,password) values ($1,$2,$3)',
       value);
       var myres = {'results': 0};
       res.render('pages/login',myres);
@@ -250,22 +262,19 @@ app.post('/signup', async (req, res) => {//this updates the form when the form f
   }
 })
 
-
 app.post('/signup1', function(req, res){
     var results = {'results':0};
-    res.render('pages/signup',results);
+    res.render('pages/login',results);
 });
 app.post('/login', function(req, res){
     var results = {'results':-1};
     res.render('pages/login',results);
 });
 
-
 //app.listen(PORT, () => console.log(`Listening on ${ PORT }`))
-http.listen(PORT, () => console.log(`Listening on ${ PORT }`))
-
-var hello = 'hello';
+http.listen(PORT, () => console.log(`Listening on ${ PORT }`));
 
 module.exports = {
   weather: weather,
+  players: players,
 }
