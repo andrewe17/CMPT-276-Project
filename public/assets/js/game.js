@@ -166,7 +166,6 @@ function preload(){
     this.load.image('twall', 'assets/images/Twall.png');
     this.load.image('van', 'assets/images/van.jpg');
     this.load.image('ninja', 'assets/images/ninja.png');
-    this.load.image('dashobject', 'assets/images/dashObject.png');
     this.load.image('slash', 'assets/images/slash.png');
     this.load.image('shuri', 'assets/images/shuri.png');
     this.load.image('rain', 'assets/images/rain.png');
@@ -196,7 +195,6 @@ function preload(){
     this.load.spritesheet('kata_anim', 'assets/images/kata_anim.png', {frameWidth: 46, frameHeight: 46});
     this.load.spritesheet('shuri_anim', 'assets/images/shuri_anim.png', {frameWidth: 13, frameHeight: 13});
     this.load.spritesheet('star_anim', 'assets/images/star.png', {frameWidth: 24, frameHeight: 22});
-    this.load.spritesheet('dash_anim', 'assets/images/dashAni.png', {frameWidth: 32, frameHeight: 32});
 }
 
 
@@ -471,12 +469,6 @@ function create(){
         frames: this.anims.generateFrameNumbers('star_anim'),
         frameRate: 1,
         repeat: 20
-    });
-    this.anims.create({
-        key: 'dash_anim',
-        frames: this.anims.generateFrameNumbers('dash_anim'),
-        frameRate: 10,
-        repeat: 0
     });
 
     // collisions
