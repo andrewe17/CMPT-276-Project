@@ -17,6 +17,8 @@ var config={
     }
 };
 
+var uNametext = document.getElementById('uName').innerHTML;
+
 var game = new Phaser.Game(config);
 
 var mapx = 2400; // need a map that's 3000+200 x
@@ -431,7 +433,7 @@ function create(){
     });
     // ask username
     //var username = prompt('Please tell me your name');
-    this.socket.emit('username', user);
+    this.socket.emit('username', uNametext);
 
     // keyboard
     cursor = this.input.keyboard.createCursorKeys();
