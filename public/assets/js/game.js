@@ -787,7 +787,7 @@ function update(){
                 dashtime=this.time.now+200;
                 dash--;
                 if(dash < 0 ){
-                    ui_dash_disable.clearAlpha(); 
+                    ui_dash_disable.setAlpha(1,1,1,1); 
                 }
                 dashreg=this.time.now+1000; // only 2 dashes
                 this.ninja.dash=1;
@@ -873,7 +873,7 @@ function update(){
             katatime = this.time.now+300;
             kata--;
             if(kata < 0 ){
-                ui_katana_disable.clearAlpha();
+                ui_katana_disable.setAlpha(1,1,1,1);
             }
             katareg = this.time.now+500;
         }
@@ -894,7 +894,7 @@ function update(){
             shuritime=this.time.now+200;
             shuri--;
             if(shuri < 0 ){
-                ui_shuriken_disable.clearAlpha();
+                ui_shuriken_disable.setAlpha(1,1,1,1);
             }
             shurireg=this.time.now+1000;
         }
