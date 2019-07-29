@@ -404,12 +404,12 @@ function create(){
     three = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.THREE);
     four = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.FOUR);
     this.input.keyboard.removeCapture('ONE,TWO,THREE,FOUR');
-    upgrade = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.U);
+    upgrade = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TILDE);
     m = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M);
     n = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.N);
     b = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.B);
-    this.input.keyboard.removeCapture('U,M,N,B');
-    //alt = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ALT);
+    this.input.keyboard.removeCapture('M,N,B');
+
     // mouse
     pointer = this.input.activePointer; // mouse location relative to screen
 
