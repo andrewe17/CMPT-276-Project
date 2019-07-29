@@ -85,6 +85,9 @@ var angle;
 var game_time;
 var game_starts=false;
 
+//ui
+var ui_dash,ui_shuriken,ui_katana;
+
 function preload(){
     var offset = 30;
     var progressBar = this.add.graphics();
@@ -175,6 +178,12 @@ function preload(){
     this.load.image('cloud', 'assets/images/cloud.png');
     this.load.image('star', 'assets/images/star.png');
 
+    //load UI
+    this.load.image('ui_shuriken', 'assets/images/UI_shuriken.png');
+    this.load.image('ui_katana', 'assets/images/UI_katana.png');
+    this.load.image('ui_dash', 'assets/images/UI_dash.png');
+    this.load.image('ui_disable', 'assets/images/UI_disable.png');
+
     this.load.audio('katana',  ['assets/audio/Sound-katana.mp3'] );
     this.load.audio('flash',  ['assets/audio/Sound-dash.mp3'] );
     this.load.audio('hit',  ['assets/audio/Sound-hit.mp3'] );
@@ -186,7 +195,7 @@ function preload(){
     this.load.audio('ancients',  ['assets/audio/Music-Song of the Ancients.mp3'] );
     this.load.audio('loneliness',  ['assets/audio/Music-Loneliness.mp3'] );
     this.load.audio('strike',  ['assets/audio/Music-Strong and Strike.mp3'] );
-    this.load.audio('wretched',  ['assets/audio/Music-Wretched Weaponry.mp3'] ); // can we delete this, it's 9 mb...
+    //this.load.audio('wretched',  ['assets/audio/Music-Wretched Weaponry.mp3'] ); // can we delete this, it's 9 mb...
 
     this.load.spritesheet('ninja_up', 'assets/images/ninja_up.png', {frameWidth: 32, frameHeight: 32});
     this.load.spritesheet('ninja_down', 'assets/images/ninja_down.png', {frameWidth: 32, frameHeight: 32});
@@ -215,7 +224,7 @@ function create(){
         music = this.sound.add('loneliness');
     }
     else if(rng==3){
-        music = this.sound.add('wretched');
+        //music = this.sound.add('wretched');
     }
     else if(rng==4){
         music = this.sound.add('strike');
@@ -238,6 +247,7 @@ function create(){
 
     // background
     this.add.image(mapy/2, mapy/2, 'van');
+
 
     // walls
     wx = this.physics.add.staticGroup();
@@ -524,6 +534,32 @@ function create(){
     gold=0;
     deaths=0;
 
+    ui_x = 600;
+    ui_y = 550;
+    ui_text_offset = 12;
+
+    //ui
+    ui_selection = this.add.graphics().setScrollFactor(0);
+
+    ui_dash = this.add.image(ui_x + 160,ui_y,'ui_dash');
+    ui_dash_disable = this.add.image(ui_x + 160,ui_y,'ui_disable').setScrollFactor(0);
+    ui_dash.setScrollFactor(0);
+    ui_dash_text = this.add.text(ui_x + 160  + ui_text_offset, ui_y + ui_text_offset, ' 2', {fontFamily:'"Roboto Condensed"', fill: '#000000'}).setScrollFactor(0);
+
+    ui_shuriken = this.add.image(ui_x + 70 ,ui_y,'ui_shuriken');
+    ui_shuriken_disable = this.add.image(ui_x + 70,ui_y,'ui_disable').setScrollFactor(0);
+    ui_shuriken.setScrollFactor(0);
+    ui_shuriken_text = this.add.text(ui_x + 70 + ui_text_offset, ui_y + ui_text_offset, '10', {fontFamily:'"Roboto Condensed"', fill: '#000000'}).setScrollFactor(0);
+
+    ui_katana = this.add.image(ui_x,ui_y,'ui_katana');
+    ui_katana_disable = this.add.image(ui_x , ui_y,'ui_disable').setScrollFactor(0);
+    ui_katana.setScrollFactor(0);
+    ui_katana_text = this.add.text(ui_x + ui_text_offset , ui_y + ui_text_offset, '∞', {fontFamily:'"Roboto Condensed"', fill: '#000000'}).setScrollFactor(0);
+
+    
+    ui_selection.fillStyle(0xff5555, 1);
+    ui_selection.fillRect(ui_x - 34,ui_y -34,68,68);
+
     // text
     text1=this.add.text(0, 0, '', {fontFamily:'"Roboto Condensed"', fill: '#ffffff'}).setScrollFactor(0);
     text2=this.add.text(700, 0, '', {fontFamily:'"Roboto Condensed"', fill: '#ffffff'}).setScrollFactor(0);
@@ -748,6 +784,9 @@ function update(){
 
                 dashtime=this.time.now+200;
                 dash--;
+                if(dash < 0 ){
+                    ui_dash_disable.clearAlpha(); 
+                }
                 dashreg=this.time.now+1000; // only 2 dashes
                 this.ninja.dash=1;
             }
@@ -756,6 +795,9 @@ function update(){
             if(dash<2){
                 dashreg=this.time.now+1000; //orignially 10000
                 dash++;
+                if(dash > 0){
+                    ui_dash_disable.setAlpha(0,0,0,0);
+                } 
             }
             else{
                 dashreg=this.time.now;
@@ -781,8 +823,16 @@ function update(){
     }
 
     // items
-    if(one.isDown) options=1;
-    if(two.isDown) options=2;
+    if(one.isDown){
+        options=1;
+        ui_selection.clear();
+        ui_selection.fillRect(ui_x - 34,ui_y -34,68,68);
+    } 
+    if(two.isDown){
+        options=2;
+        ui_selection.clear();
+        ui_selection.fillRect(ui_x - 34 + 70,ui_y -34,68,68); 
+    }
     // if(three.isDown) options=3;
     // if(four.isDown) options=4;
     if(upgrade.isDown && upgrade_time<this.time.now){
@@ -820,6 +870,9 @@ function update(){
             this.socket.emit('playerSlash', {x:slashx, y:slashy, r:angle}); // slash location info
             katatime = this.time.now+300;
             kata--;
+            if(kata < 0 ){
+                ui_katana_disable.clearAlpha();
+            }
             katareg = this.time.now+500;
         }
 
@@ -838,6 +891,9 @@ function update(){
             // if hit -10 hp
             shuritime=this.time.now+200;
             shuri--;
+            if(shuri < 0 ){
+                ui_shuriken_disable.clearAlpha();
+            }
             shurireg=this.time.now+1000;
         }
     }
@@ -847,6 +903,9 @@ function update(){
         if(kata<5){
             katareg=this.time.now+500;
             kata++;
+            if(kata > 0 ){
+                ui_katana_disable.setAlpha(0,0,0,0);
+            }
         }
         else{
             katareg=this.time.now;
@@ -856,11 +915,19 @@ function update(){
         if(shuri<10){
             shurireg=this.time.now+1000;
             shuri++;
+            if(shuri > 0 ){
+                ui_shuriken_disable.setAlpha(0,0,0,0);
+            }
         }
         else{
             shurireg=this.time.now;
         }
     }
+
+    ui_katana_text.setText(kata);
+    ui_shuriken_text.setText(shuri);
+    ui_dash_text.setText(dash);
+
     // mute audio
     if(m.isDown && mute_music==0) mute_music=1;
     else if(m.isDown && mute_music==1) mute_music=0;
