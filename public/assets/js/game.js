@@ -418,7 +418,9 @@ function create(){
 
     // game starts
     this.socket.on('game_start', ()=>{
-        text4.setText('game starts');
+        text4.setText([
+            '#players'+player_count,
+        ]);
         game_starts=true;
         game_time=this.time.now+(1000*60*10);
     });
