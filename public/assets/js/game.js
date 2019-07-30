@@ -308,6 +308,7 @@ function create(){
         self.otherPlayers.getChildren().forEach(function (otherPlayer) {
             if (playerId === otherPlayer.playerId) {
                 otherPlayer.healthText.destroy();
+                otherPlayer.nameText.destroy();
                 otherPlayer.destroy();
             }
         });
@@ -317,6 +318,7 @@ function create(){
         self.otherPlayers.getChildren().forEach(function (otherPlayer) {
             if (playerId === otherPlayer.playerId) {
                 otherPlayer.healthText.destroy();
+                otherPlayer.nameText.destroy();
                 otherPlayer.destroy();
             }
         });
