@@ -3,14 +3,47 @@
     <meta charset="utf-8">
     <title>Login</title>
     <link rel="stylesheet" href="./assets/stylesheets/login2.css">
-    <link rel="stylesheet" href="./assets/stylesheets/main.css">
     <script type = "text/javascript"src="./assets/js/login.js"></script>
+    <style>
+    .header {
+      position: absolute;
+      top: 10%;
+      left: 30%;
+      width: 40%;
+    }
+    .playbtn {
+      border-radius: 25px;
+      position: absolute;
+      top: 70%;
+      left: 44.5%;
+      background-color: #4CAF50; /* Green */
+      border: none;
+      color: white;
+      padding: 15px 32px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+    }
+
+    .playbtn:hover {
+      background-color: darkgreen;
+    }
+
+    .gameimg {
+      border-radius: 25px;
+      position: absolute;
+      top: 30%;
+      left: 39%;
+    }
+    </style>
     <script src="./assets/js/jquery.min.js"></script>
   </head>
   <body>
-  <h1>NINJA-DASH</h1>
+    <img class="header" src="assets/images/header.png" alt="header">
+    <img class="gameimg" src="assets/images/gameimage.png" alt="gameimg">
   <form method='post' action="/login" >
-    <button type="submit" class="signupbtn">Play</button>
+    <button type="submit" class="playbtn">Click here to sign in</button>
   </form>
 
   </body>
