@@ -383,7 +383,7 @@ function create(){
         //console.log(playerInfo.playerId);
         //console.log(self.socket.id);
         if(playerInfo.playerId === self.socket.id){
-            console.log('selfplayer');
+            //console.log('selfplayer');
             self.ninja.deaths = playerInfo.deaths;
             self.ninja.health = playerInfo.health;
             self.ninja.x = playerInfo.x;
@@ -395,7 +395,7 @@ function create(){
         else{
             self.otherPlayers.getChildren().forEach(function (otherPlayer) {
                 if (playerInfo.playerId === otherPlayer.playerId) {
-                    console.log('otherplayer');
+                    //console.log('otherplayer');
                     otherPlayer.health = playerInfo.health;
                     otherPlayer.healthText.setText(healthToText(playerInfo.health));
                 }
@@ -405,7 +405,7 @@ function create(){
     // update kill counter
     this.socket.on('shurikenKill', function (playerInfo,killer,dead){
         if(playerInfo.playerId === self.socket.id){
-            console.log('increase kills');
+            //console.log('increase kills');
             kills=playerInfo.kills;
         }
     });
@@ -599,7 +599,7 @@ function create(){
     ui_katana.setScrollFactor(0);
     ui_katana_text = this.add.text(ui_x + ui_text_offset , ui_y + ui_text_offset, '∞', {fontFamily:'"Roboto Condensed"', fill: '#000000'}).setScrollFactor(0);
 
-    
+
     ui_selection.fillStyle(0xff5555, 1);
     ui_selection.fillRect(ui_x - 34,ui_y -34,68,68);
 
@@ -615,7 +615,7 @@ function create(){
     var cloud_particles = this.add.particles('cloud');
     this.socket.on('weather', function(current_weather) {
         //current_weather='Snow'; // testing only
-        console.log(current_weather);
+      //  console.log(current_weather);
         rain_particles.destroy();
         snow_particles.destroy();
         cloud_particles.destroy();
@@ -842,7 +842,7 @@ function update(){
                 dashtime=this.time.now+200;
                 dash--;
                 if(dash <= 0 ){
-                    ui_dash_disable.setAlpha(1,1,1,1); 
+                    ui_dash_disable.setAlpha(1,1,1,1);
                 }
                 dashreg=this.time.now+1000; // only 2 dashes
                 this.ninja.dash=1;
@@ -854,7 +854,7 @@ function update(){
                 dash++;
                 if(dash > 0){
                     ui_dash_disable.setAlpha(0,0,0,0);
-                } 
+                }
             }
             else{
                 dashreg=this.time.now;
@@ -884,11 +884,11 @@ function update(){
         options=1;
         ui_selection.clear();
         ui_selection.fillRect(ui_x - 34,ui_y -34,68,68);
-    } 
+    }
     if(two.isDown){
         options=2;
         ui_selection.clear();
-        ui_selection.fillRect(ui_x - 34 + 70,ui_y -34,68,68); 
+        ui_selection.fillRect(ui_x - 34 + 70,ui_y -34,68,68);
     }
     // if(three.isDown) options=3;
     // if(four.isDown) options=4;
@@ -896,7 +896,7 @@ function update(){
         if(one.isDown){
             if(gold>=200){
                 gold-=200;
-                console.log('upgrade_kata');
+                //console.log('upgrade_kata');
                 kata_d+=10;
                 upgrade_time=this.time.now+1000;
             }
@@ -904,7 +904,7 @@ function update(){
         if(two.isDown){
             if(gold>=200){
                 gold-=200;
-                console.log('upgrade_shuri');
+                //console.log('upgrade_shuri');
                 shuri_d+=5;
                 shuri_s+=25;
                 upgrade_time=this.time.now+1000;
@@ -1272,7 +1272,7 @@ function katahit(self, otherPlayer, kk){
     if(otherPlayer.health<=kata_d){
         kills+=1;
         gold+=100;
-        console.log(self.socket.id);
+        //console.log(self.socket.id);
         self.socket.emit('shuri_kill', {id:self.socket.id});
     }
     self.socket.emit('kata_hit', {id:otherPlayer.playerId, kata_d:kata_d});
@@ -1282,7 +1282,7 @@ function shurihit(self, otherPlayer, ss){
     if(otherPlayer.health<=shuri_d){
         kills+=1;
         gold+=100;
-        console.log(self.socket.id);
+        //console.log(self.socket.id);
         self.socket.emit('shuri_kill', {id:self.socket.id});
     }
     self.socket.emit('shuri_hit', {id:otherPlayer.playerId, shuri_d:shuri_d});
@@ -1293,7 +1293,7 @@ function dashhit(self, otherPlayer, dd){
     if(otherPlayer.health<=25){
         kills+=1;
         gold+=100;
-        console.log(self.socket.id);
+        //console.log(self.socket.id);
         self.socket.emit('shuri_kill', {id:self.socket.id});
     }
     self.socket.emit('dash_hit', {id:otherPlayer.playerId});
