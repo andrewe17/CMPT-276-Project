@@ -77,6 +77,7 @@ var upgrade_time;
 // cannot use ctrl+c or move
 var health, kills, deaths, gold; // misc
 var text1, text2, text3, text4; // textbox
+var end, player1, player2, player3, player4; // game over text
 
 // mouse
 var mousex;
@@ -91,13 +92,13 @@ var game_over=false;
 //ui
 var ui_dash,ui_shuriken,ui_katana;
 var killInfo = [];
+var killInfoPtr = [];
 
 // killInfo.push('a Kills B');
 // killInfo.push('sadaa Kills B');
 // killInfo.push('a12212 Kills B');
 // killInfo.push('----a Kills B');
 // killInfo.push(';#####ddda Kills B');
-
 var killInfoPtr = [];
 
 
@@ -222,11 +223,11 @@ function preload(){
     this.load.audio('rain',  ['assets/audio/Background-rain.mp3'] );
     this.load.audio('snow',  ['assets/audio/Background-snow.mp3'] );
     this.load.audio('thunder',  ['assets/audio/Background-thunder.mp3'] );
-    //this.load.audio('silence',  ['assets/audio/Background-silence.mp3'] );
+    this.load.audio('silence',  ['assets/audio/Background-silence.mp3'] );
     this.load.audio('ancients',  ['assets/audio/Music-Song of the Ancients.mp3'] );
     this.load.audio('loneliness',  ['assets/audio/Music-Loneliness.mp3'] );
     this.load.audio('strike',  ['assets/audio/Music-Strong and Strike.mp3'] );
-    this.load.audio('wretched',  ['assets/audio/Music-Wretched Weaponry.mp3'] ); // can we delete this, it's 9 mb...
+    // this.load.audio('wretched',  ['assets/audio/Music-Wretched Weaponry.mp3'] ); // can we delete this, it's 9 mb...
 
     this.load.spritesheet('ninja_up', 'assets/images/ninja_up.png', {frameWidth: 32, frameHeight: 32});
     this.load.spritesheet('ninja_down', 'assets/images/ninja_down.png', {frameWidth: 32, frameHeight: 32});
@@ -247,7 +248,7 @@ function create(){
     hit = this.sound.add('hit');
     shuriThrow = this.sound.add('shuriThrow');
     // music audio
-    rng = Math.floor((Math.random() * 4) + 1);
+    rng = Math.floor((Math.random() * 3) + 1);
     if(rng==1){
         music = this.sound.add('ancients');
     }
@@ -255,12 +256,9 @@ function create(){
         music = this.sound.add('loneliness');
     }
     else if(rng==3){
-        music = this.sound.add('wretched');
-    }
-    else if(rng==4){
         music = this.sound.add('strike');
     }
-    bg = this.sound.add('thunder');
+    bg = this.sound.add('silence');
     // unlock sound
     if (this.sound.locked)
         this.sound.unlock();
@@ -473,7 +471,7 @@ function create(){
             'game start',
         ]);
         game_starts=true;
-        game_time=this.time.now+(1000*60*10);
+        game_time=this.time.now+(1000*60*10); // 1000*60*10
     });
 
     // dash
@@ -607,6 +605,12 @@ function create(){
     text1=this.add.text(0, 0, '', {fontFamily:'"Roboto Condensed"', fill: '#ffffff'}).setScrollFactor(0);
     text2=this.add.text(700, 0, '', {fontFamily:'"Roboto Condensed"', fill: '#ffffff'}).setScrollFactor(0);
     text3=this.add.text(0, 580, '', {fontFamily:'"Roboto Condensed"', fill: '#ffffff'}).setScrollFactor(0);
+    end = this.add.text(200, 0, '', {backgroundColor: 'DarkBlue', font:'72px Roboto Condensed', fill: 'white', allign: 'center'}).setScrollFactor(0)
+    player1 = this.add.text(200, 100, '', {backgroundColor: 'white', font:'36px Roboto Condensed', fill: 'DarkBlue', allign: 'center'}).setScrollFactor(0)
+    player2 = this.add.text(200, 200, '', {backgroundColor: 'white', font:'36px Roboto Condensed', fill: 'DarkBlue', allign: 'center'}).setScrollFactor(0)
+    player3 = this.add.text(200, 300, '', {backgroundColor: 'white', font:'36px Roboto Condensed', fill: 'DarkBlue', allign: 'center'}).setScrollFactor(0)
+    player4 = this.add.text(200, 400, '', {backgroundColor: 'white', font:'36px Roboto Condensed', fill: 'DarkBlue', allign: 'center'}).setScrollFactor(0)
+
     //text4=this.add.text(700, 580, '', {fontFamily:'"Roboto Condensed"', fill: '#ffffff'}).setScrollFactor(0);
 
     // weather effects
@@ -699,7 +703,7 @@ function create(){
             });
         }
         else{
-            bg = self.sound.add('thunder');
+            bg = self.sound.add('snow');
             bg.play({
                 volume: .1,
                 loop: true
@@ -1037,11 +1041,25 @@ function update(){
             'Timer: '+Math.floor(((game_time-this.time.now)/1000)/60)+':'+Math.floor(((game_time-this.time.now)/1000)%60)
         ]);
     }
-    if(game_time<this.time.now){
+    if(game_time<=this.time.now){
         game_over=true;
-        text4.setText([
-            'game over',
+        end.setText([
+            'GAME OVER'
         ]);
+        killInfoPtr.forEach( function(element, index) {
+            player1.setText([
+                'check1'
+            ]);
+            player2.setText([
+                'check2'
+            ]);
+            player3.setText([
+                'check3'
+            ]);
+            player4.setText([
+                'check4'
+            ]);
+        });
     }
 
     if(spawn_time<this.time.now){
