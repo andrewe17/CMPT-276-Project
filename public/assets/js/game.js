@@ -838,7 +838,8 @@ function update(){
         }
 
         reduced = false;
-
+        vel = 200;
+        
         // mouse
         pointer = this.input.activePointer; // refresh coordinate
         if(this.ninja.x<400) mousex=pointer.x-this.ninja.x; // distance between mouse & this.ninja
