@@ -768,7 +768,7 @@ function addPlayer(self, playerInfo) {
     self.ninja = self.physics.add.sprite(playerInfo.x, playerInfo.y, 'ninja');
     self.ninja.setCollideWorldBounds(true);
     self.ninja.setVelocity(0, 0);
-    self.cameras.main.starbnmbntFollow(self.ninja, true, 0.05, 0.05, 0.05, 0.05);
+    self.cameras.main.startFollow(self.ninja, true, 0.05, 0.05, 0.05, 0.05);
     self.ninja.healthText = self.add.text(playerInfo.x - 12, playerInfo.y - 20, healthToText(playerInfo.health), {fontFamily:'Arial', fontSize: '3px' ,fill: '#00ff00'});
     self.ninja.nameText = self.add.text(playerInfo.x - 12, playerInfo.y  - 35, uNametext, {fontFamily:'Arial',fontSize: '15px',fill: '#2222bb'});
     self.physics.add.collider(self.ninja, wx, pb);
@@ -1070,7 +1070,6 @@ function update(){
     ui_health_l.clear();
     ui_health_l.fillStyle(0x00ff00, 1);
     ui_health_l.fillRect(healthX, healthY, healthWidth * health * 0.01, healthHeight);
-    ui_heal_text.setText(health);
     if(game_starts==true && game_over==false){
         text3.setText([
             'Timer: '+Math.floor(((game_time-this.time.now)/1000)/60)+':'+Math.floor(((game_time-this.time.now)/1000)%60)
@@ -1080,9 +1079,9 @@ function update(){
         this.socket.emit('end', { id:uNametext, kills:kills, deaths:deaths});    
     }
     if(game_over==true){
-        end.setText([
-            'GAME OVER'
-        ]);   
+            end.setText([
+                'GAME OVER'
+            ]);   
             // if(temp==0) player1.setText([gameInfo[0]]);
             // if(temp==1) player2.setText([gameInfo[1]]);
             // if(temp==2) player3.setText([gameInfo[2]]);
