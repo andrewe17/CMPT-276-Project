@@ -4,6 +4,7 @@
 	<meta charset="UTF-8">
 	<title>Ninja-Dash</title>
 	<link rel="stylesheet" href="assets/stylesheets/chat.css">
+	<link rel="stylesheet"href="assets/stylesheets/game.css">
 	<style media='screen' type='text/css'>
 
 	@font-face {
@@ -11,79 +12,6 @@
 		src: url('assets/njnaruto.ttf');
 	}
 
-
-canvas{
-	display:block;
-	margin: 0;
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	border-style: solid;
-	border-width: 5px;
-	width: 50%;
-	height: 65%;
-}
-
-h2 {
-	top: 15%;
-	width: 400px;
-	display: block;
-	position: absolute;
-	text-align: center;
-	height: 100px;
-}
-
-.i1 {
-	display: block;
-	position: absolute;
-	top: 20%;
-	left: 7.5%;
-}
-
-.i2 {
-	display: block;
-	position: absolute;
-	top: 40%;
-	left: 7.5%;
-}
-
-.i3 {
-	display: block;
-	position: absolute;
-	top: 55%;
-	left: 7.5%;
-}
-
-.p1 {
-	display: block;
-	position: absolute;
-	top: 33%;
-	text-align: center;
-	left: 7.5%;
-}
-
-.p2 {
-	display: block;
-	position: absolute;
-	top:47.5%;
-	text-align: center;
-	left: 7.5%;
-}
-
-.p3 {
-	display: block;
-	position: absolute;
-	top: 62.5%;
-	text-align: center;
-	left: 7.5%;
-}
-
-.header{
-	position: absolute;
-	left: 33%;
-	width: 40%;
-}
 	</style>
 	<!-- The following two lines are for Phaser game engine -->
 	<script src="//cdn.jsdelivr.net/npm/phaser@3.18.1/dist/phaser.js"></script>
@@ -100,6 +28,18 @@ h2 {
 <p class="p2">Select Weapon</p>
 <img class="i3"src="assets/images/new-space.png" alt="space">
 <p class="p3">Dash</p>
+<img class="i4"src="assets/images/lmb.png" alt="left mouse button">
+<p class="p4">Attack</p>
+<img class="i5" src="assets/images/shift.png" alt="shift">
+<p class="p5">+</p>
+<img class="i6" src="assets/images/1.png" alt="1">
+<p class="p6">Upgrade Katana</p>
+<img class="i7" src="assets/images/shift.png" alt="shift">
+<p class="p7">+</p>
+<img class="i8" src="assets/images/2.png" alt="2">
+<p class="p8">Upgrade Shuriken</p>
+
+
 	<div style="font-family:ninjafont; position:absolute; left:-1000px; visibility:hidden;">.</div>
 	<script src="/socket.io/socket.io.js"></script>
 	<canvas>
