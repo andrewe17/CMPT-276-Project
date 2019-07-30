@@ -1070,6 +1070,7 @@ function update(){
     ui_health_l.clear();
     ui_health_l.fillStyle(0x00ff00, 1);
     ui_health_l.fillRect(healthX, healthY, healthWidth * health * 0.01, healthHeight);
+    ui_heal_text.setText(health);
     if(game_starts==true && game_over==false){
         text3.setText([
             'Timer: '+Math.floor(((game_time-this.time.now)/1000)/60)+':'+Math.floor(((game_time-this.time.now)/1000)%60)
