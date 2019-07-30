@@ -423,6 +423,7 @@ function create(){
     // receiving game over data
     this.socket.on('gameover', function (endData){
         gameInfo.push('Username: ' + endData.id + ', Kills: ' + endData.kills + ', Deaths: ' + endData.deaths);
+        game_over=true;
         playernum++;
     });
 
@@ -481,7 +482,7 @@ function create(){
             'game start',
         ]);
         game_starts=true;
-        game_time=this.time.now+(1000*60*10); // 1000*60*10
+        game_time=this.time.now+(1000); // 1000*60*10
     });
 
     // dash
@@ -631,11 +632,11 @@ function create(){
     text1=this.add.text(0, 0, '', {fontFamily:'"Roboto Condensed"', fill: '#ffffff'}).setScrollFactor(0);
     text2=this.add.text(700, 0, '', {fontFamily:'"Roboto Condensed"', fill: '#ffffff'}).setScrollFactor(0);
     text3=this.add.text(0, 580, '', {fontFamily:'"Roboto Condensed"', fill: '#ffffff'}).setScrollFactor(0);
-    end = this.add.text(200, 0, '', {backgroundColor: 'DarkBlue', font:'72px Roboto Condensed', fill: 'white', allign: 'center'}).setScrollFactor(0)
-    player1 = this.add.text(200, 100, '', {backgroundColor: 'white', font:'36px Roboto Condensed', fill: 'DarkBlue', allign: 'center'}).setScrollFactor(0)
-    player2 = this.add.text(200, 200, '', {backgroundColor: 'white', font:'36px Roboto Condensed', fill: 'DarkBlue', allign: 'center'}).setScrollFactor(0)
-    player3 = this.add.text(200, 300, '', {backgroundColor: 'white', font:'36px Roboto Condensed', fill: 'DarkBlue', allign: 'center'}).setScrollFactor(0)
-    player4 = this.add.text(200, 400, '', {backgroundColor: 'white', font:'36px Roboto Condensed', fill: 'DarkBlue', allign: 'center'}).setScrollFactor(0)
+    end = this.add.text(200, 0, '', {backgroundColor: 'DarkBlue', font:'72px Roboto Condensed', fill: 'white'}).setScrollFactor(0)
+    player1 = this.add.text(200, 100, '', {backgroundColor: 'white', font:'36px Roboto Condensed', fill: 'DarkBlue'}).setScrollFactor(0)
+    player2 = this.add.text(200, 200, '', {backgroundColor: 'white', font:'36px Roboto Condensed', fill: 'DarkBlue'}).setScrollFactor(0)
+    player3 = this.add.text(200, 300, '', {backgroundColor: 'white', font:'36px Roboto Condensed', fill: 'DarkBlue'}).setScrollFactor(0)
+    player4 = this.add.text(200, 400, '', {backgroundColor: 'white', font:'36px Roboto Condensed', fill: 'DarkBlue'}).setScrollFactor(0)
 
     //text4=this.add.text(700, 580, '', {fontFamily:'"Roboto Condensed"', fill: '#ffffff'}).setScrollFactor(0);
 
@@ -837,7 +838,6 @@ function update(){
         }
 
         reduced = false;
-        vel = 200;
 
         // mouse
         pointer = this.input.activePointer; // refresh coordinate
@@ -1074,18 +1074,19 @@ function update(){
             'Timer: '+Math.floor(((game_time-this.time.now)/1000)/60)+':'+Math.floor(((game_time-this.time.now)/1000)%60)
         ]);
     }
-    if(game_time<=this.time.now){
-        game_over=true;
-        this.socket.emit('end', { id:uNametext, kills:kills, deaths:deaths});
-        end.setText([
-            'GAME OVER'
-        ]);
-        // for(var temp=0; temp<playernum; temp++){
-        //     if(temp==0) player1.setText([gameInfo[0]]);
-        //     if(temp==1) player2.setText([gameInfo[1]]);
-        //     if(temp==2) player3.setText([gameInfo[2]]);
-        //     if(temp==3) player4.setText([gameInfo[3]]);
-        // }        
+    if(game_time<=this.time.now && game_over==false){
+        this.socket.emit('end', { id:uNametext, kills:kills, deaths:deaths});    
+    }
+    if(game_over==true){
+        for(var temp=0; temp<playernum; temp++){
+            end.setText([
+                'GAME OVER'
+            ]);   
+            if(temp==0) player1.setText([gameInfo[0]]);
+            if(temp==1) player2.setText([gameInfo[1]]);
+            if(temp==2) player3.setText([gameInfo[2]]);
+            if(temp==3) player4.setText([gameInfo[3]]);
+        }
     }
 
     if(spawn_time<this.time.now){

@@ -84,7 +84,7 @@ io.sockets.on('connection', function(socket){
     initialized=true;
     io.sockets.emit('game_start');
   }
-  
+
   //console.log('A user connected');
   // create a new player and add it to our players object
   players[socket.id] = {
@@ -161,7 +161,7 @@ io.sockets.on('connection', function(socket){
     socket.broadcast.emit('shurikenKill', players[ninja.id]);
     socket.emit('shurikenKill', players[ninja.id]);
   });
-  
+
   //game over
   socket.on('end', function (endData) {
     socket.broadcast.emit('gameover', endData);
@@ -266,7 +266,7 @@ app.post('/signup', async (req, res) => {//this updates the form when the form f
       res.render('pages/login',myres);
     }
     else if(results.rowCount == 0){
-      const value =[Math.floor(Math.random() * (100)),req.body.userup,req.body.psw]//randomly generated ID
+      const value =[Math.floor(Math.random() * (1000)),req.body.userup,req.body.psw]//randomly generated ID
       const inner_results = await client.query('insert into login (id,username,password) values ($1,$2,$3)',
       value);
       var myres = {'results': 0};
