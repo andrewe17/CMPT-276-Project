@@ -77,8 +77,10 @@ var upgrade_time;
 // cannot use ctrl+c or move
 var health, kills, deaths, gold; // misc
 var text1, text2, text3, text4; // textbox
-var end, player1, player2, player3, player4; // game over text
-
+// game over text
+var end, player1, player2, player3, player4;
+var playernum = 0;
+var gameInfo = [];
 // mouse
 var mousex;
 var mousey;
@@ -92,7 +94,6 @@ var game_over=false;
 //ui
 var ui_dash,ui_shuriken,ui_katana;
 var killInfo = [];
-var killInfoPtr = [];
 
 // killInfo.push('a Kills B');
 // killInfo.push('sadaa Kills B');
@@ -418,6 +419,12 @@ function create(){
         drawInfo();
     });
 
+    // receiving game over data
+    this.socket.on('gameover', function (endData){
+        gameInfo.push('Username: ' + endData.uName + ', Kills: ' + endData.kills + ', Deaths: ' + endData.deaths);
+        playernum++;
+    });
+
     //submit chat message
     $('form').submit(function(e){
         //e.preventDefault(); // prevents page reloading
@@ -473,7 +480,7 @@ function create(){
             'game start',
         ]);
         game_starts=true;
-        game_time=this.time.now+(1000*60*10); // 1000*60*10
+        game_time=this.time.now+(1000); // 1000*60*10
     });
 
     // dash
@@ -1045,24 +1052,16 @@ function update(){
     }
     if(game_time<=this.time.now){
         game_over=true;
-        
+        this.socket.emit('end', { id:uNametext, kills:kills, deaths:deaths});
         end.setText([
             'GAME OVER'
         ]);
-        killInfoPtr.forEach( function(element, index) {
-            player1.setText([
-                'check1'
-            ]);
-            player2.setText([
-                'check2'
-            ]);
-            player3.setText([
-                'check3'
-            ]);
-            player4.setText([
-                'check4'
-            ]);
-        });
+        for(var temp=0; temp<playernum; temp++){
+            if(temp==0) player1.setText([gameInfo[0]]);
+            if(temp==1) player2.setText([gameInfo[1]]);
+            if(temp==2) player3.setText([gameInfo[2]]);
+            if(temp==3) player4.setText([gameInfo[3]]);
+        }        
     }
 
     if(spawn_time<this.time.now){

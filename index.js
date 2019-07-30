@@ -161,6 +161,11 @@ io.sockets.on('connection', function(socket){
     socket.broadcast.emit('shurikenKill', players[ninja.id]);
     socket.emit('shurikenKill', players[ninja.id]);
   });
+  
+  //game over
+  socket.on('end', function (endData) {
+    socket.broadcast.emit('gameover', endData);
+  });
 
   // Broadcast shuriken hit
   socket.on('shuri_hit', function (otherPlayer) {
