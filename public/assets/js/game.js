@@ -225,7 +225,7 @@ function preload(){
     this.load.audio('ancients',  ['assets/audio/Music-Song of the Ancients.mp3'] );
     this.load.audio('loneliness',  ['assets/audio/Music-Loneliness.mp3'] );
     this.load.audio('strike',  ['assets/audio/Music-Strong and Strike.mp3'] );
-    //this.load.audio('wretched',  ['assets/audio/Music-Wretched Weaponry.mp3'] ); // can we delete this, it's 9 mb...
+    this.load.audio('wretched',  ['assets/audio/Music-Wretched Weaponry.mp3'] ); // can we delete this, it's 9 mb...
 
     this.load.spritesheet('ninja_up', 'assets/images/ninja_up.png', {frameWidth: 32, frameHeight: 32});
     this.load.spritesheet('ninja_down', 'assets/images/ninja_down.png', {frameWidth: 32, frameHeight: 32});
@@ -254,7 +254,7 @@ function create(){
         music = this.sound.add('loneliness');
     }
     else if(rng==3){
-        //music = this.sound.add('wretched');
+        music = this.sound.add('wretched');
     }
     else if(rng==4){
         music = this.sound.add('strike');
@@ -336,6 +336,8 @@ function create(){
                 otherPlayer.setPosition(playerInfo.x, playerInfo.y);
                 otherPlayer.healthText.x = playerInfo.x - 12;
                 otherPlayer.healthText.y = playerInfo.y - 20;
+                otherPlayer.nameText.x = playerInfo.x - 12;
+                otherPlayer.nameText.y = playerInfo.y - 35;
                 otherPlayer.healthText.setText(healthToText(playerInfo.health));
 
                 // animation handling of otherplayers
@@ -408,7 +410,7 @@ function create(){
     });
 
     this.socket.on('killInfo', function (killer,dead){
-        killInfo.push(killer + ' $$$ ' + dead);
+        killInfo.push(killer + ' Kills ' + dead);
         if(killInfo.size > 5){
             killInfo.shift();
         }
@@ -720,7 +722,7 @@ function create(){
 function healthToText(health){
     var percentage = health / 10;
     var ii;
-    var textHealth = uNametext + '\n';
+    var textHealth = '';
     for( ii = 1 ; ii <= percentage ; ii++){
         textHealth += '█';
     }
@@ -736,6 +738,7 @@ function addPlayer(self, playerInfo) {
     self.ninja.setVelocity(0, 0);
     self.cameras.main.startFollow(self.ninja, true, 0.05, 0.05, 0.05, 0.05);
     self.ninja.healthText = self.add.text(playerInfo.x - 12, playerInfo.y - 20, healthToText(playerInfo.health), {fontFamily:'Arial', fontSize: '3px' ,fill: '#00ff00'});
+    self.ninja.nameText = self.add.text(playerInfo.x - 12, playerInfo.y  - 35, uNametext, {fontFamily:'Arial',fontSize: '15px',fill: '#2222bb'});
     self.physics.add.collider(self.ninja, wx, pb);
     self.physics.add.collider(self.ninja, ss, shuri_destroy);
     self.physics.add.overlap(self.ninja, stars, function(player, stars){
@@ -750,6 +753,7 @@ function addOtherPlayers(self, playerInfo) {
     const otherPlayer = self.physics.add.sprite(playerInfo.x, playerInfo.y, 'ninja');
     otherPlayer.playerId = playerInfo.playerId;
     otherPlayer.healthText = self.add.text(playerInfo.x - 12 , playerInfo.y - 20, healthToText(playerInfo.health), {fontFamily:'Arial',fontSize: '3px', fill: '#ff0000'});
+    otherPlayer.nameText = self.add.text(playerInfo.x - 12, playerInfo.y  - 35, playerInfo.s_username, {fontFamily:'Arial',fontSize: '15px',fill: '#2222bb'});
     self.otherPlayers.add(otherPlayer);
 }
 
@@ -757,6 +761,8 @@ function update(){
     if(this.ninja){
         this.ninja.healthText.x = this.ninja.x - 12;
         this.ninja.healthText.y = this.ninja.y - 20;
+        this.ninja.nameText.x = this.ninja.x - 12;
+        this.ninja.nameText.y = this.ninja.y - 35;
         // keyboard
         if(w.isDown){
             if(this.ninja.anims.getCurrentKey()!='ninja_up') this.ninja.play('ninja_up');
