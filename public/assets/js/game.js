@@ -1087,7 +1087,6 @@ function update(){
             // if(temp==1) player2.setText([gameInfo[1]]);
             // if(temp==2) player3.setText([gameInfo[2]]);
             // if(temp==3) player4.setText([gameInfo[3]]);
-        }
     }
 
     if(spawn_time<this.time.now){
