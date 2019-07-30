@@ -86,6 +86,7 @@ var angle;
 // global time
 var game_time;
 var game_starts=false;
+var game_over=false;
 
 //ui
 var ui_dash,ui_shuriken,ui_katana;
@@ -820,7 +821,7 @@ function update(){
         if(mousex<0) angle+=Math.PI;
 
         // dash
-        if(space.isDown && dash>0 && game_starts==true){
+        if(space.isDown && dash>0 && game_starts==true && game_over==false){
             if(this.time.now>dashtime){
                 var tempx = this.ninja.x;
                 var tempy = this.ninja.y;
@@ -914,7 +915,7 @@ function update(){
     }
 
     // use items
-    if(pointer.leftButtonDown() && game_starts==true){ // left click
+    if(pointer.leftButtonDown() && game_starts==true && game_over==false){ // left click
         if(options==1 && this.time.now>katatime && kata>0){
             katana.play(); // sound
             var slashx = this.ninja.x+Math.cos(angle)*0;
@@ -1031,9 +1032,15 @@ function update(){
         'Gold: '+gold,
         'Deaths: '+deaths
     ]);
-    if(game_starts==true){
+    if(game_starts==true && game_over==false){
         text3.setText([
             'Timer: '+Math.floor(((game_time-this.time.now)/1000)/60)+':'+Math.floor(((game_time-this.time.now)/1000)%60)
+        ]);
+    }
+    if(game_time<this.time.now){
+        game_over=true;
+        text4.setText([
+            'game over',
         ]);
     }
 
