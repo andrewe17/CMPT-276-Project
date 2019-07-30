@@ -319,6 +319,7 @@ function create(){
             if (playerId === otherPlayer.playerId) {
                 otherPlayer.healthText.destroy();
                 otherPlayer.nameText.destroy();
+                //otherPlayer.nameText.setText('');
                 otherPlayer.destroy();
             }
         });
@@ -339,6 +340,7 @@ function create(){
                 otherPlayer.nameText.x = playerInfo.x - 12;
                 otherPlayer.nameText.y = playerInfo.y - 35;
                 otherPlayer.healthText.setText(healthToText(playerInfo.health));
+                otherPlayer.nameText.setText(uNametext);
 
                 // animation handling of otherplayers
                 if(playerInfo.f==1) otherPlayer.anims.play('ninja_up');
