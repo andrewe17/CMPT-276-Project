@@ -223,7 +223,6 @@ function preload(){
     this.load.audio('rain',  ['assets/audio/Background-rain.mp3'] );
     this.load.audio('snow',  ['assets/audio/Background-snow.mp3'] );
     this.load.audio('thunder',  ['assets/audio/Background-thunder.mp3'] );
-    this.load.audio('silence',  ['assets/audio/Background-silence.mp3'] );
     this.load.audio('ancients',  ['assets/audio/Music-Song of the Ancients.mp3'] );
     this.load.audio('loneliness',  ['assets/audio/Music-Loneliness.mp3'] );
     this.load.audio('strike',  ['assets/audio/Music-Strong and Strike.mp3'] );
@@ -258,7 +257,7 @@ function create(){
     else if(rng==3){
         music = this.sound.add('strike');
     }
-    bg = this.sound.add('silence');
+    bg = this.sound.add('snow');
     // unlock sound
     if (this.sound.locked)
         this.sound.unlock();
@@ -1043,6 +1042,7 @@ function update(){
     }
     if(game_time<=this.time.now){
         game_over=true;
+        
         end.setText([
             'GAME OVER'
         ]);
