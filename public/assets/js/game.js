@@ -422,6 +422,7 @@ function create(){
     // receiving game over data
     this.socket.on('gameover', function (endData){
         gameInfo.push('Username: ' + endData.id + ', Kills: ' + endData.kills + ', Deaths: ' + endData.deaths);
+        game_over=true;
         playernum++;
     });
 
@@ -1050,15 +1051,14 @@ function update(){
         ]);
     }
     if(game_time<=this.time.now && game_over==false){
-        game_over=true;
-        this.socket.emit('end', { id:uNametext, kills:kills, deaths:deaths});
-        end.setText([
-            'GAME OVER'
-        ]);       
+        this.socket.emit('end', { id:uNametext, kills:kills, deaths:deaths});    
     }
     if(game_over==true){
         for(var temp=0; temp<playernum; temp++){
-            if(temp==0) player1.setText(playernum);
+            end.setText([
+                'GAME OVER'
+            ]);   
+            if(temp==0) player1.setText([gameInfo[0]]);
             if(temp==1) player2.setText([gameInfo[1]]);
             if(temp==2) player3.setText([gameInfo[2]]);
             if(temp==3) player4.setText([gameInfo[3]]);
