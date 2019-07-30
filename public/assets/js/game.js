@@ -768,7 +768,7 @@ function addPlayer(self, playerInfo) {
     self.ninja = self.physics.add.sprite(playerInfo.x, playerInfo.y, 'ninja');
     self.ninja.setCollideWorldBounds(true);
     self.ninja.setVelocity(0, 0);
-    self.cameras.main.startFollow(self.ninja, true, 0.05, 0.05, 0.05, 0.05);
+    self.cameras.main.starbnmbntFollow(self.ninja, true, 0.05, 0.05, 0.05, 0.05);
     self.ninja.healthText = self.add.text(playerInfo.x - 12, playerInfo.y - 20, healthToText(playerInfo.health), {fontFamily:'Arial', fontSize: '3px' ,fill: '#00ff00'});
     self.ninja.nameText = self.add.text(playerInfo.x - 12, playerInfo.y  - 35, uNametext, {fontFamily:'Arial',fontSize: '15px',fill: '#2222bb'});
     self.physics.add.collider(self.ninja, wx, pb);
@@ -839,7 +839,7 @@ function update(){
 
         reduced = false;
         vel = 200;
-        
+
         // mouse
         pointer = this.input.activePointer; // refresh coordinate
         if(this.ninja.x<400) mousex=pointer.x-this.ninja.x; // distance between mouse & this.ninja
@@ -1079,10 +1079,9 @@ function update(){
         this.socket.emit('end', { id:uNametext, kills:kills, deaths:deaths});    
     }
     if(game_over==true){
-        for(var temp=0; temp<playernum; temp++){
-            end.setText([
-                'GAME OVER'
-            ]);   
+        end.setText([
+            'GAME OVER'
+        ]);   
             // if(temp==0) player1.setText([gameInfo[0]]);
             // if(temp==1) player2.setText([gameInfo[1]]);
             // if(temp==2) player3.setText([gameInfo[2]]);
