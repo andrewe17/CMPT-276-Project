@@ -481,7 +481,7 @@ function create(){
             'game start',
         ]);
         game_starts=true;
-        game_time=this.time.now+(1000); // 1000*60*10
+        game_time=this.time.now+(1000*60*10); // 1000*60*10
     });
 
     // dash
@@ -1058,10 +1058,10 @@ function update(){
             end.setText([
                 'GAME OVER'
             ]);   
-            if(temp==0) player1.setText([gameInfo[0]]);
-            if(temp==1) player2.setText([gameInfo[1]]);
-            if(temp==2) player3.setText([gameInfo[2]]);
-            if(temp==3) player4.setText([gameInfo[3]]);
+            // if(temp==0) player1.setText([gameInfo[0]]);
+            // if(temp==1) player2.setText([gameInfo[1]]);
+            // if(temp==2) player3.setText([gameInfo[2]]);
+            // if(temp==3) player4.setText([gameInfo[3]]);
         }
     }
 
