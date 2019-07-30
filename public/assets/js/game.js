@@ -421,7 +421,7 @@ function create(){
 
     // receiving game over data
     this.socket.on('gameover', function (endData){
-        gameInfo.push('Username: ' + endData.uName + ', Kills: ' + endData.kills + ', Deaths: ' + endData.deaths);
+        gameInfo.push('Username: ' + endData.id + ', Kills: ' + endData.kills + ', Deaths: ' + endData.deaths);
         playernum++;
     });
 
