@@ -216,6 +216,7 @@ function preload(){
     this.load.image('ui_katana', 'assets/images/UI_katana.png');
     this.load.image('ui_dash', 'assets/images/UI_dash.png');
     this.load.image('ui_disable', 'assets/images/UI_disable.png');
+    this.load.image('ui_info', 'assets/images/info.png');
 
     this.load.audio('katana',  ['assets/audio/Sound-katana.mp3'] );
     this.load.audio('flash',  ['assets/audio/Sound-dash.mp3'] );
@@ -422,6 +423,7 @@ function create(){
     // receiving game over data
     this.socket.on('gameover', function (endData){
         gameInfo.push('Username: ' + endData.id + ', Kills: ' + endData.kills + ', Deaths: ' + endData.deaths);
+        game_over=true;
         playernum++;
     });
 
@@ -480,7 +482,7 @@ function create(){
             'game start',
         ]);
         game_starts=true;
-        game_time=this.time.now+(1000); // 1000*60*10
+        game_time=this.time.now+(1000*60*10); // 1000*60*10
     });
 
     // dash
@@ -590,6 +592,22 @@ function create(){
 
     //ui
     ui_selection = this.add.graphics().setScrollFactor(0);
+
+    ui_info_y = 525;
+
+    ui_info = this.add.image(100, ui_y, 'ui_info').setScrollFactor(0);
+    healthX = 30;
+    healthY = 558;
+    healthWidth = 140;
+    healthHeight = 13;
+
+    ui_health_l = this.add.graphics().setScrollFactor(0);
+    ui_health_l.fillStyle(0x00ff00, 1);
+    ui_health_l.fillRect(healthX, healthY, healthWidth, healthHeight);
+    ui_heal_text =this.add.text( 90, ui_info_y + 28,'100', {fontFamily:'"Roboto Condensed"', fontSize:'18px' ,fill: '#2255ff'}).setScrollFactor(0);
+    ui_kill_text =this.add.text( 100, ui_info_y,'0', {fontFamily:'"Roboto Condensed"', fontSize:'22px' ,fill: '#000000'}).setScrollFactor(0);
+    ui_death_text = this.add.text( 155, ui_info_y, '0', {fontFamily:'"Roboto Condensed"', fontSize:'22px' ,fill: '#000000'}).setScrollFactor(0);
+    ui_coin_text =this.add.text(50, ui_info_y,'0', {fontFamily:'"Roboto Condensed"', fontSize:'22px' ,fill: '#000000'}).setScrollFactor(0);
 
     ui_dash = this.add.image(ui_x + 160,ui_y,'ui_dash');
     ui_dash_disable = this.add.image(ui_x + 160,ui_y,'ui_disable').setScrollFactor(0);
@@ -820,6 +838,7 @@ function update(){
         }
 
         reduced = false;
+        vel = 200;
 
         // mouse
         pointer = this.input.activePointer; // refresh coordinate
@@ -1033,36 +1052,40 @@ function update(){
     }
 
     // text
-    text1.setText([
-        'Dash: '+dash+'/2',
-        otext, // options
-        'Upgrade [SHIFT+1/2]',
-    ]);
-    text2.setText([
-        'Health: '+health,
-        'Kills: '+kills,
-        'Gold: '+gold,
-        'Deaths: '+deaths
-    ]);
+    // text1.setText([
+    //     'Dash: '+dash+'/2',
+    //     otext, // options
+    //     'Upgrade [SHIFT+1/2]',
+    // ]);
+    // text2.setText([
+    //     'Health: '+health,
+    //     'Kills: '+kills,
+    //     'Gold: '+gold,
+    //     'Deaths: '+deaths
+    // ]);
+
+    ui_kill_text.setText(kills);
+    ui_death_text.setText(deaths);
+    ui_coin_text.setText(gold);
+    ui_health_l.clear();
+    ui_health_l.fillStyle(0x00ff00, 1);
+    ui_health_l.fillRect(healthX, healthY, healthWidth * health * 0.01, healthHeight);
     if(game_starts==true && game_over==false){
         text3.setText([
             'Timer: '+Math.floor(((game_time-this.time.now)/1000)/60)+':'+Math.floor(((game_time-this.time.now)/1000)%60)
         ]);
     }
     if(game_time<=this.time.now && game_over==false){
-        game_over=true;
-        this.socket.emit('end', { id:uNametext, kills:kills, deaths:deaths});
-        end.setText([
-            'GAME OVER'
-        ]);       
+        this.socket.emit('end', { id:uNametext, kills:kills, deaths:deaths});    
     }
     if(game_over==true){
-        for(var temp=0; temp<playernum; temp++){
-            if(temp==0) player1.setText(playernum);
-            if(temp==1) player2.setText([gameInfo[1]]);
-            if(temp==2) player3.setText([gameInfo[2]]);
-            if(temp==3) player4.setText([gameInfo[3]]);
-        }
+            end.setText([
+                'GAME OVER'
+            ]);   
+            // if(temp==0) player1.setText([gameInfo[0]]);
+            // if(temp==1) player2.setText([gameInfo[1]]);
+            // if(temp==2) player3.setText([gameInfo[2]]);
+            // if(temp==3) player4.setText([gameInfo[3]]);
     }
 
     if(spawn_time<this.time.now){
